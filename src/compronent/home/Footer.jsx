@@ -1,20 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import {
-  FaTwitter,
-  FaLinkedinIn,
-  FaGithub,
-  FaEnvelope,
-} from "react-icons/fa";
+import { FaTwitter, FaLinkedinIn, FaGithub, FaEnvelope } from "react-icons/fa";
 
 export default function Footer() {
   return (
     <footer className="bg-gradient-to-b from-[#0b1220] to-[#050914] text-gray-300 relative">
-      <div className="max-w-7xl mx-auto px-6 py-16 flex flex-col md:flex-row justify-between items-start gap-10">
+      <div className="max-w-7xl mx-auto px-6 py-16 flex flex-col md:flex-row justify-center md:justify-between items-center md:items-start gap-10 text-center md:text-left">
 
         {/* Logo & Brand */}
-        <div className="flex flex-col gap-4 shrink-0">
+        <div className="flex flex-col gap-4 items-center md:items-start">
           <div className="flex items-center gap-3 group cursor-pointer">
             <div className="relative">
               <div className="absolute inset-0 bg-linear-to-r from-cyan-500 to-blue-500 rounded-lg blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
@@ -37,7 +32,7 @@ export default function Footer() {
             BD Stack Solutions delivers cutting-edge technology solutions and innovative products for businesses worldwide.
           </p>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 mt-2">
             <SocialIcon href="#" icon={<FaTwitter />} />
             <SocialIcon href="#" icon={<FaLinkedinIn />} />
             <SocialIcon href="#" icon={<FaGithub />} />
@@ -72,10 +67,10 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-white/10 mt-10">
-        <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between text-sm text-gray-400">
+        <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-center md:justify-between text-sm text-gray-400 gap-4 md:gap-0 text-center">
           <p>© {new Date().getFullYear()} BD Stack Solutions. All Rights Reserved.</p>
 
-          <div className="flex gap-6 mt-4 md:mt-0">
+          <div className="flex gap-6 flex-wrap justify-center">
             <Link href="#" className="hover:text-white transition">Privacy Policy</Link>
             <Link href="#" className="hover:text-white transition">Terms of Service</Link>
             <Link href="#" className="hover:text-white transition">Cookie Policy</Link>
@@ -89,7 +84,7 @@ export default function Footer() {
 /* Reusable Components */
 function FooterColumn({ title, children }) {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 items-center md:items-start">
       <h4 className="text-white font-semibold mb-2">{title}</h4>
       <ul className="space-y-2 text-sm">{children}</ul>
     </div>
