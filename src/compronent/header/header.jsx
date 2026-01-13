@@ -18,6 +18,7 @@ import Link from 'next/link';
 
   const services = [
     { name: 'Web Development', desc: 'Custom websites & web apps', href: '/web-development'},
+    {name:'AI Agents', desc: 'Intelligent virtual assistants', href: '/ai-agents'},
     { name: 'Mobile Apps', desc: 'iOS & Android development' },
     { name: 'UI/UX Design', desc: 'Beautiful user experiences' },
     { name: 'Digital Marketing', desc: 'SEO, PPC & Social Media' },
@@ -86,6 +87,8 @@ import Link from 'next/link';
     href={
       service.name === "Web Development"
         ? "/web-development"
+        : service.name === "AI Agents"
+        ? "/ai-agents"
         : `#${service.name.toLowerCase().replace(/\s+/g, '-')}`
     }
     className="block px-4 py-3 rounded-lg hover:bg-linear-to-r hover:from-cyan-500/10 hover:to-blue-500/10 transition-all duration-300 group"
