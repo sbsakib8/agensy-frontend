@@ -1,15 +1,27 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { ExternalLink, Sparkles, Zap, TrendingUp, Award } from 'lucide-react';
+import { useLayout } from '@/context/LayoutContext';
 
 const ProductsSection = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredProduct, setHoveredProduct] = useState(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const { setShowHeader, setShowFooter } = useLayout();
 
   useEffect(() => {
+    // Hide header and footer when component mounts
+    setShowHeader(false);
+    setShowFooter(false);
+
     setIsVisible(true);
-  }, []);
+
+    // Show header and footer when component unmounts
+    return () => {
+      setShowHeader(true);
+      setShowFooter(true);
+    };
+  }, [setShowHeader, setShowFooter]);
 
   const handleMouseMove = (e, productId) => {
     const rect = e.currentTarget.getBoundingClientRect();
