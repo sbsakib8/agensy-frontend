@@ -1,5 +1,5 @@
 
-import ProductsSection from '@/compronent/product/productSection'
+import ProductsSection from '@/components/product/productSection'
 import React from 'react'
 
 function page() {

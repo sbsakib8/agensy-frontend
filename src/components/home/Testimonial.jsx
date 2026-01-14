@@ -19,6 +19,16 @@ export default function Testimonial() {
   const [active, setActive] = useState(0)
   const [avatarStart, setAvatarStart] = useState(0)
 
+  // Generate stable random values for particles
+  const particles = useMemo(() => {
+    return [...Array(15)].map(() => ({
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+      delay: Math.random() * 5,
+      duration: 10 + Math.random() * 20
+    }));
+  }, []);
+
   useEffect(() => {
     const timer = setInterval(() => {
       setActive((p) => (p + 1) % total)
@@ -49,15 +59,15 @@ export default function Testimonial() {
             backgroundSize: "20px 20px",
           }}
         ></div>
-        {[...Array(15)].map((_, i) => (
+        {particles.map((particle, i) => (
           <div
             key={i}
             className="absolute w-2 h-2 bg-cyan-400/30 rounded-full animate-float-random"
             style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${10 + Math.random() * 20}s`,
+              top: `${particle.top}%`,
+              left: `${particle.left}%`,
+              animationDelay: `${particle.delay}s`,
+              animationDuration: `${particle.duration}s`,
             }}
           ></div>
         ))}
