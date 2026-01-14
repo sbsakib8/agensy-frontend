@@ -17,7 +17,8 @@ import Link from 'next/link';
   }, []);
 
   const services = [
-    { name: 'Web Development', desc: 'Custom websites & web apps' },
+    { name: 'Web Development', desc: 'Custom websites & web apps', href: '/web-development'},
+    {name:'AI Agents', desc: 'Intelligent virtual assistants', href: '/ai-agents'},
     { name: 'Mobile Apps', desc: 'iOS & Android development' },
     { name: 'UI/UX Design', desc: 'Beautiful user experiences' },
     { name: 'Digital Marketing', desc: 'SEO, PPC & Social Media' },
@@ -80,27 +81,38 @@ import Link from 'next/link';
               {activeDropdown === 'services' && (
                 <div className="absolute top-full left-0 mt-2 w-80 bg-slate-800/95 backdrop-blur-xl rounded-xl shadow-2xl border border-slate-700/50 overflow-hidden animate-fade-in">
                   <div className="p-2">
-                    {services.map((service, index) => (
-                      <a
-                        key={index}
-                        href={`#${service.name.toLowerCase().replace(/\s+/g, '-')}`}
-                        className="block px-4 py-3 rounded-lg hover:bg-linear-to-r hover:from-cyan-500/10 hover:to-blue-500/10 transition-all duration-300 group"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <h3 className="text-white font-semibold group-hover:text-cyan-400 transition-colors">{service.name}</h3>
-                            <p className="text-sm text-gray-400 mt-0.5">{service.desc}</p>
-                          </div>
-                          <ArrowRight className="w-4 h-4 text-cyan-400 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-                        </div>
-                      </a>
-                    ))}
+                   {services.map((service, index) => (
+  <a
+    key={index}
+    href={
+      service.name === "Web Development"
+        ? "/web-development"
+        : service.name === "AI Agents"
+        ? "/ai-agents"
+        : `#${service.name.toLowerCase().replace(/\s+/g, '-')}`
+    }
+    className="block px-4 py-3 rounded-lg hover:bg-linear-to-r hover:from-cyan-500/10 hover:to-blue-500/10 transition-all duration-300 group"
+  >
+    <div className="flex items-center justify-between">
+      <div>
+        <h3 className="text-white font-semibold group-hover:text-cyan-400 transition-colors">
+          {service.name}
+        </h3>
+        <p className="text-sm text-gray-400 mt-0.5">
+          {service.desc}
+        </p>
+      </div>
+      <ArrowRight className="w-4 h-4 text-cyan-400 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+    </div>
+  </a>
+))}
+
                   </div>
                 </div>
               )}
             </div>
 
-            <a href="#demo" className="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 relative group">
+            <a href="/demo" className="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 relative group">
               <span>Demo</span>
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-cyan-400 to-blue-500 group-hover:w-full transition-all duration-300"></span>
             </a>

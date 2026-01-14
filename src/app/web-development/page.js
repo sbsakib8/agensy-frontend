@@ -1,12 +1,13 @@
 
-import ProductsSection from '@/compronent/product/productSection'
+
+import WebPage from '@/web/WebPage'
 import React from 'react'
 
 function page() {
   return (
     <div>
-        <ProductsSection />
         
+        <WebPage />
 
     </div>
   )
