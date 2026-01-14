@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
-import { useLayout } from '@/context/LayoutContext';
 import {
   FaRobot,
   FaCogs,
@@ -30,19 +28,6 @@ const LottiePlayer = dynamic(
 );
 
 const AiAgent = () => {
-  const { setShowHeader, setShowFooter } = useLayout();
-
-  useEffect(() => {
-    // Hide header and footer when component mounts
-    setShowHeader(false);
-    setShowFooter(false);
-
-    // Show header and footer when component unmounts
-    return () => {
-      setShowHeader(true);
-      setShowFooter(true);
-    };
-  }, [setShowHeader, setShowFooter]);
   const features = [
     {
       icon: <FaCloud className="text-4xl mb-4 text-blue-400" />,

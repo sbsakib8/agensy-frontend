@@ -3,8 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import dynamic from "next/dynamic";
-import { useLayout } from '@/context/LayoutContext';
-import animationData from "../../public/animation.json";
+import animationData from "../../../public/animation.json";
 
 // Lottie Player-ke SSR off kore dynamic import kora holo
 const Player = dynamic(
@@ -103,23 +102,12 @@ const CustomBackground = () => {
 // ================= MAIN WEBPAGE =================
 export default function WebPage() {
   const [mounted, setMounted] = useState(false);
-  const { setShowHeader, setShowFooter } = useLayout();
 
   useEffect(() => {
-    // Hide header and footer when component mounts
-    setShowHeader(false);
-    setShowFooter(false);
-    
     // SSR error fix
     const timer = setTimeout(() => setMounted(true), 0);
-
-    // Show header and footer when component unmounts
-    return () => {
-      clearTimeout(timer);
-      setShowHeader(true);
-      setShowFooter(true);
-    };
-  }, [setShowHeader, setShowFooter]);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <main className="relative overflow-hidden bg-[#050914] text-gray-300 font-sans">
