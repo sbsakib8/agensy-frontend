@@ -13,8 +13,6 @@ export default function Home() {
       <HomecardSection/>
       <Testimonial/>
       <FAQ/>
-      
-      
     </div>
   );
 }

@@ -7,12 +7,12 @@ import { motion, AnimatePresence } from "framer-motion"
 import { FaChevronUp, FaChevronDown, FaChevronLeft, FaChevronRight } from "react-icons/fa"
 
 const testimonials = [
-  { id: 1, name: "রাশেদ মাহমুদ", image: "https://i.ibb.co/bgycfYMH/img2.jpg", text: "এই কোম্পানির সার্ভিস আমাদের ব্যবসার গ্রোথে বড় ভূমিকা রেখেছে।", rating: 5 },
-  { id: 2, name: "সাদিয়া ইসলাম", image: "https://i.ibb.co/v4FyWfzd/img1.jpg", text: "ডিজাইন কোয়ালিটি এবং সাপোর্ট টিম দুটোই খুবই প্রফেশনাল ছিল।", rating: 5 },
-  { id: 3, name: "মেহেদী হাসান", image: "https://i.ibb.co/KjhYb4Wy/img3.jpg", text: "সময়মতো কাজ ডেলিভারি পেয়েছি এবং কোড কোয়ালিটি ছিল অসাধারণ।", rating: 4 },
-  { id: 4, name: "নুসরাত জাহান", image: "https://i.ibb.co/4PpJwzP/user1.jpg", text: "আমাদের ওয়েবসাইট এখন আগের চেয়ে অনেক দ্রুত এবং ইউজার ফ্রেন্ডলি।", rating: 5 },
-  { id: 5, name: "আরিফুল ইসলাম", image: "https://i.ibb.co/G7cYwN9/user2.jpg", text: "প্রতিটি ধাপে তারা আমাদের সাথে পরিষ্কারভাবে কমিউনিকেট করেছে।", rating: 4 },
-  { id: 6, name: "ফারহানা রহমান", image: "https://i.ibb.co/7QXcZ9d/user3.jpg", text: "UI/UX ডিজাইন আমাদের ক্লায়েন্টদের কাছ থেকে দারুণ রেসপন্স পেয়েছে।", rating: 5 },
+  { id: 1, name: "রাশেদ মাহমুদ", image: "https://i.ibb.co.com/H998MXC/image.png", text: "এই কোম্পানির সার্ভিস আমাদের ব্যবসার গ্রোথে বড় ভূমিকা রেখেছে।", rating: 5 },
+  { id: 2, name: "সাদিয়া ইসলাম", image: "https://i.pravatar.cc/150?img=45", text: "ডিজাইন কোয়ালিটি এবং সাপোর্ট টিম দুটোই খুবই প্রফেশনাল ছিল।", rating: 5 },
+  { id: 3, name: "মেহেদী হাসান", image: "https://i.pravatar.cc/150?img=33", text: "সময়মতো কাজ ডেলিভারি পেয়েছি এবং কোড কোয়ালিটি ছিল অসাধারণ।", rating: 4 },
+  { id: 4, name: "নুসরাত জাহান", image: "https://i.pravatar.cc/150?img=48", text: "আমাদের ওয়েবসাইট এখন আগের চেয়ে অনেক দ্রুত এবং ইউজার ফ্রেন্ডলি।", rating: 5 },
+  { id: 5, name: "আরিফুল ইসলাম", image: "https://i.pravatar.cc/150?img=59", text: "প্রতিটি ধাপে তারা আমাদের সাথে পরিষ্কারভাবে কমিউনিকেট করেছে।", rating: 4 },
+  { id: 6, name: "ফারহানা রহমান", image: "https://i.pravatar.cc/150?img=47", text: "UI/UX ডিজাইন আমাদের ক্লায়েন্টদের কাছ থেকে দারুণ রেসপন্স পেয়েছে।", rating: 5 },
 ]
 
 // Generate stable particles outside component to avoid Math.random() in render
@@ -27,7 +27,7 @@ const generateParticles = () => {
 
 const particles = generateParticles();
 
-export default function Testimonial() {
+function Testimonial() {
   const total = testimonials.length
   const [active, setActive] = useState(0)
   const [avatarStart, setAvatarStart] = useState(0)
@@ -334,3 +334,5 @@ export default function Testimonial() {
     </section>
   )
 }
+
+export default Testimonial;
