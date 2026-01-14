@@ -2,7 +2,8 @@
 
 import { motion } from "framer-motion"
 import Image from "next/image"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useLayout } from '@/context/LayoutContext'
 
 const tabs = ["All", "Custom", "WordPress", "AI Agent", "App"]
 
@@ -32,6 +33,19 @@ const projects = [
 
 export default function OurProjects() {
   const [active, setActive] = useState("All")
+  const { setShowHeader, setShowFooter } = useLayout();
+
+  useEffect(() => {
+    // Hide header and footer when component mounts
+    setShowHeader(false);
+    setShowFooter(false);
+
+    // Show header and footer when component unmounts
+    return () => {
+      setShowHeader(true);
+      setShowFooter(true);
+    };
+  }, [setShowHeader, setShowFooter]);
 
   const filtered =
     active === "All"

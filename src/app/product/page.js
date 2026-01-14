@@ -6,8 +6,6 @@ function page() {
   return (
     <div>
         <ProductsSection />
-        
-
     </div>
   )
 }
