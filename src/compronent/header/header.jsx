@@ -117,7 +117,7 @@ import Link from 'next/link';
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-cyan-400 to-blue-500 group-hover:w-full transition-all duration-300"></span>
             </a>
 
-            <a href="#pricing" className="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 relative group">
+            <a href="/pricing" className="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 relative group">
               <span>Pricing</span>
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-cyan-400 to-blue-500 group-hover:w-full transition-all duration-300"></span>
             </a>
