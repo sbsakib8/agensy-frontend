@@ -5,7 +5,7 @@ import { Check } from "lucide-react";
 
 export default function PricingSection() {
   const [currency, setCurrency] = useState("USD");
-  const [billing, setBilling] = useState("Monthly");
+  const [billing, setBilling] = useState("Ai Agent");
 
   return (
     <section className="relative min-h-screen bg-[#070b14] text-white overflow-hidden">
@@ -24,36 +24,24 @@ export default function PricingSection() {
 
       {/* ================= SOFT GLOW FILTERS ================= */}
       <div className="pointer-events-none absolute inset-0 z-1">
-
-        {/* LEFT */}
-        <div className="absolute -left-48 top-1/4 w-130 h-130
-          bg-cyan-500/10 rounded-full blur-[160px] mix-blend-screen" />
-
-        {/* RIGHT */}
-        <div className="absolute -right-48 top-1/3 w-130 h-130
-          bg-purple-500/10 rounded-full blur-[160px] mix-blend-screen" />
-
-        {/* BOTTOM */}
-        <div className="absolute -bottom-65 left-1/2 -translate-x-1/2
-          w-180 h-105 bg-blue-500/10
-          rounded-full blur-[180px] mix-blend-screen" />
+        <div className="absolute -left-48 top-1/4 w-[520px] h-[520px] bg-cyan-500/10 rounded-full blur-[160px] mix-blend-screen" />
+        <div className="absolute -right-48 top-1/3 w-[520px] h-[520px] bg-purple-500/10 rounded-full blur-[160px] mix-blend-screen" />
+        <div className="absolute -bottom-64 left-1/2 -translate-x-1/2 w-[720px] h-[420px] bg-blue-500/10 rounded-full blur-[180px] mix-blend-screen" />
       </div>
 
       {/* ================= CONTENT ================= */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">
 
-        {/* HEADER */}
+        {/* ===== HEADER ===== */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold">
             Simple <span className="text-cyan-400">Pricing</span>
           </h2>
-
           <p className="mt-4 text-gray-400 max-w-2xl mx-auto">
-            Flexible plans for startups, growing teams, and enterprises. Choose
-            a billing cycle and currency that works best for you.
+            Flexible plans for startups, growing teams, and enterprises. Choose a billing cycle and currency that works best for you.
           </p>
 
-          {/* Currency Toggle */}
+          {/* ===== Currency Toggle ===== */}
           <div className="flex justify-center mt-8">
             <div className="flex bg-white/5 backdrop-blur-md rounded-full p-1 border border-white/10">
               {["USD", "BDT"].map((c) => (
@@ -61,11 +49,7 @@ export default function PricingSection() {
                   key={c}
                   onClick={() => setCurrency(c)}
                   className={`px-6 py-2 rounded-full text-sm font-medium transition
-                    ${
-                      currency === c
-                        ? "bg-cyan-500 text-black"
-                        : "text-gray-300 hover:text-white"
-                    }`}
+                    ${currency === c ? "bg-cyan-500 text-black" : "text-gray-300 hover:text-white"}`}
                 >
                   {c}
                 </button>
@@ -73,19 +57,15 @@ export default function PricingSection() {
             </div>
           </div>
 
-          {/* Billing Toggle */}
+          {/* ===== Billing Toggle ===== */}
           <div className="flex justify-center mt-6">
             <div className="flex bg-white/5 rounded-full p-1 border border-white/10">
-              {["Ai Agent", "App Development", "MERN Stack","PERN Stack","WordPress"].map((b) => (
+              {["Ai Agent", "App Development", "MERN Stack", "PERN Stack", "WordPress"].map((b) => (
                 <button
                   key={b}
                   onClick={() => setBilling(b)}
                   className={`px-6 py-2 rounded-full text-sm transition
-                    ${
-                      billing === b
-                        ? "bg-white/10 text-white"
-                        : "text-gray-400 hover:text-white"
-                    }`}
+                    ${billing === b ? "bg-white/10 text-white" : "text-gray-400 hover:text-white"}`}
                 >
                   {b}
                 </button>
@@ -94,7 +74,7 @@ export default function PricingSection() {
           </div>
         </div>
 
-        {/* PRICING CARDS */}
+        {/* ===== PRICING CARDS ===== */}
         <div className="grid md:grid-cols-3 gap-8">
           <PricingCard
             title="Startup"
@@ -147,23 +127,19 @@ export default function PricingSection() {
   );
 }
 
-/* ================= CARD COMPONENT ================= */
+/* ================= PRICING CARD COMPONENT ================= */
 function PricingCard({ title, subtitle, price, features, color, highlight }) {
   return (
     <div
-      className={`relative rounded-2xl border border-white/10
-      bg-linear-to-b from-white/5 to-white/0
-      p-8 backdrop-blur-md shadow-xl
-      ${highlight ? "ring-1 ring-cyan-400/40" : ""}`}
+      className={`relative rounded-2xl border border-white/10 bg-linear-to-b from-white/5 to-white/0 p-8 backdrop-blur-md shadow-xl
+        ${highlight ? "ring-1 ring-cyan-400/40" : ""}`}
     >
       <h3 className={`text-2xl font-bold ${color}`}>{title}</h3>
       <p className="text-gray-400 mt-1">{subtitle}</p>
 
       <div className="mt-6">
         <span className="text-4xl font-extrabold">{price}</span>
-        {price !== "Custom" && (
-          <span className="text-gray-400 text-sm"> / month</span>
-        )}
+        {price !== "Custom" && <span className="text-gray-400 text-sm"> / month</span>}
       </div>
 
       <ul className="mt-8 space-y-3">
