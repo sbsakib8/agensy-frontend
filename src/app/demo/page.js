@@ -1,5 +1,5 @@
 
-import OurProjects from '@/compronent/product/OurProjects'
+import OurProjects from '@/components/product/OurProjects'
 
 import React from 'react'
 

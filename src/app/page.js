@@ -1,8 +1,8 @@
-import AboutSection from "@/compronent/home/centerSection";
-import FAQ from "@/compronent/home/FAQ";
-import HeroSection from "@/compronent/home/hero";
-import HomecardSection from "@/compronent/home/homeCard";
-import Testimonial from "@/compronent/home/Testimonial";
+import AboutSection from "@/components/home/centerSection";
+import FAQ from "@/components/home/FAQ";
+import HeroSection from "@/components/home/hero";
+import HomecardSection from "@/components/home/homeCard";
+import Testimonial from "@/components/home/Testimonial";
 
 export default function Home() {
   return (
@@ -13,8 +13,6 @@ export default function Home() {
       <HomecardSection/>
       <Testimonial/>
       <FAQ/>
-      
-      
     </div>
   );
 }

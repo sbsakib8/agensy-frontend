@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import dynamic from "next/dynamic";
-import animationData from "../../public/animation.json";
+import animationData from "../../../public/animation.json";
 
 // Lottie Player-ke SSR off kore dynamic import kora holo
 const Player = dynamic(
@@ -103,9 +103,10 @@ const CustomBackground = () => {
 export default function WebPage() {
   const [mounted, setMounted] = useState(false);
 
-  // SSR error bondho korar jonno mounting check
   useEffect(() => {
-    setMounted(true);
+    // SSR error fix
+    const timer = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -250,7 +251,7 @@ export default function WebPage() {
             </p>
           </div>
           <button className="whitespace-nowrap px-10 py-5 rounded-2xl bg-white text-black font-bold hover:bg-cyan-400 transition-all active:scale-95 shadow-xl">
-            Let's Talk Projects
+            Let&apos;s Talk Projects
           </button>
         </motion.div>
       </section>

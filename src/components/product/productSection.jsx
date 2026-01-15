@@ -1,11 +1,22 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import Image from 'next/image';
 import { ExternalLink, Sparkles, Zap, TrendingUp, Award } from 'lucide-react';
 
 const ProductsSection = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredProduct, setHoveredProduct] = useState(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  // Generate stable random values for particles
+  const particles = useMemo(() => {
+    return [...Array(20)].map(() => ({
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      duration: 5 + Math.random() * 10,
+      delay: Math.random() * 5
+    }));
+  }, []);
 
   useEffect(() => {
     setIsVisible(true);
@@ -76,15 +87,15 @@ const ProductsSection = () => {
 
       {/* Floating Particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
+        {particles.map((particle, i) => (
           <div
             key={i}
             className="absolute w-2 h-2 bg-purple-500 rounded-full opacity-20"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animation: `float ${5 + Math.random() * 10}s ease-in-out infinite`,
-              animationDelay: `${Math.random() * 5}s`
+              left: `${particle.left}%`,
+              top: `${particle.top}%`,
+              animation: `float ${particle.duration}s ease-in-out infinite`,
+              animationDelay: `${particle.delay}s`
             }}
           ></div>
         ))}
@@ -166,14 +177,16 @@ const ProductsSection = () => {
 
                     {/* Image Section with Overlay */}
                     <div className="relative h-64 overflow-hidden">
-                      <div className={`absolute inset-0 bg-linear-to-br ${product.gradient} opacity-40 mix-blend-multiply transition-opacity duration-500 ${
+                      <div className={`absolute inset-0 bg-linear-to-br ${product.gradient} opacity-40 mix-blend-multiply transition-opacity duration-500 z-10 ${
                         isHovered ? 'opacity-60' : ''
                       }`}></div>
                       
-                      <img
+                      <Image
                         src={product.image}
                         alt={product.title}
-                        className={`w-full h-full object-cover transition-transform duration-700 ${
+                        fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        className={`object-cover transition-transform duration-700 ${
                           isHovered ? 'scale-110' : 'scale-100'
                         }`}
                       />
