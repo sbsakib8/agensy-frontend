@@ -18,24 +18,24 @@ export default function PricingSection() {
             linear-gradient(rgba(255,255,255,0.12) 1px, transparent 1px),
             linear-gradient(90deg, rgba(255,255,255,0.12) 1px, transparent 1px)
           `,
-          backgroundSize: "64px 64px",
+          backgroundSize: "30px 30px",
         }}
       />
 
       {/* ================= SOFT GLOW FILTERS ================= */}
-      <div className="pointer-events-none absolute inset-0 z-[1]">
+      <div className="pointer-events-none absolute inset-0 z-1">
 
         {/* LEFT */}
-        <div className="absolute -left-48 top-1/4 w-[520px] h-[520px]
+        <div className="absolute -left-48 top-1/4 w-130 h-130
           bg-cyan-500/10 rounded-full blur-[160px] mix-blend-screen" />
 
         {/* RIGHT */}
-        <div className="absolute -right-48 top-1/3 w-[520px] h-[520px]
+        <div className="absolute -right-48 top-1/3 w-130 h-130
           bg-purple-500/10 rounded-full blur-[160px] mix-blend-screen" />
 
         {/* BOTTOM */}
-        <div className="absolute bottom-[-260px] left-1/2 -translate-x-1/2
-          w-[720px] h-[420px] bg-blue-500/10
+        <div className="absolute -bottom-65 left-1/2 -translate-x-1/2
+          w-180 h-105 bg-blue-500/10
           rounded-full blur-[180px] mix-blend-screen" />
       </div>
 
@@ -76,7 +76,7 @@ export default function PricingSection() {
           {/* Billing Toggle */}
           <div className="flex justify-center mt-6">
             <div className="flex bg-white/5 rounded-full p-1 border border-white/10">
-              {["Monthly", "Quarterly", "One Time"].map((b) => (
+              {["Ai Agent", "App Development", "MERN Stack","PERN Stack","WordPress"].map((b) => (
                 <button
                   key={b}
                   onClick={() => setBilling(b)}
@@ -152,7 +152,7 @@ function PricingCard({ title, subtitle, price, features, color, highlight }) {
   return (
     <div
       className={`relative rounded-2xl border border-white/10
-      bg-gradient-to-b from-white/5 to-white/0
+      bg-linear-to-b from-white/5 to-white/0
       p-8 backdrop-blur-md shadow-xl
       ${highlight ? "ring-1 ring-cyan-400/40" : ""}`}
     >
