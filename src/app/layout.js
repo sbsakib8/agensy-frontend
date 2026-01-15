@@ -3,7 +3,7 @@ import "./globals.css";
 import Header from "@/components/header/header";
 import Footer from "@/components/home/Footer";
 import { LayoutProvider } from "@/context/LayoutContext";
-import LayoutWrapper from "@/components/LayoutWrapper/LayoutWrapper";
+import LayoutWrapper from "@/LayoutWrapper/LayoutWrapper.jsx";
 
 
 const geistSans = Geist({

@@ -83,30 +83,30 @@ import Link from 'next/link';
                   <div className="bg-slate-800/95 backdrop-blur-xl rounded-xl shadow-2xl border border-slate-700/50 overflow-hidden animate-fade-in">
                     <div className="p-2">
                    {services.map((service, index) => (
-  <a
-    key={index}
-    href={
-      service.name === "Web Development"
-        ? "/web-development"
-        : service.name === "AI Agents"
-        ? "/ai-agents"
-        : `#${service.name.toLowerCase().replace(/\s+/g, '-')}`
-    }
-    className="block px-4 py-3 rounded-lg hover:bg-linear-to-r hover:from-cyan-500/10 hover:to-blue-500/10 transition-all duration-300 group"
-  >
-    <div className="flex items-center justify-between">
-      <div>
-        <h3 className="text-white font-semibold group-hover:text-cyan-400 transition-colors">
-          {service.name}
-        </h3>
-        <p className="text-sm text-gray-400 mt-0.5">
-          {service.desc}
-        </p>
-      </div>
-      <ArrowRight className="w-4 h-4 text-cyan-400 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-    </div>
-  </a>
-))}
+                            <a
+                              key={index}
+                              href={
+                                service.name === "Web Development"
+                                  ? "/web-development"
+                                  : service.name === "AI Agents"
+                                  ? "/ai-agents"
+                                  : `#${service.name.toLowerCase().replace(/\s+/g, '-')}`
+                              }
+                              className="block px-4 py-3 rounded-lg hover:bg-linear-to-r hover:from-cyan-500/10 hover:to-blue-500/10 transition-all duration-300 group"
+                            >
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <h3 className="text-white font-semibold group-hover:text-cyan-400 transition-colors">
+                                    {service.name}
+                                  </h3>
+                                  <p className="text-sm text-gray-400 mt-0.5">
+                                    {service.desc}
+                                  </p>
+                                </div>
+                                <ArrowRight className="w-4 h-4 text-cyan-400 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                              </div>
+                            </a>
+                          ))}
 
                     </div>
                   </div>
@@ -129,6 +129,16 @@ import Link from 'next/link';
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-cyan-400 to-blue-500 group-hover:w-full transition-all duration-300"></span>
             </a>
           </nav>
+
+          {/* Auth Links */}
+          <div className="hidden lg:flex items-center space-x-3">
+            <Link href="/signin" className="px-4 py-2 text-gray-300 hover:text-cyan-400 transition-colors duration-300 font-medium">
+              Sign In
+            </Link>
+            <Link href="/signup" className="px-4 py-2 bg-linear-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 text-cyan-400 hover:text-white hover:border-cyan-400 rounded-full transition-all duration-300 font-medium">
+              Sign Up
+            </Link>
+          </div>
 
           {/* CTA Button */}
           <div className="hidden lg:block">
@@ -199,6 +209,16 @@ import Link from 'next/link';
             <a href="#career" className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-slate-800 rounded-lg transition-all duration-300">
               Career
             </a>
+            
+            {/* Auth Links */}
+            <div className="border-t border-slate-700 pt-4 mt-4">
+              <Link href="/signin" className="block px-4 py-3 text-gray-300 hover:text-cyan-400 hover:bg-slate-800 rounded-lg transition-all duration-300 font-medium">
+                Sign In
+              </Link>
+              <Link href="/signup" className="block px-4 py-3 text-cyan-400 hover:text-white hover:bg-slate-800 rounded-lg transition-all duration-300 font-medium">
+                Sign Up
+              </Link>
+            </div>
             
             <button className="w-full mt-4 px-6 py-3 cursor-pointer bg-linear-to-r from-cyan-500 to-blue-600 text-white font-semibold rounded-full hover:shadow-lg hover:shadow-cyan-500/50 transition-all duration-300">
               Schedule a call
