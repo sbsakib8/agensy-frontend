@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import dynamic from "next/dynamic";
-import animationData from "../../../public/animation.json";
+import animationData from "../../../../public/animation.json";
 
 // Lottie Player-ke SSR off kore dynamic import kora holo
 const Player = dynamic(

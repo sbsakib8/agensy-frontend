@@ -4,6 +4,7 @@ import Header from "@/components/header/header";
 import Footer from "@/components/home/Footer";
 import { LayoutProvider } from "@/context/LayoutContext";
 import LayoutWrapper from "@/LayoutWrapper/LayoutWrapper.jsx";
+import AuthSessionProvider from "@/components/providers/SessionProvider";
 
 
 const geistSans = Geist({
@@ -27,11 +28,13 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <LayoutProvider>
-          <LayoutWrapper Header={Header} Footer={Footer}>
-            {children}
-          </LayoutWrapper>
-        </LayoutProvider>
+        <AuthSessionProvider>
+          <LayoutProvider>
+            <LayoutWrapper Header={Header} Footer={Footer}>
+              {children}
+            </LayoutWrapper>
+          </LayoutProvider>
+        </AuthSessionProvider>
       </body>
     </html>
   );
