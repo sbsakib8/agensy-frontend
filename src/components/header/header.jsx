@@ -25,7 +25,7 @@ import { useSession, signOut } from 'next-auth/react';
   const services = [
     { name: 'Web Development', desc: 'Custom websites & web apps', href: '/web-development'},
     {name:'AI Agents', desc: 'Intelligent virtual assistants', href: '/ai-agents'},
-    { name: 'Mobile Apps', desc: 'iOS & Android development' },
+    { name: 'Mobile Apps', desc: 'iOS & Android development', href: '/app-development' },
     { name: 'UI/UX Design', desc: 'Beautiful user experiences' },
     { name: 'Digital Marketing', desc: 'SEO, PPC & Social Media' },
     { name: 'Branding', desc: 'Logo & identity design' },
@@ -96,6 +96,8 @@ import { useSession, signOut } from 'next-auth/react';
                                   ? "/web-development"
                                   : service.name === "AI Agents"
                                   ? "/ai-agents"
+                                  : service.name === "Mobile Apps"
+                                  ? "/app-development"
                                   : `#${service.name.toLowerCase().replace(/\s+/g, '-')}`
                               }
                               className="block px-4 py-3 rounded-lg hover:bg-linear-to-r hover:from-cyan-500/10 hover:to-blue-500/10 transition-all duration-300 group"
