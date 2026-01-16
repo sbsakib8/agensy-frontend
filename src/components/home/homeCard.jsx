@@ -8,7 +8,10 @@ const HomecardSection = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
 
   useEffect(() => {
-    setIsVisible(true);
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   const services = [

@@ -1,10 +1,20 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Search, Code, TrendingUp, Users, Globe, Zap } from 'lucide-react';
 
  const HeroSection = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [searchFocused, setSearchFocused] = useState(false);
+
+  // Generate stable random values for particles
+  const particles = useMemo(() => {
+    return [...Array(20)].map(() => ({
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+      delay: Math.random() * 5,
+      duration: 5 + Math.random() * 10
+    }));
+  }, []);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -49,15 +59,15 @@ import { Search, Code, TrendingUp, Users, Globe, Zap } from 'lucide-react';
         ></div>
 
         {/* Floating Particles */}
-        {[...Array(20)].map((_, i) => (
+        {particles.map((particle, i) => (
           <div
             key={i}
             className="absolute w-1 h-1 bg-cyan-400/40 rounded-full animate-particle"
             style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${5 + Math.random() * 10}s`
+              top: `${particle.top}%`,
+              left: `${particle.left}%`,
+              animationDelay: `${particle.delay}s`,
+              animationDuration: `${particle.duration}s`
             }}
           ></div>
         ))}

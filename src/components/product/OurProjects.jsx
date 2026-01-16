@@ -1,6 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
+import Image from "next/image"
 import { useState } from "react"
 
 const tabs = ["All", "Custom", "WordPress", "AI Agent", "App"]
@@ -101,12 +102,14 @@ export default function OurProjects() {
             >
               {/* IMAGE */}
               <div className="relative h-40 md:h-44 rounded-xl overflow-hidden mb-5">
-                <img
+                <Image
                   src={item.image}
                   alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition z-10" />
               </div>
 
               {/* TITLE + BADGE */}

@@ -79,8 +79,9 @@ import Link from 'next/link';
               </button>
               
               {activeDropdown === 'services' && (
-                <div className="absolute top-full left-0 mt-2 w-80 bg-slate-800/95 backdrop-blur-xl rounded-xl shadow-2xl border border-slate-700/50 overflow-hidden animate-fade-in">
-                  <div className="p-2">
+                <div className="absolute top-full left-0 pt-2 w-80">
+                  <div className="bg-slate-800/95 backdrop-blur-xl rounded-xl shadow-2xl border border-slate-700/50 overflow-hidden animate-fade-in">
+                    <div className="p-2">
                    {services.map((service, index) => (
   <a
     key={index}
@@ -107,6 +108,7 @@ import Link from 'next/link';
   </a>
 ))}
 
+                    </div>
                   </div>
                 </div>
               )}
