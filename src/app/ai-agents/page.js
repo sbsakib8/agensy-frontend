@@ -1,6 +1,6 @@
 
 
-import AiAgent from '@/components/product/AiAgent'
+import AiAgent from '@/components/Services/Aiagent/AiAgent'
 
 
 function page() {

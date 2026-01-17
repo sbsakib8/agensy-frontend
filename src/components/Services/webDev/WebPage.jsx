@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import dynamic from "next/dynamic";
-import animationData from "../../../public/animation.json";
+import animationData from "../../../../public/animation.json";
 
 // ================== LOTTIE (SSR SAFE) ==================
 const Player = dynamic(

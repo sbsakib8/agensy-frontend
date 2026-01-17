@@ -8,18 +8,22 @@ const ProductsSection = () => {
   const [hoveredProduct, setHoveredProduct] = useState(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  // Generate stable random values for particles
-  const particles = useMemo(() => {
+  // Generate stable random values for particles using useState
+  const [particles] = useState(() => {
     return [...Array(20)].map(() => ({
       left: Math.random() * 100,
       top: Math.random() * 100,
       duration: 5 + Math.random() * 10,
       delay: Math.random() * 5
     }));
-  }, []);
+  });
 
   useEffect(() => {
-    setIsVisible(true);
+    // Use a small delay to trigger animation
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleMouseMove = (e, productId) => {
