@@ -1,6 +1,6 @@
 
 
-import WebPage from '@/components/web/WebPage'
+import WebPage from '@/components/Services/webDev/WebPage'
 import React from 'react'
 
 function page() {

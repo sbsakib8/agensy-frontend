@@ -16,7 +16,7 @@ import {
   FaArrowRight,
 } from "react-icons/fa";
 
-import animationData from "../../../public/Assistant-Bot.json";
+import animationData from "../../../../public/Assistant-Bot.json";
 
 // ✅ SSR-safe Lottie Player
 const LottiePlayer = dynamic(
