@@ -40,6 +40,9 @@ export const authOptions = {
             id: user._id.toString(),
             email: user.email,
             name: user.name,
+            image: user.image || '',
+            phone: user.phone || '',
+            address: user.address || '',
           }
         } catch (error) {
           console.error('Auth error:', error)
@@ -59,11 +62,13 @@ export const authOptions = {
           const existingUser = await db.collection('users').findOne({ email: user.email })
           
           if (!existingUser) {
-            // Create new user
+            // Create new user with default values for new fields
             await db.collection('users').insertOne({
               name: user.name,
               email: user.email,
-              image: user.image,
+              image: user.image || '',
+              phone: '',
+              address: '',
               provider: 'google',
               googleId: profile.sub,
               role: 'user',
