@@ -98,6 +98,8 @@ import { useSession, signOut } from 'next-auth/react';
                                   ? "/ai-agents"
                                   : service.name === "Mobile Apps"
                                   ? "/app-development"
+                                  : service.name === "UI/UX Design"
+                                  ? "/ui-ux-design"
                                   : `#${service.name.toLowerCase().replace(/\s+/g, '-')}`
                               }
                               className="block px-4 py-3 rounded-lg hover:bg-linear-to-r hover:from-cyan-500/10 hover:to-blue-500/10 transition-all duration-300 group"
