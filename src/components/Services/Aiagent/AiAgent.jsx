@@ -77,59 +77,63 @@ const AiAgent = () => {
   return (
     <div className="bg-gray-900 text-gray-100 font-sans">
 
-      {/* ================= HERO ================= */}
-      <section className="relative overflow-hidden py-20 px-6">
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 -z-10" />
+ <section className="relative max-w-7xl mx-auto px-6 py-32">
+  {/* Background Gradients & Blurs */}
+  <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 -z-10" />
+  <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-blue-500/30 rounded-full blur-3xl -z-10" />
+  <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-purple-500/30 rounded-full blur-3xl -z-10" />
+  <div className="absolute top-20 right-1/3 w-[700px] h-[300px] bg-pink-500/20 rounded-full blur-2xl -z-10" />
 
-        <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-blue-500/30 rounded-full blur-3xl -z-10" />
-        <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-purple-500/30 rounded-full blur-3xl -z-10" />
-        <div className="absolute top-20 right-1/3 w-[700px] h-[300px] bg-pink-500/20 rounded-full blur-2xl -z-10" />
+  <div className="flex flex-col-reverse md:flex-row items-center gap-12">
+    {/* Text Content */}
+    <div className="md:w-1/2">
+      <motion.h1
+        className="text-4xl md:text-5xl font-bold mb-6"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        AI Agent & Workflow Development
+        <span className="block text-blue-400 mt-2">
+          Autonomous Business Logic
+        </span>
+      </motion.h1>
 
-        <div className="max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center gap-12">
-          <div className="md:w-1/2">
-            <motion.h1
-              className="text-4xl md:text-5xl font-bold mb-6"
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              AI Agent & Workflow Development
-              <span className="block text-blue-400 mt-2">
-                Autonomous Business Logic
-              </span>
-            </motion.h1>
+      <p className="text-gray-300 text-lg mb-8">
+        We build intelligent automation agents combining Zapier-like workflows with advanced LLM orchestration.
+      </p>
 
-            <p className="text-gray-300 text-lg mb-8">
-              We build intelligent automation agents combining Zapier-like workflows with advanced LLM orchestration.
-            </p>
+     <div className="text-gray-400 flex flex-wrap gap-4">
+  {[
+    "No-Code & Low-Code Workflows",
+    "Custom LLM Agents",
+    "200+ SaaS Integrations",
+    "Automated Data Pipelines",
+    "Real-Time Monitoring",
+    "Scalable Execution",
+  ].map((item, i) => (
+    <div key={i} className="flex items-center gap-2 w-1/3">
+      <FaCheck className="text-blue-400" />
+      <span>{item}</span>
+    </div>
+  ))}
+</div>
 
-            <div className="space-y-3 text-gray-400">
-              {[
-                "No-Code & Low-Code Workflows",
-                "Custom LLM Agents",
-                "200+ SaaS Integrations",
-                "Automated Data Pipelines",
-                "Real-Time Monitoring",
-                "Scalable Execution",
-              ].map((item, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <FaCheck className="text-blue-400" />
-                  <span>{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+    </div>
 
-          <div className="md:w-1/2 flex justify-center">
-            <LottiePlayer
-              autoplay
-              loop
-              src={animationData}
-              style={{ width: 520, height: 520 }}
-            />
-          </div>
-        </div>
-      </section>
+    {/* Animation Strictly Right */}
+    <div className="md:w-1/2 flex justify-end md:pr-0 pr-6">
+      <LottiePlayer
+        autoplay
+        loop
+        src={animationData}
+        style={{ width: 520, height: 520 }}
+      />
+    </div>
+  </div>
+</section>
+
+
 
       {/* ================= FEATURES ================= */}
       <section className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-3 gap-8">

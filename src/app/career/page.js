@@ -1,11 +1,12 @@
-import PricingSection from "@/components/home/PricingSection"
-
+import CareerPage from '@/components/home/CareerPage'
 import React from 'react'
 
 function page() {
   return (
     <div>
-    <PricingSection />
+        <CareerPage />
+        
+
     </div>
   )
 }
