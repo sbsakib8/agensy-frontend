@@ -12,13 +12,33 @@ if (!client) {
 
 export async function POST(request) {
   try {
-    const { name, email, password } = await request.json()
+    const { name, email, password, phone = '', address = '', image = '' } = await request.json()
     
     if (!name || !email || !password) {
       return NextResponse.json(
-        { success: false, message: 'All fields are required' },
+        { success: false, message: 'Name, email, and password are required' },
         { status: 400 }
       )
+    }
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        { success: false, message: 'Please enter a valid email address' },
+        { status: 400 }
+      )
+    }
+    
+    // Phone validation (optional)
+    if (phone && phone.trim() !== '') {
+      const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+      if (!phoneRegex.test(phone.replace(/[-\s]/g, ''))) {
+        return NextResponse.json(
+          { success: false, message: 'Please enter a valid phone number' },
+          { status: 400 }
+        )
+      }
     }
     
     const client = await clientPromise
@@ -36,11 +56,14 @@ export async function POST(request) {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 12)
     
-    // Create new user
+    // Create new user with all fields and defaults
     const result = await db.collection('users').insertOne({
       name,
       email,
       password: hashedPassword,
+      phone: phone || '',
+      address: address || '',
+      image: image || '',
       provider: 'credentials',
       role: 'user',
       status: 'active',
