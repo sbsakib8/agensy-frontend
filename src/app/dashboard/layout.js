@@ -6,27 +6,23 @@ import DashboardSidebar from "@/components/Dashboard/DashboardNavbar/DashboardSi
 
 export default function Layout({ children }) {
   return (
-    
     <div className="h-screen flex bg-[#020617] relative overflow-hidden">
       {/* Background Orbs */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px] animate-pulse"></div>
-        <div className="absolute top-[30%] right-[-10%] w-[600px] h-[600px] bg-purple-600/15 rounded-full blur-[130px] animate-[bounce_10s_infinite]"></div>
+        <div className="absolute top-[-10%] left-[-5%] w-125 h-125 bg-blue-600/20 rounded-full blur-[120px] animate-pulse"></div>
+        <div className="absolute top-[30%] right-[-10%] w-150 h-150 bg-purple-600/15 rounded-full blur-[130px] animate-[bounce_10s_infinite]"></div>
       </div>
 
-      {/* Sidebar - flex-shrink-0 এবং h-full নিশ্চিত করা হয়েছে */}
-      <div className="relative z-20 flex-shrink-0 h-full border-r border-blue-500/10">
+      <div className="relative z-20 shrink-0 h-full border-r border-blue-500/10">
         <DashboardSidebar />
       </div>
 
-      {/* Right Side - overflow-hidden এখানে জরুরি */}
       <div className="flex-1 flex flex-col relative z-10 overflow-hidden">
         {/* Navbar */}
         <DashboardNavbar />
 
-        {/* Main Content - এখানেই স্ক্রল হবে */}
         <main className="flex-1 p-6 overflow-y-auto custom-scrollbar">
-          <div className="max-w-[1600px] mx-auto">{children}</div>
+          <div className="max-w-400 mx-auto">{children}</div>
         </main>
       </div>
 
