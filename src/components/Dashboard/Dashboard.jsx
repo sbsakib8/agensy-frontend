@@ -19,11 +19,11 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  LineChart,
-  Line,
+  BarChart,
+  Bar,
+  Cell,
 } from "recharts";
 
-// ডামি ডাটা চার্টের জন্য
 const chartData = [
   { name: "Jan", design: 20, dev: 15 },
   { name: "Feb", design: 25, dev: 22 },
@@ -31,6 +31,12 @@ const chartData = [
   { name: "Apr", design: 30, dev: 24 },
   { name: "May", design: 25, dev: 35 },
   { name: "Jun", design: 35, dev: 30 },
+];
+
+const invoiceData = [
+  { name: "Paid", value: 80, fill: "#3b82f6" },
+  { name: "Pending", value: 45, fill: "#a855f7" },
+  { name: "Overdue", value: 25, fill: "#f43f5e" },
 ];
 
 export default function Dashboard() {
@@ -55,7 +61,7 @@ export default function Dashboard() {
     "bg-[#0a0f23]/60 backdrop-blur-xl border border-blue-500/30 rounded-2xl p-5 text-white shadow-[0_0_20px_rgba(59,130,246,0.1)] hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] transition-all duration-500";
 
   return (
-    <div className="relative min-h-screen p-6 overflow-hidden  text-slate-200">
+    <div className="relative min-h-screen p-6 overflow-hidden text-slate-200">
       <div
         className={`relative z-10 transition-opacity duration-1000 ${isVisible ? "opacity-100" : "opacity-0"}`}
       >
@@ -210,13 +216,54 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Invoices Bar Chart */}
+          {/* Invoices Status Bar Chart with Recharts */}
           <div className={cardStyle}>
-            <h3 className="text-lg font-semibold mb-6 text-center">Invoices Status</h3>
-            <div className="flex items-end justify-around h-32 px-4">
-              <Bar height="h-[80%]" color="bg-blue-500" label="Paid" />
-              <Bar height="h-[40%]" color="bg-purple-500" label="Pending" />
-              <Bar height="h-[20%]" color="bg-orange-500" label="Overdue" />
+            <h3 className="text-lg font-semibold mb-4 text-center">Invoices Status</h3>
+            <div className="h-48 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={invoiceData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+                  <XAxis
+                    dataKey="name"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: "#94a3b8", fontSize: 12 }}
+                  />
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: "#94a3b8", fontSize: 12 }}
+                  />
+                  <Tooltip
+                    cursor={{ fill: "rgba(255, 255, 255, 0.05)" }}
+                    contentStyle={{
+                      backgroundColor: "#0f172a",
+                      border: "1px solid #3b82f6",
+                      borderRadius: "8px",
+                      padding: "6px 10px",
+                    }}
+                    labelStyle={{ color: "#94a3b8", fontSize: 11 }}
+                    itemStyle={{ color: "#ffffff", fontSize: 12 }}
+                  />
+                  <Bar dataKey="value" radius={[6, 6, 0, 0]} barSize={35}>
+                    {invoiceData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.fill} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className="flex justify-center gap-4 mt-2">
+              {invoiceData.map((item, i) => (
+                <div key={i} className="flex items-center gap-1.5">
+                  <div
+                    className="w-2 h-2 rounded-full"
+                    style={{ backgroundColor: item.fill }}
+                  ></div>
+                  <span className="text-[10px] text-slate-400">{item.name}</span>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -268,21 +315,6 @@ function StatCard({ icon, title, value, sub, color = "text-white" }) {
           </span>
         )}
       </div>
-    </div>
-  );
-}
-
-function Bar({ height, color, label }) {
-  return (
-    <div className="flex flex-col items-center gap-2 w-full">
-      <div
-        className={`${height} ${color} w-8 rounded-t-md shadow-[0_0_15px_rgba(0,0,0,0.2)] relative group`}
-      >
-        <div
-          className={`absolute inset-0 ${color} blur-md opacity-40 group-hover:opacity-100 transition-opacity`}
-        ></div>
-      </div>
-      <span className="text-[10px] text-slate-400">{label}</span>
     </div>
   );
 }
