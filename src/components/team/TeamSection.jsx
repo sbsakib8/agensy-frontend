@@ -1,8 +1,30 @@
 "use client";
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Linkedin, Twitter, Github, Mail, MapPin, Calendar } from 'lucide-react';
 
 const TeamSection = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [mounted, setMounted] = useState(false);
+  
+  // Initialize particles once using useState with function
+  const [particles] = useState(() => {
+    return [...Array(15)].map(() => ({
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+      delay: Math.random() * 5,
+      duration: 5 + Math.random() * 10
+    }));
+  });
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   const teamMembers = [
     {
       id: 1,
@@ -180,41 +202,90 @@ const TeamSection = () => {
   }, [selectedDepartment]);
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-900 min-h-screen">
-      <div className="max-w-7xl mx-auto">
+    <section className="relative min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Grid Pattern */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+        
+        {/* Gradient Orbs */}
+        <div 
+          className="absolute w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-float"
+          style={{ 
+            top: '20%', 
+            left: '15%',
+            transform: `translate(${mousePosition.x * 0.015}px, ${mousePosition.y * 0.015}px)`
+          }}
+        ></div>
+        <div 
+          className="absolute w-80 h-80 bg-blue-500/15 rounded-full blur-3xl animate-float-delayed"
+          style={{ 
+            bottom: '30%', 
+            right: '20%',
+            transform: `translate(${mousePosition.x * -0.01}px, ${mousePosition.y * -0.01}px)`
+          }}
+        ></div>
+        <div 
+          className="absolute w-72 h-72 bg-purple-500/15 rounded-full blur-3xl animate-float-slow"
+          style={{ 
+            top: '60%', 
+            left: '70%',
+            transform: `translate(${mousePosition.x * 0.008}px, ${mousePosition.y * 0.008}px)`
+          }}
+        ></div>
+
+        {/* Floating Particles */}
+        {particles.map((particle, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 bg-cyan-400/30 rounded-full animate-particle"
+            style={{
+              top: `${particle.top}%`,
+              left: `${particle.left}%`,
+              animationDelay: `${particle.delay}s`,
+              animationDuration: `${particle.duration}s`
+            }}
+          ></div>
+        ))}
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         {/* Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center px-4 py-2 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 text-sm font-medium mb-6">
-            <span>Meet Our Team</span>
+        <div className={`text-center mb-16 ${mounted ? 'animate-fade-in-up' : 'opacity-100'}`}>
+          <div className="inline-flex items-center px-6 py-3 bg-slate-800/60 backdrop-blur-xl border border-cyan-500/30 rounded-full text-cyan-400 text-sm font-medium mb-8 hover:border-cyan-400/50 transition-all duration-300">
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-full blur opacity-50"></div>
+            <span className="relative">Meet Our Team</span>
           </div>
           
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-            The Minds Behind
-            <span className="block bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+            <span className={mounted ? 'animate-fade-in-up' : 'opacity-100'}>The Minds Behind</span>
+            <span className={`block bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent ${mounted ? 'animate-gradient animate-fade-in-up-delayed' : ''}`}>
               BD Stack Solutions
             </span>
           </h1>
           
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          <p className={`text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed ${mounted ? 'animate-fade-in-up-more-delayed' : 'opacity-100'}`}>
             We are a diverse team of passionate professionals dedicated to delivering exceptional 
             digital solutions. Get to know the experts who make innovation happen.
           </p>
         </div>
 
         {/* Department Filters */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
-          {departments.map((dept) => (
-            <button
-              key={dept.name}
-              onClick={() => setSelectedDepartment(dept.name)}
-              className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                selectedDepartment === dept.name
-                  ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/25'
-                  : 'bg-slate-800 text-gray-300 hover:text-white hover:bg-slate-700 border border-slate-700'
-              }`}
-            >
-              {dept.name} ({dept.count})
-            </button>
+        <div className={`flex flex-wrap justify-center gap-4 mb-12 ${mounted ? 'animate-fade-in-up' : 'opacity-100'}`} style={mounted ? {animationDelay: '0.6s'} : {}}>
+          {departments.map((dept, index) => (
+            <div key={dept.name} className={`relative group ${mounted ? 'animate-fade-in-up-stagger-1' : 'opacity-100'}`} style={mounted ? {animationDelay: `${0.7 + index * 0.1}s`} : {}}>
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <button
+                onClick={() => setSelectedDepartment(dept.name)}
+                className={`relative px-6 py-3 rounded-full font-medium backdrop-blur-sm transition-all duration-300 ${
+                  selectedDepartment === dept.name
+                    ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/25 border border-cyan-500/50'
+                    : 'bg-slate-800/70 text-gray-300 hover:text-white hover:bg-slate-700/80 border border-slate-700/50 hover:border-cyan-500/30'
+                }`}
+              >
+                {dept.name} ({dept.count})
+              </button>
+            </div>
           ))}
         </div>
 
@@ -223,25 +294,36 @@ const TeamSection = () => {
           {currentMembers.map((member, index) => (
             <div
               key={member.id}
-              className="group relative bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl overflow-hidden hover:border-cyan-500/50 transition-all duration-500 hover:shadow-2xl hover:shadow-cyan-500/10 hover:-translate-y-2"
+              className={`group relative ${mounted ? 'animate-fade-in-up-stagger-1' : 'opacity-100'}`}
               style={{
-                animationDelay: `${index * 100}ms`,
+                animationDelay: `${0.8 + index * 0.1}s`,
               }}
             >
-              {/* Card Background Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              {/* Glowing Background */}
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               
-              <div className="relative p-6">
-                {/* Profile Image */}
-                <div className="relative mb-6 mx-auto w-32 h-32">
-                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full blur-lg opacity-20 group-hover:opacity-40 transition-opacity duration-500" />
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="relative w-full h-full object-cover rounded-full border-4 border-slate-700 group-hover:border-cyan-500/50 transition-all duration-500"
-                  />
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-t from-cyan-500/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                </div>
+              <div className="relative bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-2xl overflow-hidden hover:border-cyan-500/50 transition-all duration-500 hover:shadow-2xl hover:shadow-cyan-500/20 hover:-translate-y-3">
+                {/* Card Background Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                {/* Glass overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 via-transparent to-slate-800/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              
+                <div className="relative p-8">
+                  {/* Profile Image */}
+                  <div className="relative mb-6 mx-auto w-32 h-32">
+                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full blur-lg opacity-30 group-hover:opacity-60 transition-opacity duration-500 animate-pulse-slow" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-700" />
+                    <Image
+                      src={member.image}
+                      alt={member.name}
+                      width={128}
+                      height={128}
+                      className="relative w-full h-full object-cover rounded-full border-4 border-slate-600/50 group-hover:border-cyan-400/70 transition-all duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-t from-cyan-500/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="absolute inset-0 rounded-full border-2 border-cyan-400/0 group-hover:border-cyan-400/30 transition-all duration-500"></div>
+                  </div>
 
                 {/* Member Info */}
                 <div className="text-center mb-4">
@@ -269,60 +351,76 @@ const TeamSection = () => {
                   </div>
                 </div>
 
-                {/* Skills */}
-                <div className="mb-6">
-                  <div className="flex flex-wrap gap-2">
-                    {member.skills.slice(0, 3).map((skill) => (
-                      <span
-                        key={skill}
-                        className="px-3 py-1 text-xs font-medium bg-slate-700 text-gray-300 rounded-full group-hover:bg-cyan-500/20 group-hover:text-cyan-400 transition-all duration-300"
-                      >
-                        {skill}
-                      </span>
-                    ))}
+                  {/* Skills */}
+                  <div className="mb-6">
+                    <div className="flex flex-wrap gap-2">
+                      {member.skills.slice(0, 3).map((skill, skillIndex) => (
+                        <span
+                          key={skill}
+                          className="px-3 py-1 text-xs font-medium bg-slate-700/60 backdrop-blur-sm text-gray-300 rounded-full border border-slate-600/50 group-hover:bg-cyan-500/20 group-hover:text-cyan-400 group-hover:border-cyan-500/40 transition-all duration-300 hover:scale-105"
+                          style={{
+                            animationDelay: `${1.2 + skillIndex * 0.1}s`
+                          }}
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
 
-                {/* Social Links */}
-                <div className="flex justify-center space-x-4">
-                  {member.social.linkedin && (
-                    <a
-                      href={member.social.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 bg-slate-700 text-gray-400 rounded-full hover:bg-blue-600 hover:text-white transition-all duration-300 hover:scale-110"
-                    >
-                      <Linkedin className="w-4 h-4" />
-                    </a>
-                  )}
-                  {member.social.twitter && (
-                    <a
-                      href={member.social.twitter}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 bg-slate-700 text-gray-400 rounded-full hover:bg-cyan-500 hover:text-white transition-all duration-300 hover:scale-110"
-                    >
-                      <Twitter className="w-4 h-4" />
-                    </a>
-                  )}
-                  {member.social.github && (
-                    <a
-                      href={member.social.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 bg-slate-700 text-gray-400 rounded-full hover:bg-gray-600 hover:text-white transition-all duration-300 hover:scale-110"
-                    >
-                      <Github className="w-4 h-4" />
-                    </a>
-                  )}
-                  {member.social.email && (
-                    <a
-                      href={`mailto:${member.social.email}`}
-                      className="p-2 bg-slate-700 text-gray-400 rounded-full hover:bg-green-600 hover:text-white transition-all duration-300 hover:scale-110"
-                    >
-                      <Mail className="w-4 h-4" />
-                    </a>
-                  )}
+                  {/* Social Links */}
+                  <div className="flex justify-center space-x-4">
+                    {member.social.linkedin && (
+                      <div className="relative group/social">
+                        <div className="absolute inset-0 bg-blue-500/20 rounded-full blur opacity-0 group-hover/social:opacity-100 transition-opacity duration-300"></div>
+                        <a
+                          href={member.social.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="relative p-3 bg-slate-700/60 backdrop-blur-sm border border-slate-600/50 text-gray-400 rounded-full hover:bg-blue-600/20 hover:text-blue-400 hover:border-blue-500/50 transition-all duration-300 hover:scale-110 block"
+                        >
+                          <Linkedin className="w-4 h-4" />
+                        </a>
+                      </div>
+                    )}
+                    {member.social.twitter && (
+                      <div className="relative group/social">
+                        <div className="absolute inset-0 bg-cyan-500/20 rounded-full blur opacity-0 group-hover/social:opacity-100 transition-opacity duration-300"></div>
+                        <a
+                          href={member.social.twitter}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="relative p-3 bg-slate-700/60 backdrop-blur-sm border border-slate-600/50 text-gray-400 rounded-full hover:bg-cyan-500/20 hover:text-cyan-400 hover:border-cyan-500/50 transition-all duration-300 hover:scale-110 block"
+                        >
+                          <Twitter className="w-4 h-4" />
+                        </a>
+                      </div>
+                    )}
+                    {member.social.github && (
+                      <div className="relative group/social">
+                        <div className="absolute inset-0 bg-gray-500/20 rounded-full blur opacity-0 group-hover/social:opacity-100 transition-opacity duration-300"></div>
+                        <a
+                          href={member.social.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="relative p-3 bg-slate-700/60 backdrop-blur-sm border border-slate-600/50 text-gray-400 rounded-full hover:bg-gray-600/20 hover:text-gray-300 hover:border-gray-500/50 transition-all duration-300 hover:scale-110 block"
+                        >
+                          <Github className="w-4 h-4" />
+                        </a>
+                      </div>
+                    )}
+                    {member.social.email && (
+                      <div className="relative group/social">
+                        <div className="absolute inset-0 bg-green-500/20 rounded-full blur opacity-0 group-hover/social:opacity-100 transition-opacity duration-300"></div>
+                        <a
+                          href={`mailto:${member.social.email}`}
+                          className="relative p-3 bg-slate-700/60 backdrop-blur-sm border border-slate-600/50 text-gray-400 rounded-full hover:bg-green-600/20 hover:text-green-400 hover:border-green-500/50 transition-all duration-300 hover:scale-110 block"
+                        >
+                          <Mail className="w-4 h-4" />
+                        </a>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -333,45 +431,53 @@ const TeamSection = () => {
         {totalPages > 1 && (
           <div className="flex justify-center items-center mt-12 space-x-2">
             {/* Previous Button */}
-            <button
-              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-              className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                currentPage === 1
-                  ? 'bg-slate-800 text-gray-500 cursor-not-allowed'
-                  : 'bg-slate-700 text-gray-300 hover:bg-slate-600 hover:text-white'
-              }`}
-            >
-              Previous
-            </button>
+            <div className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className={`relative px-4 py-2 rounded-lg font-medium backdrop-blur-sm border transition-all duration-300 ${
+                  currentPage === 1
+                    ? 'bg-slate-800/50 border-slate-700/50 text-gray-500 cursor-not-allowed'
+                    : 'bg-slate-700/60 border-slate-600/50 text-gray-300 hover:bg-slate-600/60 hover:text-white hover:border-cyan-500/30'
+                }`}
+              >
+                Previous
+              </button>
+            </div>
 
             {/* Page Numbers */}
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <button
-                key={page}
-                onClick={() => setCurrentPage(page)}
-                className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                  currentPage === page
-                    ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/25'
-                    : 'bg-slate-700 text-gray-300 hover:bg-slate-600 hover:text-white'
-                }`}
-              >
-                {page}
-              </button>
+              <div key={page} className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <button
+                  onClick={() => setCurrentPage(page)}
+                  className={`relative px-4 py-2 rounded-lg font-medium backdrop-blur-sm border transition-all duration-300 ${
+                    currentPage === page
+                      ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/25 border-cyan-500/50'
+                      : 'bg-slate-700/60 border-slate-600/50 text-gray-300 hover:bg-slate-600/60 hover:text-white hover:border-cyan-500/30'
+                  }`}
+                >
+                  {page}
+                </button>
+              </div>
             ))}
 
             {/* Next Button */}
-            <button
-              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-              disabled={currentPage === totalPages}
-              className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                currentPage === totalPages
-                  ? 'bg-slate-800 text-gray-500 cursor-not-allowed'
-                  : 'bg-slate-700 text-gray-300 hover:bg-slate-600 hover:text-white'
-              }`}
-            >
-              Next
-            </button>
+            <div className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className={`relative px-4 py-2 rounded-lg font-medium backdrop-blur-sm border transition-all duration-300 ${
+                  currentPage === totalPages
+                    ? 'bg-slate-800/50 border-slate-700/50 text-gray-500 cursor-not-allowed'
+                    : 'bg-slate-700/60 border-slate-600/50 text-gray-300 hover:bg-slate-600/60 hover:text-white hover:border-cyan-500/30'
+                }`}
+              >
+                Next
+              </button>
+            </div>
           </div>
         )}
 
@@ -385,21 +491,33 @@ const TeamSection = () => {
 
         {/* Call to Action */}
         <div className="text-center mt-20">
-          <div className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-12">
-            <h2 className="text-3xl font-bold text-white mb-4">
-              Want to Join Our Team?
-            </h2>
-            <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
-              We are always looking for talented individuals who share our passion for innovation and excellence. 
-              Check out our open positions and become part of our growing team.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold rounded-full hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 hover:scale-105">
-                View Open Positions
-              </button>
-              <button className="px-8 py-4 border border-slate-600 text-gray-300 font-semibold rounded-full hover:border-cyan-500 hover:text-white transition-all duration-300">
-                Contact HR
-              </button>
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10 rounded-2xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-500"></div>
+            <div className="relative bg-slate-800/30 backdrop-blur-xl border border-slate-700/30 rounded-2xl p-12 hover:border-cyan-500/40 transition-all duration-500">
+              <div className="absolute inset-0 bg-gradient-to-br from-slate-800/20 via-transparent to-slate-700/20 rounded-2xl"></div>
+              <div className="relative">
+                <h2 className="text-3xl font-bold text-white mb-4">
+                  Want to Join Our Team?
+                </h2>
+                <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
+                  We are always looking for talented individuals who share our passion for innovation and excellence. 
+                  Check out our open positions and become part of our growing team.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <div className="relative group/btn">
+                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full blur opacity-50 group-hover/btn:opacity-75 transition-opacity duration-300"></div>
+                    <button className="relative px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold rounded-full hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 hover:scale-105">
+                      View Open Positions
+                    </button>
+                  </div>
+                  <div className="relative group/btn">
+                    <div className="absolute inset-0 bg-gradient-to-r from-slate-600/20 to-cyan-500/20 rounded-full blur opacity-0 group-hover/btn:opacity-50 transition-opacity duration-300"></div>
+                    <button className="relative px-8 py-4 bg-slate-700/40 backdrop-blur-sm border border-slate-600/50 text-gray-300 font-semibold rounded-full hover:border-cyan-500/50 hover:text-white hover:bg-slate-600/50 transition-all duration-300">
+                      Contact HR
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

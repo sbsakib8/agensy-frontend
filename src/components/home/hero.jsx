@@ -5,6 +5,7 @@ import { Search, Code, TrendingUp, Users, Globe, Zap } from 'lucide-react';
  const HeroSection = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [searchFocused, setSearchFocused] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   // Generate stable random values for particles
   const particles = useMemo(() => {
@@ -22,6 +23,10 @@ import { Search, Code, TrendingUp, Users, Globe, Zap } from 'lucide-react';
     };
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  useEffect(() => {
+    setMounted(true);
   }, []);
 
   return (
@@ -84,16 +89,16 @@ import { Search, Code, TrendingUp, Users, Globe, Zap } from 'lucide-react';
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
         
         {/* Hero Title */}
-        <div className="text-center mb-8 animate-fade-in-up">
+        <div className={`text-center mb-8 ${mounted ? 'animate-fade-in-up' : 'opacity-100'}`}>
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
             <span className="text-white">Innovating </span>
-            <span className="bg-linear-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent animate-gradient">
+            <span className={`bg-linear-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent ${mounted ? 'animate-gradient' : ''}`}>
               Intelligent
             </span>
             <span className="text-white"> Solutions</span>
           </h1>
           
-          <p className="text-gray-400 text-base sm:text-lg md:text-xl max-w-4xl mx-auto leading-relaxed px-4 animate-fade-in-up-delayed">
+          <p className={`text-gray-400 text-base sm:text-lg md:text-xl max-w-4xl mx-auto leading-relaxed px-4 ${mounted ? 'animate-fade-in-up-delayed' : 'opacity-100'}`}>
             We transform complex challenges into robust, high-performance software,
             leveraging cutting-edge technology and agile methodologies to deliver unparalleled
             business value.
@@ -101,7 +106,7 @@ import { Search, Code, TrendingUp, Users, Globe, Zap } from 'lucide-react';
         </div>
 
         {/* Search Bar */}
-        <div className="max-w-2xl mx-auto mb-16 animate-fade-in-up-more-delayed">
+        <div className={`max-w-2xl mx-auto mb-16 ${mounted ? 'animate-fade-in-up-more-delayed' : 'opacity-100'}`}>
           <div className={`relative group ${searchFocused ? 'scale-105' : ''} transition-transform duration-300`}>
             <div className="absolute inset-0 bg-linear-to-r from-cyan-500 to-blue-500 rounded-2xl blur-xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
             <div className="relative flex items-center bg-slate-800/80 backdrop-blur-xl border border-slate-700/50 rounded-2xl overflow-hidden">
@@ -124,7 +129,7 @@ import { Search, Code, TrendingUp, Users, Globe, Zap } from 'lucide-react';
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           
           {/* Card 1 - Deployment Success Rate */}
-          <div className="group animate-fade-in-up-stagger-1">
+          <div className={`group ${mounted ? 'animate-fade-in-up-stagger-1' : 'opacity-100'}`}>
             <div className="relative">
               <div className="absolute inset-0 bg-linear-to-r from-cyan-500/20 to-blue-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="relative bg-slate-800/60 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-6 hover:border-cyan-500/50 transition-all duration-500 group-hover:transform group-hover:-translate-y-2">
@@ -157,7 +162,7 @@ import { Search, Code, TrendingUp, Users, Globe, Zap } from 'lucide-react';
           </div>
 
           {/* Card 2 - Project Velocity */}
-          <div className="group animate-fade-in-up-stagger-2">
+          <div className={`group ${mounted ? 'animate-fade-in-up-stagger-2' : 'opacity-100'}`}>
             <div className="relative">
               <div className="absolute inset-0 bg-linear-to-r from-blue-500/20 to-purple-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="relative bg-slate-800/60 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-6 hover:border-blue-500/50 transition-all duration-500 group-hover:transform group-hover:-translate-y-2">
@@ -190,7 +195,7 @@ import { Search, Code, TrendingUp, Users, Globe, Zap } from 'lucide-react';
           </div>
 
           {/* Card 3 - Client Retention */}
-          <div className="group animate-fade-in-up-stagger-3 md:col-span-2 lg:col-span-1">
+          <div className={`group ${mounted ? 'animate-fade-in-up-stagger-3' : 'opacity-100'} md:col-span-2 lg:col-span-1`}>
             <div className="relative">
               <div className="absolute inset-0 bg-linear-to-t from-green-500/20 to-cyan-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="relative bg-slate-800/60 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-6 hover:border-green-500/50 transition-all duration-500 group-hover:transform group-hover:-translate-y-2">
