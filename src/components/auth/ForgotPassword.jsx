@@ -6,7 +6,7 @@ import { ArrowLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import login from "../../../public/animation.json";
+import login from "../../../public/Anima Bot.json";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -70,7 +70,7 @@ export default function ForgotPasswordPage() {
           <div className="w-full flex items-center justify-center px-6 md:px-16 bg-[#020617]">
             <div className="w-full max-w-md text-center">
               <div className="mb-8">
-                <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-20 h-20 bg-linear-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
                   <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>

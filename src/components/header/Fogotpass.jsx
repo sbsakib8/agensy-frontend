@@ -6,7 +6,7 @@ import { ChevronLeft, Mail } from "lucide-react";
 import Lottie from "lottie-react";
 import { useLayout } from "@/context/LayoutContext";
 
-import forgotPasswordAnim from "../../public/Anima Bot.json";
+import forgotPasswordAnim from "../../../public/Anima Bot.json";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");

@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { signInWithGoogle, emailSignIn } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-import login from "../../../public/animation.json";
+import login from "../../../public/Login (1).json";
 
 export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false);

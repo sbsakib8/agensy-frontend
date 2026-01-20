@@ -10,7 +10,7 @@ import { uploadImageToImgBB } from "@/lib/imgbb-upload";
 import { useRouter } from "next/navigation";
 
 // Lottie animation
-import signup from "../../../public/animation.json";
+import signup from "../../../public/Sign up.json";
 import Image from "next/image";
 
 export default function SignUpPage() {
