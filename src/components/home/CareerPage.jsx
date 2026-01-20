@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import {
   FaRocket,
   FaBriefcase,
@@ -13,7 +14,7 @@ import {
 const benefits = [
   { title: "Fast Career Growth", icon: <FaRocket /> },
   { title: "Remote Friendly", icon: <FaLaptopCode /> },
-  { title: "Professional Team", icon: <FaUserTie /> },
+  { title: "Professional Team", icon: <FaUserTie />, link: "/team" },
   { title: "Healthy Culture", icon: <FaHandshake /> },
 ];
 
@@ -105,17 +106,31 @@ const CareerPage = () => {
         </h2>
 
         <div className="grid md:grid-cols-4 gap-8">
-          {benefits.map((item, index) => (
-            <div
-              key={index}
-              className="bg-white/5 border border-white/10 rounded-2xl p-6 text-center hover:border-blue-400 transition"
-            >
-              <div className="text-blue-400 text-4xl mb-4 flex justify-center">
-                {item.icon}
+          {benefits.map((item, index) => {
+            const content = (
+              <>
+                <div className="text-blue-400 text-4xl mb-4 flex justify-center">
+                  {item.icon}
+                </div>
+                <p className="font-medium">{item.title}</p>
+              </>
+            );
+            
+            return item.link ? (
+              <Link key={index} href={item.link}>
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 text-center hover:border-blue-400 hover:scale-105 transition-all cursor-pointer">
+                  {content}
+                </div>
+              </Link>
+            ) : (
+              <div
+                key={index}
+                className="bg-white/5 border border-white/10 rounded-2xl p-6 text-center hover:border-blue-400 transition"
+              >
+                {content}
               </div>
-              <p className="font-medium">{item.title}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
