@@ -10,22 +10,23 @@ import { uploadImageToImgBB } from "@/lib/imgbb-upload";
 import { useRouter } from "next/navigation";
 
 // Lottie animation
-import signup from "../../../public/animation.json";
+import signup from "../../../public/Sign up.json";
+import Image from "next/image";
 
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
   const { setShowHeader, setShowFooter } = useLayout();
   const [isVisible, setIsVisible] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    phone: '',
-    address: '',
-    image: ''
+    name: "",
+    email: "",
+    password: "",
+    phone: "",
+    address: "",
+    image: "",
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -49,28 +50,28 @@ export default function SignUpPage() {
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
-    setError('');
+    setError("");
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       // Check file type
-      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+      const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
       if (!validTypes.includes(file.type)) {
-        setError('Please select a valid image file (JPG, PNG, GIF, or WebP)');
+        setError("Please select a valid image file (JPG, PNG, GIF, or WebP)");
         return;
       }
-      
+
       // Check file size (5MB limit)
       if (file.size > 5 * 1024 * 1024) {
-        setError('Image size should be less than 5MB');
+        setError("Image size should be less than 5MB");
         return;
       }
-      
-      setError(''); // Clear any previous errors
+
+      setError(""); // Clear any previous errors
       setImageFile(file);
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -85,23 +86,23 @@ export default function SignUpPage() {
     setImagePreview(null);
     setFormData({
       ...formData,
-      image: ''
+      image: "",
     });
   };
 
   const handleEmailSignUp = async (e) => {
     e.preventDefault();
     if (!acceptTerms) {
-      setError('Please accept the Terms & Conditions');
+      setError("Please accept the Terms & Conditions");
       return;
     }
-    
+
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
-      let imageUrl = '';
-      
+      let imageUrl = "";
+
       // Upload image if provided
       if (imageFile) {
         setUploadingImage(true);
@@ -109,7 +110,7 @@ export default function SignUpPage() {
         if (uploadResult.success) {
           imageUrl = uploadResult.imageUrl;
         } else {
-          setError('Failed to upload image. Please try again.');
+          setError("Failed to upload image. Please try again.");
           setLoading(false);
           setUploadingImage(false);
           return;
@@ -119,17 +120,17 @@ export default function SignUpPage() {
 
       const signUpData = {
         ...formData,
-        image: imageUrl
+        image: imageUrl,
       };
 
       const result = await emailSignUp(signUpData);
       if (result.success) {
-        router.push('/signin?message=Account created successfully');
+        router.push("/signin?message=Account created successfully");
       } else {
-        setError(result.message || 'Sign up failed');
+        setError(result.message || "Sign up failed");
       }
     } catch (err) {
-      setError('An error occurred during sign up');
+      setError("An error occurred during sign up");
     } finally {
       setLoading(false);
       setUploadingImage(false);
@@ -140,7 +141,7 @@ export default function SignUpPage() {
     try {
       await signInWithGoogle();
     } catch (err) {
-      setError('Google sign up failed');
+      setError("Google sign up failed");
     }
   };
 
@@ -149,9 +150,9 @@ export default function SignUpPage() {
   return (
     <div className="w-screen h-screen flex items-center justify-center p-4 md:p-6 bg-[#0b1220] overflow-hidden">
       {/* MAIN CARD */}
-      <div className="relative flex w-full max-w-7xl h-full md:h-[85vh] md:max-w-6xl rounded-3xl overflow-hidden shadow-[0_0_80px_rgba(56,189,248,0.15)] border border-cyan-500/10">
+      <div className="relative flex w-full max-w-7xl h-full md:h-[90vh] md:max-w-6xl rounded-3xl overflow-hidden shadow-[0_0_80px_rgba(56,189,248,0.15)] border border-cyan-500/10">
         {/* GLOW */}
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-blue-500/5 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-br from-cyan-500/10 via-blue-500/5 to-transparent pointer-events-none" />
 
         {/* LEFT SIDE */}
         <div className="hidden md:flex w-1/2 relative p-6 lg:p-8 flex-col bg-[#0f172a] overflow-hidden min-h-0">
@@ -159,10 +160,10 @@ export default function SignUpPage() {
           <div className="absolute bottom-0 right-0 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl animate-pulse delay-700" />
 
           {/* TOP */}
-          <div className="relative z-10 flex justify-between items-center flex-shrink-0 mb-4">
+          <div className="relative z-10 flex justify-between items-center shrink-0 mb-4">
             <div className="flex items-center space-x-3">
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
+                <div className="absolute inset-0 bg-linear-to-r from-cyan-500 to-blue-500 rounded-lg blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
                 <div className="relative bg-linear-to-br from-cyan-400 to-blue-600 p-2 rounded-lg transform group-hover:scale-110 transition-transform duration-300">
                   <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none">
                     <path
@@ -192,7 +193,7 @@ export default function SignUpPage() {
               <div>
                 <Link href="/" className="text-md font-bold">
                   <span className="text-white">BD Stack </span>
-                  <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                  <span className="bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                     -Solutions
                   </span>
                 </Link>
@@ -211,12 +212,12 @@ export default function SignUpPage() {
           <div className="relative z-10 flex flex-col items-center justify-center flex-1 gap-6 px-4">
             <div className="w-full max-w-sm h-52 flex items-center justify-center">
               <div className="w-full h-full">
-                <Lottie 
-                  key="signup-lottie" 
-                  animationData={signup} 
+                <Lottie
+                  key="signup-lottie"
+                  animationData={signup}
                   loop={true}
                   autoplay={true}
-                  style={{ width: '100%', height: '100%' }}
+                  style={{ width: "100%", height: "100%" }}
                 />
               </div>
             </div>
@@ -238,7 +239,9 @@ export default function SignUpPage() {
           <div className="w-full h-full overflow-y-auto px-6 md:px-12 py-8 signup-scroll">
             <div className="w-full max-w-md mx-auto space-y-6">
               <div className="text-center md:text-left">
-                <h2 className="text-2xl md:text-3xl font-semibold text-white mb-2">Create an account</h2>
+                <h2 className="text-2xl md:text-3xl font-semibold text-white mb-2">
+                  Create an account
+                </h2>
                 <p className="text-gray-400 mb-6 text-sm">
                   Already have an account?{" "}
                   <Link href="/signin" className="text-cyan-400 hover:text-cyan-300 underline">
@@ -259,10 +262,12 @@ export default function SignUpPage() {
                   <div className="relative">
                     {imagePreview ? (
                       <div className="relative">
-                        <img
-                          src={imagePreview}
+                        <Image
+                          src={imagePreview} 
                           alt="Profile preview"
-                          className="w-20 h-20 rounded-full object-cover border-2 border-cyan-500/20"
+                          width={80} 
+                          height={80} 
+                          className="rounded-full object-cover border-2 border-cyan-500/20"
                         />
                         <button
                           type="button"
@@ -287,7 +292,7 @@ export default function SignUpPage() {
                     />
                     <div className="flex items-center gap-2 text-xs text-cyan-400 hover:text-cyan-300 transition">
                       <Upload size={14} />
-                      {imagePreview ? 'Change Photo' : 'Upload Photo (Optional)'}
+                      {imagePreview ? "Change Photo" : "Upload Photo (Optional)"}
                     </div>
                   </label>
                 </div>
@@ -353,20 +358,25 @@ export default function SignUpPage() {
                 </div>
 
                 <label className="flex items-center gap-2 text-sm text-gray-400 mt-4">
-                  <input 
-                    type="checkbox" 
+                  <input
+                    type="checkbox"
                     checked={acceptTerms}
                     onChange={(e) => setAcceptTerms(e.target.checked)}
-                    className="accent-cyan-500" 
-                  />I agree to the Terms & Conditions
+                    className="accent-cyan-500"
+                  />
+                  I agree to the Terms & Conditions
                 </label>
 
                 <button
                   type="submit"
                   disabled={loading || uploadingImage}
-                  className="w-full py-2.5 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-medium hover:shadow-[0_0_30px_rgba(56,189,248,0.6)] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm mt-4"
+                  className="w-full py-2.5 rounded-lg bg-linear-to-r from-cyan-500 to-blue-600 text-white font-medium hover:shadow-[0_0_30px_rgba(56,189,248,0.6)] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm mt-4"
                 >
-                  {uploadingImage ? 'Uploading Image...' : loading ? 'Creating Account...' : 'Create account'}
+                  {uploadingImage
+                    ? "Uploading Image..."
+                    : loading
+                      ? "Creating Account..."
+                      : "Create account"}
                 </button>
               </form>
 
@@ -381,10 +391,22 @@ export default function SignUpPage() {
                 className="w-full py-2.5 rounded-lg border border-cyan-500/20 text-white font-medium hover:bg-cyan-500/10 transition flex items-center justify-center gap-3 text-sm mb-8"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                  <path
+                    fill="#4285F4"
+                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                  />
+                  <path
+                    fill="#EA4335"
+                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                  />
                 </svg>
                 Continue with Google
               </button>

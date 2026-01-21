@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { signInWithGoogle, emailSignIn } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-import login from "../../../public/animation.json";
+import login from "../../../public/Login (1).json";
 
 export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -75,7 +75,7 @@ export default function SignInPage() {
   return (
     <div className="w-screen h-screen flex items-center justify-center p-6 md:p-10 bg-[#0b1220]">
       {/* MAIN CARD */}
-      <div className="relative flex w-full max-w-7xl h-full md:h-[70vh] md:max-w-5xl rounded-3xl overflow-hidden shadow-[0_0_80px_rgba(56,189,248,0.15)] border border-cyan-500/10">
+      <div className="relative flex w-full max-w-7xl h-full md:h-[90vh] md:max-w-5xl rounded-3xl overflow-hidden shadow-[0_0_80px_rgba(56,189,248,0.15)] border border-cyan-500/10">
         {/* GLOW */}
         <div className="absolute inset-0 bg-linear-to-br from-cyan-500/10 via-blue-500/5 to-transparent pointer-events-none" />
 

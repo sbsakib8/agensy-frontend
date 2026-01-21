@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import Lottie from "lottie-react";
-import mobileAppShowcase from "../../../../public/animation.json";
+import mobileAppShowcase from "../../../../public/Mobile App Showcase.json";
 import {
   Rocket,
   Code2,
