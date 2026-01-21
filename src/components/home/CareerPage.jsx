@@ -24,7 +24,7 @@ import { ArrowRight } from "lucide-react";
 const benefits = [
   { title: "Fast Career Growth", icon: <FaRocket /> },
   { title: "Remote Friendly", icon: <FaLaptopCode /> },
-  { title: "Professional Team", icon: <FaUserTie /> },
+  { title: "Professional Team", icon: <FaUserTie />, link: "/team" },
   { title: "Healthy Culture", icon: <FaHandshake /> },
 ];
 
