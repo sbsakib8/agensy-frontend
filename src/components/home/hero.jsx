@@ -69,98 +69,125 @@ export default function HeroSection() {
 
         {/* RIGHT SIDE */}
 <div className="relative flex items-center justify-center">
-  {/* MAIN IMAGE + BORDER GLOW */}
-  <motion.div
-    animate={{ y: [0, -12, 0] }}
-    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-    className="relative z-0" // <-- z-0 so cards can be above
-  >
-    {/* Border glow */}
-    <div className="absolute -inset-0.75 rounded-3xl 
-      bg-linear-to-r from-blue-500 to-cyan-400 
-      blur-md opacity-70" />
+ 
 
+ <div className="absolute inset-0 z-10 pointer-events-none">
+
+  {/* LEFT BOTTOM — BIG */}
+  <motion.div
+    animate={{ y: [0, -14, 0] }}
+    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+    className="absolute left-10 bottom-16"
+  >
     <Image
-      src="/banner1.jpg"
-      alt="Agency Preview"
-      width={800}
-      height={500}
-      priority
-      className="relative rounded-3xl object-cover 
-        w-105 h-65 md:w-130 md:h-80"
+      src="/UI-UX.png"
+      alt="UI UX"
+      width={180}
+      height={400}
+      unoptimized
+      className="rounded-2xl drop-shadow-2xl"
     />
   </motion.div>
 
-  {/* ================= FLOATING CARDS ON IMAGE ================= */}
-  <div className="absolute inset-0 z-10 pointer-events-none">
-    {/* LEFT BOTTOM */}
-    <motion.div
-      animate={{ y: [0, -14, 0] }}
-      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-      className="absolute left-6 bottom-10 -translate-x-1/2
-        rounded-2xl border border-blue-400/30 bg-blue-500/10 
-        px-5 py-4 backdrop-blur"
-    >
-      <div className="flex items-center gap-2">
-        <Zap size={18} className="text-blue-400" />
-        <p className="text-sm font-semibold text-blue-400">
-          Fast Performance
-        </p>
-      </div>
-      <p className="mt-1 text-xs text-gray-400">Optimized & scalable</p>
-    </motion.div>
+  {/* RIGHT TOP — MEDIUM */}
+  <motion.div
+    animate={{ y: [0, 16, 0] }}
+    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+    className="absolute right-12 top-14"
+  >
+    <Image
+      src="/photo1.jpeg"
+      alt="Photo"
+      width={230}
+      height={300}
+      unoptimized
+      className="rounded-xl drop-shadow-xl"
+    />
+  </motion.div>
 
-    {/* RIGHT TOP */}
-    <motion.div
-      animate={{ y: [0, 16, 0] }}
-      transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-      className="absolute right-0 top-0
-        rounded-2xl border border-cyan-400/30 bg-cyan-500/10 
-        px-5 py-4 backdrop-blur"
-    >
-      <div className="flex items-center gap-2">
-        <Palette size={16} className="text-cyan-400" />
-        <p className="text-sm font-semibold text-cyan-400">
-          UI / UX Focused
-        </p>
-      </div>
-      <p className="mt-1 text-xs text-gray-400">Modern visual system</p>
-    </motion.div>
+  {/* LEFT TOP — SMALL */}
+  <motion.div
+    animate={{ x: [0, 12, 0] }}
+    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+    className="absolute left-10 top-25"
+  >
+    <Image
+      src="/wrodpress.webp"
+      alt="WordPress"
+      width={180}
+      height={220}
+      unoptimized
+      className="rounded-xl drop-shadow-lg"
+    />
+  </motion.div>
 
-    {/* LEFT TOP */}
-    <motion.div
-      animate={{ x: [0, 12, 0] }}
-      transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-      className="absolute left-12 top-0 -translate-y-1/2
-        rounded-2xl border border-purple-400/30 bg-purple-500/10 
-        px-5 py-4 backdrop-blur"
-    >
-      <div className="flex items-center gap-2">
-        <Rocket size={18} className="text-purple-400" />
-        <p className="text-sm font-semibold text-purple-400">
-          React & Next.js
-        </p>
-      </div>
-      <p className="mt-1 text-xs text-gray-400">Modern tech stack</p>
-    </motion.div>
+  {/* RIGHT BOTTOM — WIDE */}
+  <motion.div
+    animate={{ x: [0, -14, 0], y: [0, 8, 0] }}
+    transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+    className="absolute right-16 bottom-14"
+  >
+    <Image
+      src="/e-commerce.jpg"
+      alt="E-commerce"
+      width={180}
+      height={160}
+      unoptimized
+      className="rounded-2xl drop-shadow-xl"
+    />
+  </motion.div>
 
-    {/* RIGHT BOTTOM */}
-    <motion.div
-      animate={{ x: [0, -14, 0], y: [0, 8, 0] }}
-      transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-      className="absolute right-2 bottom-0
-        rounded-2xl border border-emerald-400/30 bg-emerald-500/10 
-        px-5 py-4 backdrop-blur"
-    >
-      <div className="flex items-center gap-2">
-        <ShieldCheck size={18} className="text-emerald-400" />
-        <p className="text-sm font-semibold text-emerald-400">
-          Secure & Reliable
-        </p>
-      </div>
-      <p className="mt-1 text-xs text-gray-400">Production ready</p>
-    </motion.div>
-  </div>
+ {/* 🔹 EXTRA SMALL — CENTER LEFT — Upward */}
+<motion.div
+  animate={{ y: [0, 10, 0] }}
+  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+  className="absolute left-1/4 top-1/3"  // ← এখানে top কমানো হলো
+>
+  <Image
+    src="/app.jpg"
+    alt="Icon"
+    width={140}
+    height={130}
+    unoptimized
+    className="rounded-lg drop-shadow-md opacity-80"
+  />
+</motion.div>
+
+
+  {/* 🔹 EXTRA SMALL — CENTER RIGHT */}
+  <motion.div
+    animate={{ x: [0, -10, 0] }}
+    transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+    className="absolute right-1/6 top-1/4"
+  >
+    <Image
+      src="/download.jpg"
+      alt="Icon"
+      width={140}
+      height={180}
+      unoptimized
+      className="rounded-lg drop-shadow-md opacity-75"
+    />
+  </motion.div>
+
+  {/* 🔹 EXTRA TINY — BOTTOM CENTER */}
+  <motion.div
+    animate={{ y: [0, 8, 0] }}
+    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+    className="absolute left-1/2 bottom-8 -translate-x-1/2"
+  >
+    <Image
+      src="/Digital_marketing1.jpg"
+      alt="Tiny"
+      width={120}
+      height={100}
+      unoptimized
+      className="rounded-md drop-shadow opacity-70"
+    />
+  </motion.div>
+
+</div>
+
 </div>
 
         
