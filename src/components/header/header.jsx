@@ -32,6 +32,11 @@ import { useSession, signOut } from 'next-auth/react';
     { name: 'E-commerce', desc: 'Online store solutions' }
   ];
 
+  const aboutUsItems = [
+    { name: 'Team', desc: 'Meet our talented team', href: '/team' },
+    { name: 'Career', desc: 'Join our growing team', href: '/career' }
+  ];
+
   return (
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
@@ -134,15 +139,46 @@ import { useSession, signOut } from 'next-auth/react';
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-cyan-400 to-blue-500 group-hover:w-full transition-all duration-300"></span>
             </a>
 
-            <a href="/team" className="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 relative group">
-              <span>Team</span>
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-cyan-400 to-blue-500 group-hover:w-full transition-all duration-300"></span>
-            </a>
-
-            <a href="/career" className="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 relative group">
-              <span>Career</span>
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-cyan-400 to-blue-500 group-hover:w-full transition-all duration-300"></span>
-            </a>
+            {/* About Us Dropdown */}
+            <div 
+              className="relative"
+              onMouseEnter={() => setActiveDropdown('about')}
+              onMouseLeave={() => setActiveDropdown(null)}
+            >
+              <button className="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 flex items-center group">
+                <span>About Us</span>
+                <ChevronDown className={`ml-1 w-4 h-4 transition-transform duration-300 ${activeDropdown === 'about' ? 'rotate-180' : ''}`} />
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-cyan-400 to-blue-500 group-hover:w-full transition-all duration-300"></span>
+              </button>
+              
+              {activeDropdown === 'about' && (
+                <div className="absolute top-full left-0 pt-2 w-72">
+                  <div className="bg-slate-800/95 backdrop-blur-xl rounded-xl shadow-2xl border border-slate-700/50 overflow-hidden animate-fade-in">
+                    <div className="p-2">
+                      {aboutUsItems.map((item, index) => (
+                        <a
+                          key={index}
+                          href={item.href}
+                          className="block px-4 py-3 rounded-lg hover:bg-linear-to-r hover:from-cyan-500/10 hover:to-blue-500/10 transition-all duration-300 group"
+                        >
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <h3 className="text-white font-semibold group-hover:text-cyan-400 transition-colors">
+                                {item.name}
+                              </h3>
+                              <p className="text-sm text-gray-400 mt-0.5">
+                                {item.desc}
+                              </p>
+                            </div>
+                            <ArrowRight className="w-4 h-4 text-cyan-400 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                          </div>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </nav>
 <div className='flex gap-5'>
 
@@ -254,12 +290,30 @@ import { useSession, signOut } from 'next-auth/react';
             <a href="#pricing" className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-slate-800 rounded-lg transition-all duration-300">
               Pricing
             </a>
-            <a href="/team" className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-slate-800 rounded-lg transition-all duration-300">
-              Team
-            </a>
-            <a href="#career" className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-slate-800 rounded-lg transition-all duration-300">
-              Career
-            </a>
+            
+            <div>
+              <button
+                onClick={() => setActiveDropdown(activeDropdown === 'mobile-about' ? null : 'mobile-about')}
+                className="w-full flex items-center justify-between px-4 py-3 text-gray-300 hover:text-white hover:bg-slate-800 rounded-lg transition-all duration-300"
+              >
+                <span>About Us</span>
+                <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${activeDropdown === 'mobile-about' ? 'rotate-180' : ''}`} />
+              </button>
+              
+              {activeDropdown === 'mobile-about' && (
+                <div className="mt-2 ml-4 space-y-1">
+                  {aboutUsItems.map((item, index) => (
+                    <a
+                      key={index}
+                      href={item.href}
+                      className="block px-4 py-2 text-sm text-gray-400 hover:text-cyan-400 hover:bg-slate-800/50 rounded-lg transition-all duration-300"
+                    >
+                      {item.name}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
             
             {/* Auth Links */}
             <div className="border-t border-slate-700 pt-4 mt-4">
