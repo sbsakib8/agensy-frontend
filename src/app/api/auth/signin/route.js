@@ -53,6 +53,14 @@ export async function POST(request) {
       return NextResponse.json({ success: false, message: 'Invalid credentials' }, { status: 401 })
     }
 
+    // Check if user has a password (traditional signup) vs OAuth signup
+    if (!user.password) {
+      return NextResponse.json({ 
+        success: false, 
+        message: 'This account was created with Google. Please sign in with Google instead.' 
+      }, { status: 401 })
+    }
+
     const isPasswordValid = await bcrypt.compare(password, user.password)
     if (!isPasswordValid) {
       return NextResponse.json({ success: false, message: 'Invalid credentials' }, { status: 401 })
@@ -82,11 +90,17 @@ export async function POST(request) {
 
     response.cookies.set('auth-token', token, {
       httpOnly: true,
-       secure: false,          // localhost only
-  sameSite: 'lax', 
+      secure: false,          // localhost only
+      sameSite: 'lax',        // Allow cross-site cookies for localhost
       path: '/',
       maxAge: 60 * 60 * 24 * 7 // 7 days
     })
+
+    // 🔑 KEY: Add CORS headers for Express backend integration
+    response.headers.set('Access-Control-Allow-Origin', 'http://localhost:5001')
+    response.headers.set('Access-Control-Allow-Credentials', 'true')
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, Cookie')
 
     return response
     
@@ -97,4 +111,17 @@ export async function POST(request) {
       { status: 500 }
     )
   }
+}
+
+// Handle preflight requests for CORS
+export async function OPTIONS(request) {
+  const response = new NextResponse(null, { status: 200 })
+  
+  // CORS headers for preflight
+  response.headers.set('Access-Control-Allow-Origin', 'http://localhost:5001')
+  response.headers.set('Access-Control-Allow-Credentials', 'true')
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, Cookie')
+  
+  return response
 }

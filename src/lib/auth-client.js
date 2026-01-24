@@ -29,22 +29,42 @@ export const emailSignUp = async (userData) => {
   }
 }
 
-// Email sign-in function
+// Email sign-in function - Updated to use custom auth API
 export const emailSignIn = async (credentials) => {
   try {
-    const result = await signIn('credentials', {
-      email: credentials.email,
-      password: credentials.password,
-      redirect: false,
+    console.log('🔄 Signing in with custom auth API...')
+    
+    const response = await fetch('/api/auth/signin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include', // 🔑 KEY: Include cookies for auth-token
+      body: JSON.stringify(credentials),
     })
     
-    if (result?.error) {
-      return { success: false, message: 'Invalid credentials' }
-    }
+    const result = await response.json()
+    console.log('📝 Sign in response:', result)
     
-    return { success: true, message: 'Sign in successful' }
+    if (result.success) {
+      console.log('✅ Login successful, auth-token cookie set')
+      return { 
+        success: true, 
+        message: 'Sign in successful',
+        user: result.user 
+      }
+    } else {
+      console.log('❌ Login failed:', result.message)
+      return { 
+        success: false, 
+        message: result.message || 'Sign in failed' 
+      }
+    }
   } catch (error) {
-    console.error('Sign in error:', error)
-    return { success: false, message: 'An error occurred during sign in' }
+    console.error('❌ Sign in error:', error)
+    return { 
+      success: false, 
+      message: 'An error occurred during sign in' 
+    }
   }
 }
