@@ -29,7 +29,7 @@ export default function Profile() {
     try {
       setLoading(true)
       const result = await fetchUserProfile()
-      
+      console.log("result", result)
       if (result.success) {
         setUserProfile(result.data)
         setEditForm(result.data)
