@@ -2,32 +2,50 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X, ChevronDown, ArrowRight, LogOut, User } from "lucide-react";
 import Link from "next/link";
-import { useSession, signOut } from "next-auth/react";
+import { useCustomAuth } from "@/hooks/useCustomAuth";
+import Image from "next/image";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
-  const { data: session, status } = useSession();
+  const [dropdownTimeout, setDropdownTimeout] = useState(null);
+  const { user, loading, signOut: handleSignOut } = useCustomAuth();
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (dropdownTimeout) {
+        clearTimeout(dropdownTimeout);
+      }
+    };
+  }, [dropdownTimeout]);
 
-  const handleSignOut = async () => {
-    await signOut({ callbackUrl: "/" });
+  const handleDropdownEnter = (dropdownName) => {
+    if (dropdownTimeout) {
+      clearTimeout(dropdownTimeout);
+      setDropdownTimeout(null);
+    }
+    setActiveDropdown(dropdownName);
+  };
+
+  const handleDropdownLeave = () => {
+    const timeout = setTimeout(() => {
+      setActiveDropdown(null);
+    }, 150); // 150ms delay to allow moving to dropdown
+    setDropdownTimeout(timeout);
   };
 
   const services = [
     { name: "Web Development", desc: "Custom websites & web apps", href: "/web-development" },
     { name: "AI Agents", desc: "Intelligent virtual assistants", href: "/ai-agents" },
     { name: "Mobile Apps", desc: "iOS & Android development", href: "/app-development" },
-    { name: "UI/UX Design", desc: "Beautiful user experiences, href: /ui-ux-design" },
-    { name: "Digital Marketing", desc: "SEO, PPC & Social Media, href: /digital-marketing" },
+    { name: "UI/UX Design", desc: "Beautiful user experiences", href: "/ui-ux-design" },
+    { name: "Digital Marketing", desc: "SEO, PPC & Social Media", href: "/digital-marketing" },
     { name: "Branding", desc: "Logo & identity design" },
     { name: "E-commerce", desc: "Online store solutions" },
   ];
@@ -102,8 +120,8 @@ const Header = () => {
             {/* Services Dropdown */}
             <div
               className="relative"
-              onMouseEnter={() => setActiveDropdown("services")}
-              onMouseLeave={() => setActiveDropdown(null)}
+              onMouseEnter={() => handleDropdownEnter("services")}
+              onMouseLeave={handleDropdownLeave}
             >
               <button className="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 flex items-center group">
                 <span>Services</span>
@@ -114,7 +132,11 @@ const Header = () => {
               </button>
 
               {activeDropdown === "services" && (
-                <div className="absolute top-full left-0 pt-2 w-80">
+                <div
+                  className="absolute top-full left-0 pt-2 w-80"
+                  onMouseEnter={() => handleDropdownEnter("services")}
+                  onMouseLeave={handleDropdownLeave}
+                >
                   <div className="bg-slate-800/95 backdrop-blur-xl rounded-xl shadow-2xl border border-slate-700/50 overflow-hidden animate-fade-in">
                     <div className="p-2">
                       {services.map((service, index) => (
@@ -171,8 +193,8 @@ const Header = () => {
             {/* About Us Dropdown */}
             <div
               className="relative"
-              onMouseEnter={() => setActiveDropdown("about")}
-              onMouseLeave={() => setActiveDropdown(null)}
+              onMouseEnter={() => handleDropdownEnter("about")}
+              onMouseLeave={handleDropdownLeave}
             >
               <button className="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 flex items-center group">
                 <span>About Us</span>
@@ -183,7 +205,11 @@ const Header = () => {
               </button>
 
               {activeDropdown === "about" && (
-                <div className="absolute top-full left-0 pt-2 w-72">
+                <div
+                  className="absolute top-full left-0 pt-2 w-72"
+                  onMouseEnter={() => handleDropdownEnter("about")}
+                  onMouseLeave={handleDropdownLeave}
+                >
                   <div className="bg-slate-800/95 backdrop-blur-xl rounded-xl shadow-2xl border border-slate-700/50 overflow-hidden animate-fade-in">
                     <div className="p-2">
                       {aboutUsItems.map((item, index) => (
@@ -212,28 +238,132 @@ const Header = () => {
           <div className="flex gap-5">
             {/* Auth Links */}
             <div className="hidden lg:flex items-center space-x-3">
-              {session ? (
+              {user ? (
                 <div className="flex items-center space-x-3">
-                  <div className="relative group">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform duration-200">
-                      {session.user.image ? (
-                        <img
-                          src={session.user.image}
-                          alt={session.user.name}
+                  {/* Profile Dropdown */}
+                  <div
+                    className="relative"
+                    onMouseEnter={() => handleDropdownEnter("profile")}
+                    onMouseLeave={handleDropdownLeave}
+                  >
+                    <button className="w-10 h-10 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform duration-200">
+                      {user.image || user.picture ? (
+                        <Image
+                          src={user.image || user.picture}
+                          alt={user.name || user.firstName || "User"}
+                          width={40}
+                          height={40}
                           className="w-full h-full rounded-full object-cover"
                         />
                       ) : (
                         <User className="w-5 h-5 text-white" />
                       )}
-                    </div>
-                    {/* Hover Tooltip */}
-                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-slate-800 text-white text-sm rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
-                      <div className="font-medium">{session.user.name || "User"}</div>
-                      <div className="text-gray-300 text-xs">{session.user.email}</div>
-                      {/* Tooltip Arrow */}
-                      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-b-slate-800"></div>
-                    </div>
+                    </button>
+
+                    {/* Profile Dropdown Menu */}
+                    {activeDropdown === "profile" && (
+                      <div
+                        className="absolute top-full right-0 mt-2 w-56"
+                        onMouseEnter={() => handleDropdownEnter("profile")}
+                        onMouseLeave={handleDropdownLeave}
+                      >
+                        <div className="bg-slate-800/95 backdrop-blur-xl rounded-xl shadow-2xl border border-slate-700/50 overflow-hidden animate-fade-in">
+                          {/* User Info Header */}
+                          <div className="px-4 py-3 border-b border-slate-700/50">
+                            <div className="font-medium text-white">
+                              {user.name || user.firstName || "User"}
+                            </div>
+                            <div className="text-gray-300 text-sm">{user.email}</div>
+                          </div>
+
+                          {/* Menu Items */}
+                          <div className="p-2">
+                            <Link
+                              href="/dashboard"
+                              className="flex items-center px-4 py-3 rounded-lg hover:bg-linear-to-r hover:from-cyan-500/10 hover:to-blue-500/10 transition-all duration-300 group"
+                            >
+                              <div className="flex items-center justify-between w-full">
+                                <div className="flex items-center">
+                                  <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center mr-3">
+                                    <svg
+                                      className="w-4 h-4 text-blue-400"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                                      />
+                                    </svg>
+                                  </div>
+                                  <div>
+                                    <h3 className="text-white font-medium group-hover:text-cyan-400 transition-colors">
+                                      Dashboard
+                                    </h3>
+                                  </div>
+                                </div>
+                                <ArrowRight className="w-4 h-4 text-cyan-400 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                              </div>
+                            </Link>
+
+                            <Link
+                              href="/track-order"
+                              className="flex items-center px-4 py-3 rounded-lg hover:bg-linear-to-r hover:from-cyan-500/10 hover:to-blue-500/10 transition-all duration-300 group"
+                            >
+                              <div className="flex items-center justify-between w-full">
+                                <div className="flex items-center">
+                                  <div className="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center mr-3">
+                                    <svg
+                                      className="w-4 h-4 text-green-400"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                      />
+                                    </svg>
+                                  </div>
+                                  <div>
+                                    <h3 className="text-white font-medium group-hover:text-cyan-400 transition-colors">
+                                      Track Order
+                                    </h3>
+                                  </div>
+                                </div>
+                                <ArrowRight className="w-4 h-4 text-cyan-400 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                              </div>
+                            </Link>
+
+                            <Link
+                              href="/profile"
+                              className="flex items-center px-4 py-3 rounded-lg hover:bg-linear-to-r hover:from-cyan-500/10 hover:to-blue-500/10 transition-all duration-300 group"
+                            >
+                              <div className="flex items-center justify-between w-full">
+                                <div className="flex items-center">
+                                  <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center mr-3">
+                                    <User className="w-4 h-4 text-purple-400" />
+                                  </div>
+                                  <div>
+                                    <h3 className="text-white font-medium group-hover:text-cyan-400 transition-colors">
+                                      Profile
+                                    </h3>
+                                  </div>
+                                </div>
+                                <ArrowRight className="w-4 h-4 text-cyan-400 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                              </div>
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
+
                   <button
                     onClick={handleSignOut}
                     className="flex items-center space-x-2 px-4 py-2 bg-red-500/10 border border-red-500/20 text-red-400 hover:text-white hover:border-red-400 rounded-full transition-all duration-300 font-medium"
@@ -255,7 +385,7 @@ const Header = () => {
             </div>
 
             {/* CTA Button */}
-            {!session && status !== "loading" && (
+            {!user && !loading && (
               <div className="hidden lg:block">
                 <button className="relative px-6 py-2.5 rounded-full font-semibold text-white overflow-hidden group">
                   <div className="absolute inset-0 bg-linear-to-r from-cyan-500 to-blue-600 transition-transform duration-300 group-hover:scale-105"></div>
@@ -365,14 +495,16 @@ const Header = () => {
 
             {/* Auth Links */}
             <div className="border-t border-slate-700 pt-4 mt-4">
-              {session ? (
+              {user ? (
                 <div className="space-y-3">
                   <div className="flex items-center space-x-3 px-4 py-3 bg-slate-800/50 rounded-lg">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center">
-                      {session.user.image ? (
-                        <img
-                          src={session.user.image}
-                          alt={session.user.name}
+                      {user.image || user.picture ? (
+                        <Image
+                          src={user.image || user.picture}
+                          alt={user.name || user.firstName || "User"}
+                          width={40}
+                          height={40}
                           className="w-full h-full rounded-full object-cover"
                         />
                       ) : (
@@ -380,8 +512,10 @@ const Header = () => {
                       )}
                     </div>
                     <div>
-                      <div className="text-white font-medium">{session.user.name || "User"}</div>
-                      <div className="text-gray-400 text-sm">{session.user.email}</div>
+                      <div className="text-white font-medium">
+                        {user.name || user.firstName || "User"}
+                      </div>
+                      <div className="text-gray-400 text-sm">{user.email}</div>
                     </div>
                   </div>
                   <button
@@ -393,7 +527,7 @@ const Header = () => {
                   </button>
                 </div>
               ) : (
-                status !== "loading" && (
+                !loading && (
                   <>
                     <Link
                       href="/signin"
@@ -412,7 +546,7 @@ const Header = () => {
               )}
             </div>
 
-            {!session && status !== "loading" && (
+            {!user && !loading && (
               <button className="w-full mt-4 px-6 py-3 cursor-pointer bg-linear-to-r from-cyan-500 to-blue-600 text-white font-semibold rounded-full hover:shadow-lg hover:shadow-cyan-500/50 transition-all duration-300">
                 Schedule a call
               </button>
