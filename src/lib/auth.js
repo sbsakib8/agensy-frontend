@@ -17,7 +17,10 @@ export const authOptions = {
         password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
+        console.log('🔍 Authorize called with credentials:', credentials ? 'present' : 'missing')
+        
         if (!credentials?.email || !credentials?.password) {
+          console.log('❌ Missing email or password in credentials')
           return null
         }
 
@@ -27,15 +30,19 @@ export const authOptions = {
           const user = await db.collection('users').findOne({ email: credentials.email })
 
           if (!user) {
+            console.log('❌ User not found with email:', credentials.email)
             return null
           }
 
+          console.log('🔍 User found, comparing passwords...')
           const isPasswordValid = await bcrypt.compare(credentials.password, user.password)
 
           if (!isPasswordValid) {
+            console.log('❌ Password comparison failed')
             return null
           }
 
+          console.log('✅ Password valid, returning user')
           return {
             id: user._id.toString(),
             email: user.email,

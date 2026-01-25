@@ -2,21 +2,22 @@
 
 import React, { useState } from "react";
 import {
-  LayoutDashboard,
-  FolderKanban,
   Users,
-  CheckSquare,
-  FileText,
-  BarChart3,
+  FolderKanban,
   Settings,
-  LogOut,
+  DollarSign,
+  Package,
+  ShoppingCart,
+  UserCheck,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function DashboardSidebar() {
   const [open, setOpen] = useState(true);
+  const pathname = usePathname();
 
   return (
     <aside
@@ -58,40 +59,48 @@ export default function DashboardSidebar() {
 
       {/* Menu */}
       <nav className="flex-1 px-3 py-6 space-y-2 text-sm">
-        <SidebarItem icon={<LayoutDashboard />} label="Dashboard" open={open} active />
-        <SidebarItem icon={<FolderKanban />} label="Projects" open={open} />
-        <SidebarItem icon={<Users />} label="Clients" open={open} />
-        <SidebarItem icon={<CheckSquare />} label="Tasks" open={open} />
-        <SidebarItem icon={<FileText />} label="Invoices" open={open} />
-        <SidebarItem icon={<Users />} label="Team" open={open} />
-        <SidebarItem icon={<BarChart3 />} label="Reports" open={open} />
+        <SidebarItem icon={<UserCheck />} label="Users" open={open} href="/dashboard/users" active={pathname === '/dashboard/users'} />
+        <SidebarItem icon={<ShoppingCart />} label="Orders" open={open} href="/dashboard/orders" active={pathname === '/dashboard/orders'} />
+        <SidebarItem icon={<Package />} label="Product" open={open} href="/dashboard/product" active={pathname === '/dashboard/product'} />
+        <SidebarItem icon={<Users />} label="Team" open={open} href="/dashboard/team" active={pathname === '/dashboard/team'} />
+        <SidebarItem icon={<FolderKanban />} label="Demo Project" open={open} href="/dashboard/demo-project" active={pathname === '/dashboard/demo-project'} />
+        <SidebarItem icon={<Settings />} label="Service" open={open} href="/dashboard/service" active={pathname === '/dashboard/service'} />
+        <SidebarItem icon={<DollarSign />} label="Pricing" open={open} href="/dashboard/pricing" active={pathname === '/dashboard/pricing'} />
       </nav>
-
-      {/* Bottom */}
-      <div className="px-3 py-4 border-t border-white/10 space-y-2">
-        <SidebarItem icon={<Settings />} label="Settings" open={open} />
-        <SidebarItem icon={<LogOut />} label="Logout" open={open} danger />
-      </div>
     </aside>
   );
 }
 
 /* Sidebar Item */
-function SidebarItem({ icon, label, active, danger, open }) {
-  return (
-    <button
-      className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg transition
-        ${
-          active
-            ? "bg-linear-to-r from-blue-500/20 to-cyan-500/10 text-white"
-            : danger
-              ? "text-red-400 hover:bg-red-500/10"
-              : "text-gray-400 hover:text-white hover:bg-white/5"
-        }
-      `}
-    >
+function SidebarItem({ icon, label, active, danger, open, href }) {
+  const content = (
+    <>
       <span className="w-5 h-5">{icon}</span>
       {open && <span>{label}</span>}
+    </>
+  );
+
+  const className = `w-full flex items-center gap-3 px-4 py-2.5 rounded-lg transition
+    ${
+      active
+        ? "bg-linear-to-r from-blue-500/20 to-cyan-500/10 text-white"
+        : danger
+          ? "text-red-400 hover:bg-red-500/10"
+          : "text-gray-400 hover:text-white hover:bg-white/5"
+    }
+  `;
+
+  if (href) {
+    return (
+      <Link href={href} className={className}>
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <button className={className}>
+      {content}
     </button>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import DashboardNavbar from "@/components/Dashboard/DashboardNavbar/Navbar";
 import DashboardSidebar from "@/components/Dashboard/DashboardNavbar/DashboardSidebar/Sidebar";
 
 export default function Layout({ children }) {
@@ -18,11 +17,8 @@ export default function Layout({ children }) {
       </div>
 
       <div className="flex-1 flex flex-col relative z-10 overflow-hidden">
-        {/* Navbar */}
-        <DashboardNavbar />
-
         <main className="flex-1 p-6 overflow-y-auto custom-scrollbar">
-          <div className="max-w-400 mx-auto">{children}</div>
+          <div className="max-w-full mx-auto">{children}</div>
         </main>
       </div>
 

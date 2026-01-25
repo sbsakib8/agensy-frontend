@@ -5,7 +5,7 @@ import Lottie from "lottie-react";
 import { Eye, EyeOff, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { signInWithGoogle, emailSignIn } from "@/lib/auth-client";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import login from "../../../public/Login (1).json";
 
@@ -49,13 +49,31 @@ export default function SignInPage() {
     setError('');
 
     try {
-      const result = await emailSignIn(formData);
+      console.log('🔄 Attempting login with custom signin API...')
+      
+      const response = await fetch('/api/auth/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // 🔑 KEY: Include cookies for auth-token
+        body: JSON.stringify(formData),
+      })
+      
+      const result = await response.json()
+      console.log('📝 Sign in response:', result)
+      
       if (result.success) {
+        console.log('✅ Login successful, auth-token cookie set')
+        // Store user data in sessionStorage for header update
+        sessionStorage.setItem('user', JSON.stringify(result.user))
         router.push('/');
       } else {
+        console.log('❌ Login failed:', result.message)
         setError(result.message || 'Sign in failed');
       }
     } catch (err) {
+      console.error('❌ Sign in error:', err)
       setError('An error occurred during sign in');
     } finally {
       setLoading(false);
@@ -63,10 +81,45 @@ export default function SignInPage() {
   };
 
   const handleGoogleSignIn = async () => {
+    setLoading(true);
     try {
-      await signInWithGoogle();
-    } catch (err) {
+      // First authenticate with Google OAuth using NextAuth
+      const result = await signIn('google', { 
+        redirect: false,
+        callbackUrl: '/' 
+      });
+      
+      if (result?.error) {
+        console.error('Google OAuth error:', result.error);
+        setError('Google sign in failed');
+        return;
+      }
+      
+      // After successful Google auth, sync the session with our custom auth
+      const syncResponse = await fetch('/api/auth/session-sync', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      
+      const syncResult = await syncResponse.json();
+      console.log('🔄 Session sync result:', syncResult);
+      
+      if (syncResult.success) {
+        console.log('✅ Google login successful, auth-token cookie set');
+        // Store user data in sessionStorage for header update
+        sessionStorage.setItem('user', JSON.stringify(syncResult.user));
+        router.push('/');
+      } else {
+        setError('Session sync failed');
+      }
+    } catch (error) {
+      console.error('Google sign in error:', error);
       setError('Google sign in failed');
+    } finally {
+      setLoading(false);
     }
   };
 

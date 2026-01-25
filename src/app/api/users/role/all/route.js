@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server'
 import { verifyToken } from '@/lib/jwt-middleware'
 
-// GET all users from Express backend
+// Get all users by role from Express backend
 export async function GET(request) {
   try {
-    console.log('🔍 Getting all users')
+    console.log('🔍 Getting all users by role')
 
     // Verify authentication
     const auth = verifyToken(request)
@@ -12,6 +12,14 @@ export async function GET(request) {
       return NextResponse.json(
         { success: false, message: auth.message }, 
         { status: auth.status }
+      )
+    }
+
+    // Only admin can get all users
+    if (auth.user.role !== 'admin') {
+      return NextResponse.json(
+        { success: false, message: 'Admin access required' },
+        { status: 403 }
       )
     }
 
@@ -26,7 +34,7 @@ export async function GET(request) {
     }
 
     // Forward request to Express backend
-    const expressResponse = await fetch('http://localhost:5001/api/users', {
+    const expressResponse = await fetch('http://localhost:5001/api/users/role/all', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -49,8 +57,8 @@ export async function GET(request) {
     const response = NextResponse.json({
       success: true,
       message: 'Users retrieved successfully',
-      count: usersData.length || 0,
-      users: usersData
+      data: usersData,
+      count: usersData.length || 0
     })
 
     // Add CORS headers
@@ -60,7 +68,7 @@ export async function GET(request) {
     return response
 
   } catch (error) {
-    console.error('❌ Get users error:', error)
+    console.error('❌ Get users by role error:', error)
     return NextResponse.json(
       { success: false, message: 'Failed to get users data' },
       { status: 500 }
