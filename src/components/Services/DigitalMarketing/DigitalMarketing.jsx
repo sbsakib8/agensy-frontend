@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Lottie from "lottie-react";
 import {
   Rocket,
@@ -30,19 +30,6 @@ const GlowBlob = ({ className = "" }) => (
       background: "radial-gradient(closest-side, rgba(56,189,248,0.55), rgba(56,189,248,0))",
     }}
   />
-);
-
-const SectionTitle = ({ kicker, title, subtitle }) => (
-  <div className="mb-6">
-    {kicker ? (
-      <div className="inline-flex items-center gap-2 rounded-full border border-sky-400/15 bg-sky-500/10 px-3 py-1 text-xs font-semibold text-sky-200">
-        <Sparkles className="h-4 w-4" />
-        {kicker}
-      </div>
-    ) : null}
-    <h2 className="mt-3 text-xl md:text-2xl font-semibold tracking-tight text-white/90">{title}</h2>
-    {subtitle ? <p className="mt-2 text-sm md:text-base text-white/55">{subtitle}</p> : null}
-  </div>
 );
 
 const Card = ({ className = "", children }) => (
@@ -85,6 +72,40 @@ const Pill = ({ children }) => (
 
 /* ----------------- page ----------------- */
 export default function DigitalMarketing() {
+  // ✅ scroll reveal animation (no framer)
+  useEffect(() => {
+    const reduceMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+
+    const els = Array.from(document.querySelectorAll(".scroll-anim"));
+
+    // ✅ stagger delay
+    els.forEach((el, idx) => {
+      el.style.setProperty("--d", `${idx * 70}ms`);
+    });
+
+    if (reduceMotion) {
+      els.forEach((el) => el.classList.add("is-visible"));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -12% 0px" },
+    );
+
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 text-white">
       <div className="relative overflow-hidden">
@@ -105,16 +126,16 @@ export default function DigitalMarketing() {
         </div>
 
         <main className="relative mx-auto w-full max-w-7xl px-4 py-10 md:px-6 md:py-25">
-          {/* ---------------- HERO ---------------- */}
           <div className="space-y-16 md:space-y-20">
-            <section className="relative">
+            {/* ---------------- HERO ---------------- */}
+            <section className="relative scroll-anim">
               <GlowBlob className="left-35 top-35 h-115 w-115" />
               <GlowBlob className="right-40 top-25 h-130 w-130" />
 
               <Card className="p-6 md:p-8">
                 <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-center">
                   {/* Left */}
-                  <div>
+                  <div className="scroll-anim">
                     <div className="inline-flex items-center gap-2 rounded-full border border-sky-400/15 bg-sky-500/10 px-3 py-1 text-xs font-semibold text-sky-200">
                       <Sparkles className="h-4 w-4" />
                       Digital Marketing
@@ -153,8 +174,12 @@ export default function DigitalMarketing() {
                         ["+3.5x", "Revenue", "case study"],
                         ["-22%", "CPA", "avg improvement"],
                         ["4.8x", "ROAS", "paid campaigns"],
-                      ].map(([a, b, c]) => (
-                        <div key={a} className="rounded-2xl border border-white/10 bg-white/2 p-4">
+                      ].map(([a, b, c], idx) => (
+                        <div
+                          key={a}
+                          className="scroll-anim rounded-2xl border border-white/10 bg-white/2 p-4"
+                          style={{ transitionDelay: `${idx * 80}ms` }}
+                        >
                           <p className="text-2xl font-semibold text-white/90">{a}</p>
                           <p className="mt-1 text-sm font-semibold text-white/75">{b}</p>
                           <p className="mt-1 text-xs text-white/45">{c}</p>
@@ -164,7 +189,7 @@ export default function DigitalMarketing() {
                   </div>
 
                   {/* Right: Lottie + particles */}
-                  <div className="relative">
+                  <div className="relative scroll-anim">
                     <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/2 p-3">
                       {/* blobs */}
                       <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-fuchsia-500/15 blur-3xl" />
@@ -224,9 +249,8 @@ export default function DigitalMarketing() {
             </section>
 
             {/* ---------------- WHO WE WORK WITH ---------------- */}
-            <section className="mt-12 md:mt-16">
-              {/* Section Header */}
-              <div className="mb-10 text-center">
+            <section className="mt-12 md:mt-16 scroll-anim">
+              <div className="mb-10 text-center scroll-anim">
                 <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-sky-400/20 bg-sky-500/10 px-4 py-1.5 text-xs font-semibold text-sky-200 shadow-[0_0_30px_rgba(56,189,248,0.25)]">
                   <Rocket className="h-4 w-4" />
                   Our Clients
@@ -240,19 +264,21 @@ export default function DigitalMarketing() {
                   Built for teams at every stage — from early ideas to scalable brands.
                 </p>
 
-                {/* subtle divider */}
                 <div className="mx-auto mt-5 h-px w-32 bg-linear-to-r from-transparent via-sky-400/40 to-transparent" />
               </div>
 
-              {/* Cards */}
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {[
                   { label: "Startups", Icon: Rocket },
                   { label: "Local Businesses", Icon: Store },
                   { label: "E-commerce Brands", Icon: ShoppingCart },
                   { label: "Personal Brands", Icon: User },
-                ].map(({ label, Icon }) => (
-                  <Card key={label} className="p-5">
+                ].map(({ label, Icon }, idx) => (
+                  <Card
+                    key={label}
+                    className="p-5 scroll-anim"
+                    style={{ transitionDelay: `${idx * 80}ms` }}
+                  >
                     <div className="flex items-center gap-4">
                       <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-sky-400/20 bg-sky-500/10 shadow-[0_0_30px_rgba(56,189,248,0.18)]">
                         <Icon className="h-6 w-6 text-sky-300" />
@@ -274,9 +300,9 @@ export default function DigitalMarketing() {
             </section>
 
             {/* ---------------- PROBLEMS + OUR FIX ---------------- */}
-            <section className="mt-12 md:mt-14">
+            <section className="mt-12 md:mt-14 scroll-anim">
               <div className="grid gap-4 md:grid-cols-2">
-                <Card className="p-6">
+                <Card className="p-6 scroll-anim">
                   <h3 className="text-lg font-semibold text-white/90">Problems We Fix</h3>
                   <ul className="mt-4 space-y-3">
                     {[
@@ -292,7 +318,7 @@ export default function DigitalMarketing() {
                   </ul>
                 </Card>
 
-                <Card className="p-6">
+                <Card className="p-6 scroll-anim">
                   <h3 className="text-lg font-semibold text-white/90">Our Fix</h3>
                   <ul className="mt-4 space-y-3">
                     {[
@@ -311,9 +337,8 @@ export default function DigitalMarketing() {
             </section>
 
             {/* ---------------- WHAT YOU'LL GET ---------------- */}
-            <section className="mt-12 md:mt-16">
-              {/* Section Header */}
-              <div className="mb-10 text-center">
+            <section className="mt-12 md:mt-16 scroll-anim">
+              <div className="mb-10 text-center scroll-anim">
                 <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-sky-400/20 bg-sky-500/10 px-4 py-1.5 text-xs font-semibold text-sky-200 shadow-[0_0_30px_rgba(56,189,248,0.25)]">
                   <Target className="h-4 w-4" />
                   Outcomes
@@ -327,11 +352,9 @@ export default function DigitalMarketing() {
                   Simple, measurable outcomes that directly impact your revenue.
                 </p>
 
-                {/* subtle divider */}
                 <div className="mx-auto mt-5 h-px w-32 bg-linear-to-r from-transparent via-sky-400/40 to-transparent" />
               </div>
 
-              {/* Cards */}
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {[
                   {
@@ -354,8 +377,12 @@ export default function DigitalMarketing() {
                     Icon: FileText,
                     desc: "Transparent dashboards with KPIs you can actually understand.",
                   },
-                ].map(({ label, Icon, desc }) => (
-                  <Card key={label} className="p-5">
+                ].map(({ label, Icon, desc }, idx) => (
+                  <Card
+                    key={label}
+                    className="p-5 scroll-anim"
+                    style={{ transitionDelay: `${idx * 80}ms` }}
+                  >
                     <div className="flex items-center gap-4">
                       <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-sky-400/20 bg-sky-500/10 shadow-[0_0_30px_rgba(56,189,248,0.18)]">
                         <Icon className="h-6 w-6 text-sky-300" />
@@ -372,9 +399,8 @@ export default function DigitalMarketing() {
             </section>
 
             {/* ---------------- SELECTED WORK ---------------- */}
-            <section className="mt-12 md:mt-16">
-              {/* Section Header */}
-              <div className="mb-10 text-center">
+            <section className="mt-12 md:mt-16 scroll-anim">
+              <div className="mb-10 text-center scroll-anim">
                 <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-sky-400/20 bg-sky-500/10 px-4 py-1.5 text-xs font-semibold text-sky-200 shadow-[0_0_30px_rgba(56,189,248,0.25)]">
                   <Sparkles className="h-4 w-4" />
                   Case Studies
@@ -391,24 +417,13 @@ export default function DigitalMarketing() {
                 <div className="mx-auto mt-5 h-px w-32 bg-linear-to-r from-transparent via-sky-400/40 to-transparent" />
               </div>
 
-              <Card className="p-6">
+              <Card className="p-6 scroll-anim">
                 {/* Tools row */}
                 <div className="flex flex-wrap items-center gap-3">
                   {["Google Ads", "Meta", "GA4", "Search Console", "Ahrefs", "SEMrush"].map((x) => (
                     <span
                       key={x}
-                      className="
-        rounded-full
-        border border-sky-400/25
-        bg-sky-500/10
-        px-4 py-1.5
-        text-xs font-semibold text-sky-200
-        shadow-[0_0_20px_rgba(56,189,248,0.25)]
-        transition
-        hover:bg-sky-500/20
-        hover:border-sky-400/40
-        hover:shadow-[0_0_30px_rgba(56,189,248,0.45)]
-      "
+                      className="rounded-full border border-sky-400/25 bg-sky-500/10 px-4 py-1.5 text-xs font-semibold text-sky-200 shadow-[0_0_20px_rgba(56,189,248,0.25)] transition hover:bg-sky-500/20 hover:border-sky-400/40 hover:shadow-[0_0_30px_rgba(56,189,248,0.45)]"
                     >
                       {x}
                     </span>
@@ -416,8 +431,7 @@ export default function DigitalMarketing() {
                 </div>
 
                 <div className="mt-6 grid gap-4 lg:grid-cols-[1.1fr_1.9fr]">
-                  {/* Case study card */}
-                  <Card className="p-5">
+                  <Card className="p-5 scroll-anim">
                     <p className="text-xs font-semibold text-sky-200">E-commerce Case Study</p>
                     <p className="mt-2 text-2xl font-semibold text-white/90">+3.5x Revenue</p>
                     <p className="mt-2 text-sm text-white/60">
@@ -441,7 +455,6 @@ export default function DigitalMarketing() {
                     </button>
                   </Card>
 
-                  {/* Steps + CTA */}
                   <div className="grid gap-3">
                     <div className="grid gap-3 md:grid-cols-4">
                       {[
@@ -449,8 +462,12 @@ export default function DigitalMarketing() {
                         ["2", "Strategy Blueprint"],
                         ["3", "Launch & Test"],
                         ["4", "Optimize & Scale"],
-                      ].map(([n, t]) => (
-                        <Card key={t} className="p-4">
+                      ].map(([n, t], idx) => (
+                        <Card
+                          key={t}
+                          className="p-4 scroll-anim"
+                          style={{ transitionDelay: `${idx * 70}ms` }}
+                        >
                           <div className="flex items-center gap-3">
                             <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-sky-400/20 bg-sky-500/10 text-sm font-bold text-sky-200">
                               {n}
@@ -464,7 +481,7 @@ export default function DigitalMarketing() {
                       ))}
                     </div>
 
-                    <Card className="p-5">
+                    <Card className="p-5 scroll-anim">
                       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                         <div>
                           <p className="text-lg font-semibold text-white/90">Our Growth Process</p>
@@ -483,7 +500,7 @@ export default function DigitalMarketing() {
           </div>
         </main>
 
-        {/* Global keyframes */}
+        {/* Existing keyframes */}
         <style>{`
           @keyframes blob {
             0%   { transform: translate(0px, 0px) scale(1); }
@@ -499,6 +516,34 @@ export default function DigitalMarketing() {
           @keyframes float {
             0%,100% { transform: translateY(0); }
             50% { transform: translateY(-8px); }
+          }
+        `}</style>
+
+        {/* ✅ Scroll reveal CSS */}
+        <style jsx global>{`
+          .scroll-anim {
+            opacity: 0;
+            transform: translate3d(0, 14px, 0);
+            transition:
+              opacity 600ms cubic-bezier(0.22, 1, 0.36, 1),
+              transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+            transition-delay: var(--d, 0ms);
+            will-change: opacity, transform;
+            backface-visibility: hidden;
+          }
+
+          .scroll-anim.is-visible {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            .scroll-anim,
+            .scroll-anim.is-visible {
+              transition: none !important;
+              transform: none !important;
+              opacity: 1 !important;
+            }
           }
         `}</style>
       </div>
