@@ -248,24 +248,27 @@ import Image from 'next/image';
                         
                         {/* Menu Items */}
                         <div className="p-2">
-                          <Link
-                            href="/dashboard"
-                            className="flex items-center px-4 py-3 rounded-lg hover:bg-linear-to-r hover:from-cyan-500/10 hover:to-blue-500/10 transition-all duration-300 group"
-                          >
-                            <div className="flex items-center justify-between w-full">
-                              <div className="flex items-center">
-                                <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center mr-3">
-                                  <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                                  </svg>
+                          {/* Dashboard - Only visible for admin users */}
+                          {user.role === 'admin' && (
+                            <Link
+                              href="/dashboard"
+                              className="flex items-center px-4 py-3 rounded-lg hover:bg-linear-to-r hover:from-cyan-500/10 hover:to-blue-500/10 transition-all duration-300 group"
+                            >
+                              <div className="flex items-center justify-between w-full">
+                                <div className="flex items-center">
+                                  <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center mr-3">
+                                    <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                                    </svg>
+                                  </div>
+                                  <div>
+                                    <h3 className="text-white font-medium group-hover:text-cyan-400 transition-colors">Dashboard</h3>
+                                  </div>
                                 </div>
-                                <div>
-                                  <h3 className="text-white font-medium group-hover:text-cyan-400 transition-colors">Dashboard</h3>
-                                </div>
+                                <ArrowRight className="w-4 h-4 text-cyan-400 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                               </div>
-                              <ArrowRight className="w-4 h-4 text-cyan-400 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-                            </div>
-                          </Link>
+                            </Link>
+                          )}
 
                           <Link
                             href="/track-order"
@@ -316,7 +319,7 @@ import Image from 'next/image';
                   <span>Sign Out</span>
                 </button>
               </div>
-            ) : status !== 'loading' && (
+            ) : !loading && (
               <Link href="/signup" className="px-4 py-2 bg-linear-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 text-cyan-400 hover:text-white hover:border-cyan-400 rounded-full transition-all duration-300 font-medium">
                 Sign Up
               </Link>

@@ -1,13 +1,25 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Users, Search, Filter, MoreVertical, Eye, Edit, Trash2 } from 'lucide-react';
+import { Users, Search, Filter, MoreVertical, Eye, Edit, Trash2, X, Save, AlertTriangle, Shield, UserCheck } from 'lucide-react';
+import { userApi } from '@/lib/api';
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState(null);
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showRoleModal, setShowRoleModal] = useState(false);
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [editForm, setEditForm] = useState({ name: '', email: '', role: '', status: '' });
+  const [newRole, setNewRole] = useState('');
+  const [newStatus, setNewStatus] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   useEffect(() => {
     fetchUsers();
@@ -16,29 +28,19 @@ export default function UsersPage() {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/users', {
-        method: 'GET',
-        credentials: 'include',
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
+      console.log('📡 Fetching users using userApi...');
       
-      if (data.success) {
-        // Ensure we always set an array
-        const usersArray = Array.isArray(data.users) ? data.users : [];
-        setUsers(usersArray);
-      } else {
-        setError(data.message || 'Failed to fetch users');
-        setUsers([]); // Set empty array on error
-      }
+      const data = await userApi.getAllUsers();
+      console.log('✅ Users fetched:', data);
+      
+      // userApi.getAllUsers already returns normalized array
+      const usersArray = Array.isArray(data) ? data : [];
+      console.log('📊 Users array:', usersArray);
+      setUsers(usersArray);
     } catch (error) {
-      console.error('Error fetching users:', error);
-      setError('Failed to load users. Please try again.');
-      setUsers([]); // Set empty array on error
+      console.error('💥 Error fetching users:', error);
+      setError(error.message || 'Failed to load users. Please try again.');
+      setUsers([]);
     } finally {
       setLoading(false);
     }
@@ -48,6 +50,128 @@ export default function UsersPage() {
     user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.email?.toLowerCase().includes(searchTerm.toLowerCase())
   ) : [];
+
+  const handleViewUser = (user) => {
+    setSelectedUser(user);
+    setShowViewModal(true);
+  };
+
+  const handleEditUser = (user) => {
+    setSelectedUser(user);
+    setEditForm({
+      name: user.name || '',
+      email: user.email || '',
+      role: user.role || 'user',
+      status: user.status || 'active'
+    });
+    setShowEditModal(true);
+  };
+
+  const handleChangeRole = (user) => {
+    setSelectedUser(user);
+    setNewRole(user.role || 'user');
+    setShowRoleModal(true);
+  };
+
+  const handleChangeStatus = (user) => {
+    setSelectedUser(user);
+    setNewStatus(user.status || 'active');
+    setShowStatusModal(true);
+  };
+
+  const handleDeleteUser = (user) => {
+    setSelectedUser(user);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!selectedUser) return;
+    try {
+      console.log('🗑️ Deleting user:', selectedUser._id || selectedUser.id);
+      await userApi.deleteUser(selectedUser._id || selectedUser.id);
+      
+      setUsers(users.filter(u => u._id !== selectedUser._id && u.id !== selectedUser.id));
+      setShowDeleteModal(false);
+      setSelectedUser(null);
+      setSuccessMessage('User deleted successfully!');
+      setShowSuccessModal(true);
+      
+      // Auto refresh after 1.5 seconds
+      setTimeout(() => {
+        setShowSuccessModal(false);
+        fetchUsers(); // Refresh the user list
+      }, 1500);
+    } catch (error) {
+      console.error('💥 Delete error:', error);
+      setError('Error deleting user: ' + error.message);
+    }
+  };
+
+  const handleSaveEdit = async () => {
+    if (!selectedUser) return;
+    try {
+      console.log('🔄 Updating user:', selectedUser._id || selectedUser.id);
+      await userApi.updateUser(selectedUser._id || selectedUser.id, editForm);
+      
+      setUsers(users.map(u => 
+        (u._id === selectedUser._id || u.id === selectedUser.id) 
+          ? { ...u, ...editForm } 
+          : u
+      ));
+      setShowEditModal(false);
+      setSelectedUser(null);
+      setSuccessMessage('User updated successfully!');
+      setShowSuccessModal(true);
+      setTimeout(() => setShowSuccessModal(false), 3000);
+    } catch (error) {
+      console.error('💥 Update error:', error);
+      setError('Error updating user: ' + error.message);
+    }
+  };
+
+  const handleSaveRole = async () => {
+    if (!selectedUser) return;
+    try {
+      console.log('🔄 Updating user role:', selectedUser._id || selectedUser.id);
+      await userApi.updateUserRole(selectedUser._id || selectedUser.id, newRole);
+      
+      setUsers(users.map(u => 
+        (u._id === selectedUser._id || u.id === selectedUser.id) 
+          ? { ...u, role: newRole } 
+          : u
+      ));
+      setShowRoleModal(false);
+      setSelectedUser(null);
+      setSuccessMessage('User role updated successfully!');
+      setShowSuccessModal(true);
+      setTimeout(() => setShowSuccessModal(false), 3000);
+    } catch (error) {
+      console.error('💥 Role update error:', error);
+      setError('Error updating role: ' + error.message);
+    }
+  };
+
+  const handleSaveStatus = async () => {
+    if (!selectedUser) return;
+    try {
+      console.log('🔄 Updating user status:', selectedUser._id || selectedUser.id);
+      await userApi.updateUserStatus(selectedUser._id || selectedUser.id, newStatus);
+      
+      setUsers(users.map(u => 
+        (u._id === selectedUser._id || u.id === selectedUser.id) 
+          ? { ...u, status: newStatus } 
+          : u
+      ));
+      setShowStatusModal(false);
+      setSelectedUser(null);
+      setSuccessMessage('User status updated successfully!');
+      setShowSuccessModal(true);
+      setTimeout(() => setShowSuccessModal(false), 3000);
+    } catch (error) {
+      console.error('💥 Status update error:', error);
+      setError('Error updating status: ' + error.message);
+    }
+  };
 
   if (loading) {
     return (
@@ -159,8 +283,13 @@ export default function UsersPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100/10 text-green-400">
-                        Active
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        user.status === 'active' ? 'bg-green-100/10 text-green-400' :
+                        user.status === 'inactive' ? 'bg-gray-100/10 text-gray-400' :
+                        user.status === 'suspended' ? 'bg-red-100/10 text-red-400' :
+                        'bg-green-100/10 text-green-400'
+                      }`}>
+                        {user.status || 'Active'}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-gray-400 text-sm">
@@ -168,17 +297,40 @@ export default function UsersPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-center gap-2">
-                        <button className="p-1.5 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors">
+                        <button 
+                          onClick={() => handleViewUser(user)}
+                          className="p-1.5 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors"
+                          title="View Details"
+                        >
                           <Eye className="w-4 h-4" />
                         </button>
-                        <button className="p-1.5 text-gray-400 hover:text-yellow-400 hover:bg-yellow-500/10 rounded-lg transition-colors">
+                        <button 
+                          onClick={() => handleEditUser(user)}
+                          className="p-1.5 text-gray-400 hover:text-yellow-400 hover:bg-yellow-500/10 rounded-lg transition-colors"
+                          title="Edit User"
+                        >
                           <Edit className="w-4 h-4" />
                         </button>
-                        <button className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors">
-                          <Trash2 className="w-4 h-4" />
+                        <button 
+                          onClick={() => handleChangeRole(user)}
+                          className="p-1.5 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg transition-colors"
+                          title="Change Role"
+                        >
+                          <Shield className="w-4 h-4" />
                         </button>
-                        <button className="p-1.5 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors">
-                          <MoreVertical className="w-4 h-4" />
+                        <button 
+                          onClick={() => handleChangeStatus(user)}
+                          className="p-1.5 text-gray-400 hover:text-green-400 hover:bg-green-500/10 rounded-lg transition-colors"
+                          title="Change Status"
+                        >
+                          <UserCheck className="w-4 h-4" />
+                        </button>
+                        <button 
+                          onClick={() => handleDeleteUser(user)}
+                          className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+                          title="Delete User"
+                        >
+                          <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
                     </td>
@@ -206,6 +358,298 @@ export default function UsersPage() {
           </div>
         </div>
       )}
+
+      {/* Modals */}
+      {showSuccessModal && (
+        <div className="fixed top-4 right-4 bg-green-500/20 border border-green-500/30 rounded-lg p-4 z-50 animate-fadeIn">
+          <p className="text-green-400">{successMessage}</p>
+        </div>
+      )}
+      
+      <ViewUserModal
+        user={selectedUser}
+        isOpen={showViewModal}
+        onClose={() => { setShowViewModal(false); setSelectedUser(null); }}
+      />
+      <EditUserModal
+        user={selectedUser}
+        form={editForm}
+        setForm={setEditForm}
+        isOpen={showEditModal}
+        onClose={() => { setShowEditModal(false); setSelectedUser(null); }}
+        onSave={handleSaveEdit}
+      />
+      <RoleModal
+        user={selectedUser}
+        role={newRole}
+        setRole={setNewRole}
+        isOpen={showRoleModal}
+        onClose={() => { setShowRoleModal(false); setSelectedUser(null); }}
+        onSave={handleSaveRole}
+      />
+      <StatusModal
+        user={selectedUser}
+        status={newStatus}
+        setStatus={setNewStatus}
+        isOpen={showStatusModal}
+        onClose={() => { setShowStatusModal(false); setSelectedUser(null); }}
+        onSave={handleSaveStatus}
+      />
+      <DeleteUserModal
+        user={selectedUser}
+        isOpen={showDeleteModal}
+        onClose={() => { setShowDeleteModal(false); setSelectedUser(null); }}
+        onConfirm={confirmDelete}
+      />
+    </div>
+  );
+}
+
+// View User Modal
+function ViewUserModal({ user, isOpen, onClose }) {
+  if (!isOpen || !user) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-[#0a0f23] border border-blue-500/30 rounded-2xl p-6 w-full max-w-md">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-xl font-semibold text-white">User Details</h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-white">
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Name</label>
+            <p className="text-white">{user.name || 'N/A'}</p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Email</label>
+            <p className="text-white">{user.email || 'N/A'}</p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Role</label>
+            <p className="text-white">{user.role || 'User'}</p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Status</label>
+            <p className="text-white">{user.status || 'Active'}</p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Joined</label>
+            <p className="text-white">{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Edit User Modal
+function EditUserModal({ user, form, setForm, isOpen, onClose, onSave }) {
+  if (!isOpen || !user) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-[#0a0f23] border border-blue-500/30 rounded-2xl p-6 w-full max-w-md">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-xl font-semibold text-white">Edit User</h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-white">
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Name</label>
+            <input
+              type="text"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Email</label>
+            <input
+              type="email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Role</label>
+            <select
+              value={form.role}
+              onChange={(e) => setForm({ ...form, role: e.target.value })}
+              className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+            >
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-1">Status</label>
+            <select
+              value={form.status}
+              onChange={(e) => setForm({ ...form, status: e.target.value })}
+              className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+            >
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="suspended">Suspended</option>
+            </select>
+          </div>
+        </div>
+        <div className="flex gap-3 mt-6">
+          <button
+            onClick={onSave}
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <Save className="w-4 h-4" />
+            Save Changes
+          </button>
+          <button
+            onClick={onClose}
+            className="px-4 py-2 border border-white/10 rounded-lg text-gray-300 hover:bg-white/5 transition-colors"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Delete User Modal
+function DeleteUserModal({ user, isOpen, onClose, onConfirm }) {
+  if (!isOpen || !user) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-[#0a0f23] border border-red-500/30 rounded-2xl p-6 w-full max-w-md">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="p-2 bg-red-600/20 rounded-lg">
+            <AlertTriangle className="w-6 h-6 text-red-400" />
+          </div>
+          <h3 className="text-xl font-semibold text-white">Delete User</h3>
+        </div>
+        <p className="text-gray-300 mb-6">
+          Are you sure you want to delete <span className="text-white font-medium">{user.name}</span>? 
+          This action cannot be undone.
+        </p>
+        <div className="flex gap-3">
+          <button
+            onClick={onConfirm}
+            className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+          >
+            Delete User
+          </button>
+          <button
+            onClick={onClose}
+            className="px-4 py-2 border border-white/10 rounded-lg text-gray-300 hover:bg-white/5 transition-colors"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Role Modal
+function RoleModal({ user, role, setRole, isOpen, onClose, onSave }) {
+  if (!isOpen || !user) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-[#0a0f23] border border-purple-500/30 rounded-2xl p-6 w-full max-w-md">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="p-2 bg-purple-600/20 rounded-lg">
+            <Shield className="w-6 h-6 text-purple-400" />
+          </div>
+          <h3 className="text-xl font-semibold text-white">Change User Role</h3>
+        </div>
+        <p className="text-gray-300 mb-4">
+          Change role for <span className="text-white font-medium">{user.name}</span>
+        </p>
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-400 mb-2">Select Role</label>
+          <select
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+          >
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+            <option value="moderator">Moderator</option>
+          </select>
+        </div>
+        <div className="flex gap-3">
+          <button
+            onClick={onSave}
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+          >
+            <Save className="w-4 h-4" />
+            Update Role
+          </button>
+          <button
+            onClick={onClose}
+            className="px-4 py-2 border border-white/10 rounded-lg text-gray-300 hover:bg-white/5 transition-colors"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Status Modal
+function StatusModal({ user, status, setStatus, isOpen, onClose, onSave }) {
+  if (!isOpen || !user) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-[#0a0f23] border border-green-500/30 rounded-2xl p-6 w-full max-w-md">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="p-2 bg-green-600/20 rounded-lg">
+            <UserCheck className="w-6 h-6 text-green-400" />
+          </div>
+          <h3 className="text-xl font-semibold text-white">Change User Status</h3>
+        </div>
+        <p className="text-gray-300 mb-4">
+          Change status for <span className="text-white font-medium">{user.name}</span>
+        </p>
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-400 mb-2">Select Status</label>
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500/50"
+          >
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="suspended">Suspended</option>
+            <option value="pending">Pending</option>
+          </select>
+        </div>
+        <div className="flex gap-3">
+          <button
+            onClick={onSave}
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+          >
+            <Save className="w-4 h-4" />
+            Update Status
+          </button>
+          <button
+            onClick={onClose}
+            className="px-4 py-2 border border-white/10 rounded-lg text-gray-300 hover:bg-white/5 transition-colors"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

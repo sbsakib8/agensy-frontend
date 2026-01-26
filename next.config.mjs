@@ -33,9 +33,23 @@ const nextConfig = {
       },
     ],
   },
-  // 🔑 Configure headers for Express backend integration
+  // 🔑 Configure headers for Express backend integration and Firebase
   async headers() {
     return [
+      {
+        // Apply headers to all routes to fix Firebase Google Auth COOP error
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'unsafe-none'
+          },
+          {
+            key: 'Cross-Origin-Embedder-Policy',
+            value: 'unsafe-none'
+          }
+        ]
+      },
       {
         // Apply CORS headers to all API routes
         source: '/api/:path*',
