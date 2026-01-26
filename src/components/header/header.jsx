@@ -43,10 +43,7 @@ const Header = () => {
   const services = [
     { name: "Web Development", desc: "Custom websites & web apps", href: "/web-development" },
     { name: "AI Agents", desc: "Intelligent virtual assistants", href: "/ai-agents" },
-    { name: "Mobile Apps", desc: "iOS & Android development", href: "/app-development" },
-    { name: "UI/UX Design", desc: "Beautiful user experiences", href: "/ui-ux-design" },
-    { name: "Digital Marketing", desc: "SEO, PPC & Social Media", href: "/digital-marketing" },
-    { name: "Branding", desc: "Logo & identity design" },
+    { name: "App Development", desc: "iOS & Android development", href: "/app-development" },
     { name: "E-commerce", desc: "Online store solutions" },
   ];
 
@@ -147,13 +144,9 @@ const Header = () => {
                               ? "/web-development"
                               : service.name === "AI Agents"
                                 ? "/ai-agents"
-                                : service.name === "Mobile Apps"
+                                : service.name === "App Development"
                                   ? "/app-development"
-                                  : service.name === "UI/UX Design"
-                                    ? "/ui-ux-design"
-                                  : service.name === "Digital Marketing"
-                                    ? "/digital-marketing"
-                                    : `#${service.name.toLowerCase().replace(/\s+/g, "-")}`
+                                  : `#${service.name.toLowerCase().replace(/\s+/g, "-")}`
                           }
                           className="block px-4 py-3 rounded-lg hover:bg-linear-to-r hover:from-cyan-500/10 hover:to-blue-500/10 transition-all duration-300 group"
                         >
