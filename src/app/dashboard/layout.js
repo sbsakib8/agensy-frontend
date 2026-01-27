@@ -1,9 +1,40 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import DashboardSidebar from "@/components/Dashboard/DashboardNavbar/DashboardSidebar/Sidebar";
+import { useCustomAuth } from "@/hooks/useCustomAuth";
 
 export default function Layout({ children }) {
+  const { user, loading } = useCustomAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading) {
+      if (!user) {
+        // Not logged in, redirect to signin
+        router.push('/signin');
+      } else if (user.role !== 'admin') {
+        // Not an admin, redirect to home
+        router.push('/');
+      }
+    }
+  }, [user, loading, router]);
+
+  // Show loading state while checking authentication
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-[#020617]">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
+  }
+
+  // Don't render dashboard if not authorized
+  if (!user || user.role !== 'admin') {
+    return null;
+  }
+
   return (
     <div className="h-screen flex bg-[#020617] relative overflow-hidden">
       {/* Background Orbs */}

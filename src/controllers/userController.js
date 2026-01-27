@@ -1,72 +1,52 @@
 // User controller for managing user-related API calls
+import { userApi } from '../lib/api';
 
 /* ================= FETCH PROFILE ================= */
-export const fetchUserProfile = async () => {
+export const fetchUserProfile = async (uid) => {
   try {
-    const res = await fetch('/api/auth/profile', { credentials: 'include' })
-    const data = await res.json()
-
-    if (!data.success) throw new Error(data.message)
-
-    const u = data.user || data.data || data
-
-    const mapped = {
-      id: u._id || u.id,
-      name: u.name,
-      email: u.email,
-      phone: u.phone || '',
-      address: u.address || '',
-      image: u.image || '',
-      role: u.role || 'user',
-      createdAt: u.createdAt
+    if (!uid) {
+      throw new Error('User ID is required');
     }
 
-    return { success: true, data: mapped }
+    console.log('🔍 Fetching profile for Firebase UID:', uid);
+    
+    // Fetch from backend API using Firebase UID
+    const userData = await userApi.getUser(uid);
+    console.log('✅ Profile data received from backend:', userData);
+
+    // Return data as-is from backend
+    return { success: true, data: userData };
   } catch (err) {
-    return { success: false, error: err.message || 'Failed to load profile' }
+    console.error('❌ fetchUserProfile error:', err);
+    return { success: false, error: err.message || 'Failed to load profile' };
   }
-}
+};
 
 /* ================= UPDATE PROFILE ================= */
 export const updateUserProfile = async (userProfile, editForm) => {
   try {
-    console.log('🔄 Updating profile with data:', editForm)
-    console.log('📱 Phone number in editForm:', editForm.phone)
+    console.log('🔄 Updating profile for Firebase UID:', userProfile.uid || userProfile.firebaseUid);
+    console.log('📝 Edit form data:', editForm);
     
-    const res = await fetch(`/api/users/${userProfile.id}`, {
-      method: 'PUT',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(editForm)
-    })
-
-    const data = await res.json()
-    console.log('📝 Update response:', data)
+    // Prepare update data with backend field names
+    const updateData = {
+      displayName: editForm.displayName,
+      phoneNumber: editForm.phoneNumber,
+      address: editForm.address,
+      photoURL: editForm.photoURL,
+    };
     
-    if (!data.success) throw new Error(data.message)
-
-    // Handle nested data structure: data.data.data
-    const updatedUser = data.data?.data || data.data || data
-    console.log('🎯 Extracted user data:', updatedUser)
-    console.log('📞 Backend returned phone:', updatedUser.phone)
+    console.log('📤 Sending to backend:', updateData);
     
-    const mapped = {
-      id: updatedUser._id || updatedUser.id || userProfile.id,
-      name: updatedUser.name || editForm.name,
-      email: updatedUser.email || editForm.email,
-      phone: updatedUser.phone || editForm.phone,
-      address: updatedUser.address || editForm.address,
-      image: updatedUser.image || editForm.image,
-      role: updatedUser.role || editForm.role,
-      createdAt: updatedUser.createdAt || userProfile.createdAt
-    }
+    // Use Firebase UID to update user
+    const uid = userProfile.uid || userProfile.firebaseUid;
+    const updatedUser = await userApi.updateUser(uid, updateData);
+    
+    console.log('✅ Update response from backend:', updatedUser);
 
-    console.log('✅ Final mapped data:', mapped)
-    console.log('📱 Final phone number:', mapped.phone)
-
-    return { success: true, data: mapped }
+    return { success: true, data: updatedUser };
   } catch (error) {
-    console.error('❌ Update profile error:', error)
-    return { success: false, error: 'Update failed' }
+    console.error('❌ Update profile error:', error);
+    return { success: false, error: error.message || 'Update failed' };
   }
-}
+};

@@ -5,9 +5,12 @@ import Lottie from "lottie-react";
 import { Eye, EyeOff, ChevronRight, Camera, Upload } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { signInWithGoogle, emailSignUp } from "@/lib/auth-client";
-import { uploadImageToImgBB } from "@/lib/imgbb-upload";
 import { useRouter } from "next/navigation";
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "@/lib/firebase";
+import { authApi } from "@/lib/api";
+import { formatErrorMessage } from "@/lib/error-handler";
+import { uploadToImgBB } from "@/lib/imgbb-upload";
 
 // Lottie animation
 import signup from "../../../public/Sign up.json";
@@ -25,12 +28,13 @@ export default function SignUpPage() {
     address: "",
     image: "",
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -47,12 +51,34 @@ export default function SignUpPage() {
     };
   }, [setShowHeader, setShowFooter]);
 
+  const formatPhoneNumber = (phone) => {
+    if (!phone || phone.trim() === '') {
+      return ''; // Return empty if no phone number
+    }
+
+    // Remove all non-digit characters
+    let digits = phone.replace(/\D/g, '');
+
+    // If it starts with 880, it already has country code
+    if (digits.startsWith('880')) {
+      return '+' + digits;
+    }
+
+    // If it starts with 0, remove it (local format)
+    if (digits.startsWith('0')) {
+      digits = digits.substring(1);
+    }
+
+    // Add Bangladesh country code +880
+    return '+880' + digits;
+  };
+
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
-    setError("");
+    setError('');
   };
 
   const handleImageChange = (e) => {
@@ -71,7 +97,7 @@ export default function SignUpPage() {
         return;
       }
 
-      setError(""); // Clear any previous errors
+      setError('');
       setImageFile(file);
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -93,15 +119,25 @@ export default function SignUpPage() {
   const handleEmailSignUp = async (e) => {
     e.preventDefault();
     if (!acceptTerms) {
-      setError("Please accept the Terms & Conditions");
+      setError('Please accept the Terms & Conditions');
       return;
     }
 
+    // Validate phone number if provided
+    if (formData.phone && formData.phone.trim() !== '') {
+      const digits = formData.phone.replace(/\D/g, '');
+      // Bangladesh mobile numbers are 11 digits (starting with 0) or 10 digits (without 0)
+      if (digits.length < 10 || digits.length > 11) {
+        setError('Please enter a valid phone number (10-11 digits). Example: 01712345678');
+        return;
+      }
+    }
+
     setLoading(true);
-    setError("");
+    setError('');
 
     try {
-      let imageUrl = "";
+      let imageUrl = '';
 
       // Upload image if provided
       if (imageFile) {
@@ -110,7 +146,7 @@ export default function SignUpPage() {
         if (uploadResult.success) {
           imageUrl = uploadResult.imageUrl;
         } else {
-          setError("Failed to upload image. Please try again.");
+          setError('Failed to upload image. Please try again.');
           setLoading(false);
           setUploadingImage(false);
           return;
@@ -118,19 +154,34 @@ export default function SignUpPage() {
         setUploadingImage(false);
       }
 
+      // Format phone number with +880 country code
+      const formattedPhone = formData.phone ? formatPhoneNumber(formData.phone) : '';
+
       const signUpData = {
         ...formData,
+        phone: formattedPhone,
         image: imageUrl,
       };
 
-      const result = await emailSignUp(signUpData);
-      if (result.success) {
-        router.push("/signin?message=Account created successfully");
+      console.log('📤 Sending registration data to backend:', signUpData);
+      console.log('📋 Fields being sent:', Object.keys(signUpData));
+      console.log('📱 Formatted phone number:', formattedPhone);
+
+      const response = await authApi.registerWithEmail(signUpData);
+
+      if (response.success) {
+        console.log('✅ Registration successful:', response);
+        setShowSuccessModal(true);
+        // Redirect to signin after 2 seconds
+        setTimeout(() => {
+          router.push('/signin?message=Account created successfully');
+        }, 2000);
       } else {
-        setError(result.message || "Sign up failed");
+        setError(response.message || 'Sign up failed');
       }
     } catch (err) {
-      setError("An error occurred during sign up");
+      console.error('❌ Sign up error:', err);
+      setError(formatErrorMessage(err));
     } finally {
       setLoading(false);
       setUploadingImage(false);
@@ -138,10 +189,32 @@ export default function SignUpPage() {
   };
 
   const handleGoogleSignUp = async () => {
+    setLoading(true);
+    setError('');
+
     try {
-      await signInWithGoogle();
+      // Firebase Google sign-in
+      const result = await signInWithPopup(auth, googleProvider);
+      const idToken = await result.user.getIdToken();
+
+      // Send token to backend
+      const response = await authApi.registerWithGoogle(idToken);
+
+      if (response.success) {
+        console.log('✅ Google registration successful:', response);
+        setShowSuccessModal(true);
+        // Redirect to home after showing success modal
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 2000);
+      } else {
+        setError(response.message || 'Google sign up failed');
+      }
     } catch (err) {
-      setError("Google sign up failed");
+      console.error('❌ Google sign up error:', err);
+      setError(formatErrorMessage(err));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -149,6 +222,23 @@ export default function SignUpPage() {
 
   return (
     <div className="w-screen h-screen flex items-center justify-center p-4 md:p-6 bg-[#0b1220] overflow-hidden">
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn">
+          <div className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-2xl p-8 max-w-md mx-4 shadow-[0_0_50px_rgba(34,197,94,0.3)] animate-slideUp">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mb-4 animate-bounce">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-bold text-green-400 mb-2">Registration Successful!</h3>
+              <p className="text-gray-300">Your account has been created successfully.</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* MAIN CARD */}
       <div className="relative flex w-full max-w-7xl h-full md:h-[90vh] md:max-w-6xl rounded-3xl overflow-hidden shadow-[0_0_80px_rgba(56,189,248,0.15)] border border-cyan-500/10">
         {/* GLOW */}
@@ -252,7 +342,10 @@ export default function SignUpPage() {
 
               {error && (
                 <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
-                  {error}
+                  <div className="flex items-start gap-2">
+                    <span className="text-red-400 shrink-0">⚠️</span>
+                    <div className="whitespace-pre-line">{error}</div>
+                  </div>
                 </div>
               )}
 
@@ -319,14 +412,17 @@ export default function SignUpPage() {
                     className="w-full bg-[#0f1629] border border-cyan-500/20 text-white px-4 py-2.5 rounded-lg outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-sm"
                   />
 
-                  <input
-                    type="tel"
-                    name="phone"
-                    placeholder="Phone number (Optional)"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    className="w-full bg-[#0f1629] border border-cyan-500/20 text-white px-4 py-2.5 rounded-lg outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-sm"
-                  />
+                  <div>
+                    <input
+                      type="tel"
+                      name="phone"
+                      placeholder="Phone number (Optional)"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      className="w-full bg-[#0f1629] border border-cyan-500/20 text-white px-4 py-2.5 rounded-lg outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-sm"
+                    />
+                    <p className="text-xs text-gray-500 mt-1 px-1">Format: 01XXXXXXXXX (Will be saved as +880XXXXXXXXX)</p>
+                  </div>
 
                   <input
                     type="text"
@@ -369,14 +465,10 @@ export default function SignUpPage() {
 
                 <button
                   type="submit"
-                  disabled={loading || uploadingImage}
+                  disabled={uploadingImage}
                   className="w-full py-2.5 rounded-lg bg-linear-to-r from-cyan-500 to-blue-600 text-white font-medium hover:shadow-[0_0_30px_rgba(56,189,248,0.6)] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm mt-4"
                 >
-                  {uploadingImage
-                    ? "Uploading Image..."
-                    : loading
-                      ? "Creating Account..."
-                      : "Create account"}
+                  {uploadingImage ? "Uploading Image..." : "Create account"}
                 </button>
               </form>
 
@@ -410,10 +502,10 @@ export default function SignUpPage() {
                 </svg>
                 Continue with Google
               </button>
-            </div>
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

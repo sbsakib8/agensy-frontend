@@ -5,8 +5,11 @@ import Lottie from "lottie-react";
 import { Eye, EyeOff, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
+import { auth, googleProvider } from "@/lib/firebase";
+import { authApi } from "@/lib/api";
+import { formatErrorMessage } from "@/lib/error-handler";
 import login from "../../../public/Login (1).json";
 
 export default function SignInPage() {
@@ -19,6 +22,7 @@ export default function SignInPage() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -49,32 +53,37 @@ export default function SignInPage() {
     setError('');
 
     try {
-      console.log('🔄 Attempting login with custom signin API...')
-      
-      const response = await fetch('/api/auth/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include', // 🔑 KEY: Include cookies for auth-token
-        body: JSON.stringify(formData),
-      })
-      
-      const result = await response.json()
-      console.log('📝 Sign in response:', result)
-      
-      if (result.success) {
-        console.log('✅ Login successful, auth-token cookie set')
-        // Store user data in sessionStorage for header update
-        sessionStorage.setItem('user', JSON.stringify(result.user))
-        router.push('/');
+      // First, authenticate with backend
+      const response = await authApi.loginWithEmail({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (response.success) {
+        console.log('✅ Backend login successful:', response);
+        
+        // Sign in to Firebase with the same credentials
+        try {
+          await signInWithEmailAndPassword(auth, formData.email, formData.password);
+          console.log('✅ Firebase login successful');
+        } catch (firebaseError) {
+          console.warn('⚠️ Firebase login failed, but backend succeeded:', firebaseError);
+          // Continue even if Firebase fails, as backend auth is primary
+        }
+        
+        // Show success modal briefly
+        setShowSuccessModal(true);
+        
+        // Redirect to home after showing success modal
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 2000);
       } else {
-        console.log('❌ Login failed:', result.message)
-        setError(result.message || 'Sign in failed');
+        setError(response.message || 'Sign in failed');
       }
     } catch (err) {
-      console.error('❌ Sign in error:', err)
-      setError('An error occurred during sign in');
+      console.error('❌ Sign in error:', err);
+      setError(formatErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -82,42 +91,45 @@ export default function SignInPage() {
 
   const handleGoogleSignIn = async () => {
     setLoading(true);
+    setError('');
+
     try {
-      // First authenticate with Google OAuth using NextAuth
-      const result = await signIn('google', { 
-        redirect: false,
-        callbackUrl: '/' 
-      });
+      console.log('🔵 Starting Google sign in...');
       
-      if (result?.error) {
-        console.error('Google OAuth error:', result.error);
-        setError('Google sign in failed');
-        return;
-      }
+      // Firebase Google sign-in
+      const result = await signInWithPopup(auth, googleProvider);
+      console.log('✅ Firebase popup successful:', result.user.email);
       
-      // After successful Google auth, sync the session with our custom auth
-      const syncResponse = await fetch('/api/auth/session-sync', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      
-      const syncResult = await syncResponse.json();
-      console.log('🔄 Session sync result:', syncResult);
-      
-      if (syncResult.success) {
-        console.log('✅ Google login successful, auth-token cookie set');
-        // Store user data in sessionStorage for header update
-        sessionStorage.setItem('user', JSON.stringify(syncResult.user));
-        router.push('/');
+      const idToken = await result.user.getIdToken();
+      console.log('🔑 Got ID token, sending to backend...');
+
+      // Send token to backend
+      const response = await authApi.loginWithGoogle(idToken);
+      console.log('📡 Backend response:', response);
+
+      if (response.success) {
+        console.log('✅ Google login successful:', response);
+        console.log('🔄 Firebase user should be:', result.user.uid);
+        
+        setShowSuccessModal(true);
+        
+        // Wait a bit for Firebase state to settle before redirect
+        setTimeout(() => {
+          console.log('🏠 Redirecting to home...');
+          window.location.href = '/';
+        }, 2000);
       } else {
-        setError('Session sync failed');
+        console.error('❌ Backend rejected login:', response.message);
+        setError(response.message || 'Google sign in failed');
       }
-    } catch (error) {
-      console.error('Google sign in error:', error);
-      setError('Google sign in failed');
+    } catch (err) {
+      console.error('❌ Google sign in error:', err);
+      console.error('Error details:', {
+        code: err.code,
+        message: err.message,
+        response: err.response?.data
+      });
+      setError(formatErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -127,6 +139,25 @@ export default function SignInPage() {
 
   return (
     <div className="w-screen h-screen flex items-center justify-center p-6 md:p-10 bg-[#0b1220]">
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[9999] animate-fadeIn">
+          <div className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-2 border-green-500/50 rounded-2xl p-8 max-w-md mx-4 shadow-[0_0_80px_rgba(34,197,94,0.5)] animate-slideUp">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shrink-0 animate-bounce">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold text-green-400 mb-1">Login Successful!</h3>
+                <p className="text-gray-200 text-base">Redirecting to home...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* MAIN CARD */}
       <div className="relative flex w-full max-w-7xl h-full md:h-[90vh] md:max-w-5xl rounded-3xl overflow-hidden shadow-[0_0_80px_rgba(56,189,248,0.15)] border border-cyan-500/10">
         {/* GLOW */}
@@ -146,7 +177,10 @@ export default function SignInPage() {
 
             {error && (
               <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
-                {error}
+                <div className="flex items-start gap-2">
+                  <span className="text-red-400 shrink-0">⚠️</span>
+                  <div className="whitespace-pre-line">{error}</div>
+                </div>
               </div>
             )}
 
@@ -206,7 +240,8 @@ export default function SignInPage() {
 
             <button
               onClick={handleGoogleSignIn}
-              className="w-full py-3 rounded-lg border border-cyan-500/20 text-white font-medium hover:bg-cyan-500/10 transition flex items-center justify-center gap-3"
+              disabled={loading}
+              className="w-full py-3 rounded-lg border border-cyan-500/20 text-white font-medium hover:bg-cyan-500/10 transition flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
