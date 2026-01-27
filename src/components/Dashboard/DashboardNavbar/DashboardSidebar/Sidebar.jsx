@@ -11,12 +11,15 @@ import {
   UserCheck,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function DashboardSidebar() {
   const [open, setOpen] = useState(true);
+  const [teamDropdownOpen, setTeamDropdownOpen] = useState(false);
   const pathname = usePathname();
 
   return (
@@ -62,7 +65,34 @@ export default function DashboardSidebar() {
         <SidebarItem icon={<UserCheck />} label="Users" open={open} href="/dashboard/users" active={pathname === '/dashboard/users'} />
         <SidebarItem icon={<ShoppingCart />} label="Orders" open={open} href="/dashboard/orders" active={pathname === '/dashboard/orders'} />
         <SidebarItem icon={<Package />} label="Product" open={open} href="/dashboard/product" active={pathname === '/dashboard/product'} />
-        <SidebarItem icon={<Users />} label="Team" open={open} href="/dashboard/team" active={pathname === '/dashboard/team'} />
+        
+        {/* Team Dropdown */}
+        <div>
+          <SidebarItem 
+            icon={<Users />} 
+            label="Team" 
+            open={open} 
+            active={pathname.startsWith('/dashboard/team')}
+            onClick={() => setTeamDropdownOpen(!teamDropdownOpen)}
+            hasDropdown={true}
+            dropdownOpen={teamDropdownOpen}
+          />
+          {teamDropdownOpen && open && (
+            <div className="ml-4 mt-1 space-y-1">
+              <SidebarSubItem 
+                label="Team Category" 
+                href="/dashboard/team/category" 
+                active={pathname === '/dashboard/team/category'} 
+              />
+              <SidebarSubItem 
+                label="Team Members" 
+                href="/dashboard/team/members" 
+                active={pathname === '/dashboard/team/members'} 
+              />
+            </div>
+          )}
+        </div>
+        
         <SidebarItem icon={<FolderKanban />} label="Demo Project" open={open} href="/dashboard/demo-project" active={pathname === '/dashboard/demo-project'} />
         <SidebarItem icon={<Settings />} label="Service" open={open} href="/dashboard/service" active={pathname === '/dashboard/service'} />
         <SidebarItem icon={<DollarSign />} label="Pricing" open={open} href="/dashboard/pricing" active={pathname === '/dashboard/pricing'} />
@@ -72,11 +102,16 @@ export default function DashboardSidebar() {
 }
 
 /* Sidebar Item */
-function SidebarItem({ icon, label, active, danger, open, href }) {
+function SidebarItem({ icon, label, active, danger, open, href, onClick, hasDropdown, dropdownOpen }) {
   const content = (
     <>
-      <span className="w-5 h-5">{icon}</span>
-      {open && <span>{label}</span>}
+      <span className="w-5 h-5 shrink-0">{icon}</span>
+      {open && <span className=" whitespace-nowrap">{label}</span>}
+      {open && hasDropdown && (
+        <span className="w-4 h-4 shrink-0">
+          {dropdownOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+        </span>
+      )}
     </>
   );
 
@@ -90,6 +125,14 @@ function SidebarItem({ icon, label, active, danger, open, href }) {
     }
   `;
 
+  if (onClick) {
+    return (
+      <button onClick={onClick} className={className}>
+        {content}
+      </button>
+    );
+  }
+
   if (href) {
     return (
       <Link href={href} className={className}>
@@ -102,5 +145,23 @@ function SidebarItem({ icon, label, active, danger, open, href }) {
     <button className={className}>
       {content}
     </button>
+  );
+}
+
+/* Sidebar Sub Item */
+function SidebarSubItem({ label, href, active }) {
+  return (
+    <Link
+      href={href}
+      className={`block px-4 py-2 rounded-lg text-sm transition
+        ${
+          active
+            ? "bg-blue-500/10 text-white"
+            : "text-gray-400 hover:text-white hover:bg-white/5"
+        }
+      `}
+    >
+      {label}
+    </Link>
   );
 }
