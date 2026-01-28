@@ -1,10 +1,10 @@
-import Dashboard from '@/components/Dashboard/Dashboard'
+import OverviewComponent from '@/components/Dashboard/OverviewComponent'
 import React from 'react'
 
 export default function page() {
   return (
     <div>
-      <Dashboard/>
+      <OverviewComponent/>
     </div>
   )
 }
