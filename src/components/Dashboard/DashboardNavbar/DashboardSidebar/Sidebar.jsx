@@ -23,6 +23,8 @@ import { usePathname } from "next/navigation";
 export default function DashboardSidebar() {
   const [open, setOpen] = useState(true);
   const [teamDropdownOpen, setTeamDropdownOpen] = useState(false);
+  const [pricingDropdownOpen, setPricingDropdownOpen] = useState(false);
+  const [demoDropdownOpen, setDemoDropdownOpen] = useState(false);
   const pathname = usePathname();
 
   return (
@@ -98,9 +100,61 @@ export default function DashboardSidebar() {
           )}
         </div>
         
-        <SidebarItem icon={<FolderKanban />} label="Demo Project" open={open} href="/dashboard/demo-project" active={pathname === '/dashboard/demo-project'} />
+        {/* Demo Project Dropdown */}
+        <div>
+          <SidebarItem 
+            icon={<FolderKanban />} 
+            label="Demo Project" 
+            open={open} 
+            active={pathname.startsWith('/dashboard/demo-project')}
+            onClick={() => setDemoDropdownOpen(!demoDropdownOpen)}
+            hasDropdown={true}
+            dropdownOpen={demoDropdownOpen}
+          />
+          {demoDropdownOpen && open && (
+            <div className="ml-4 mt-1 space-y-1">
+              <SidebarSubItem 
+                label="Demo Category" 
+                href="/dashboard/demo-project/category" 
+                active={pathname === '/dashboard/demo-project/category'} 
+              />
+              <SidebarSubItem 
+                label="Demo Projects" 
+                href="/dashboard/demo-project" 
+                active={pathname === '/dashboard/demo-project'} 
+              />
+            </div>
+          )}
+        </div>
+        
         <SidebarItem icon={<Settings />} label="Service" open={open} href="/dashboard/service" active={pathname === '/dashboard/service'} />
-        <SidebarItem icon={<DollarSign />} label="Pricing" open={open} href="/dashboard/pricing" active={pathname === '/dashboard/pricing'} />
+        
+        {/* Pricing Dropdown */}
+        <div>
+          <SidebarItem 
+            icon={<DollarSign />} 
+            label="Pricing" 
+            open={open} 
+            active={pathname.startsWith('/dashboard/pricing')}
+            onClick={() => setPricingDropdownOpen(!pricingDropdownOpen)}
+            hasDropdown={true}
+            dropdownOpen={pricingDropdownOpen}
+          />
+          {pricingDropdownOpen && open && (
+            <div className="ml-4 mt-1 space-y-1">
+              <SidebarSubItem 
+                label="Pricing Category" 
+                href="/dashboard/pricing/category" 
+                active={pathname === '/dashboard/pricing/category'} 
+              />
+              <SidebarSubItem 
+                label="Pricing Plan" 
+                href="/dashboard/pricing/plan" 
+                active={pathname === '/dashboard/pricing/plan'} 
+              />
+            </div>
+          )}
+        </div>
       </nav>
     </aside>
   );
