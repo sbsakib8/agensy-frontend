@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Image from "next/image";
 import {
   Image as ImageIcon,
   MessageSquare,
@@ -249,9 +250,11 @@ function TestimonialsSection({ cardStyle }) {
         {testimonials.map((testimonial) => (
           <div key={testimonial.id} className={cardStyle}>
             <div className="flex items-start gap-4">
-              <img
+              <Image
                 src={testimonial.image}
                 alt={testimonial.name}
+                width={64}
+                height={64}
                 className="w-16 h-16 rounded-full object-cover"
               />
               <div className="flex-1">
@@ -413,17 +416,21 @@ function BannerSection({ cardStyle }) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <h3 className="text-sm text-gray-400 mb-2">Primary Image</h3>
-                <img
+                <Image
                   src={bannerData.primaryImage}
                   alt="Primary"
+                  width={400}
+                  height={128}
                   className="w-full h-32 object-cover rounded-lg"
                 />
               </div>
               <div>
                 <h3 className="text-sm text-gray-400 mb-2">Secondary Image</h3>
-                <img
+                <Image
                   src={bannerData.secondaryImage}
                   alt="Secondary"
+                  width={400}
+                  height={128}
                   className="w-full h-32 object-cover rounded-lg"
                 />
               </div>
