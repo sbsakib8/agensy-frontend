@@ -13,6 +13,9 @@ import {
   ChevronRight,
   ChevronDown,
   ChevronUp,
+  Home,
+  LayoutDashboard,
+  House,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -62,6 +65,8 @@ export default function DashboardSidebar() {
 
       {/* Menu */}
       <nav className="flex-1 px-3 py-6 space-y-2 text-sm">
+        <SidebarItem icon={<LayoutDashboard />} label="Overview" open={open} href="/dashboard" active={pathname === '/dashboard'} />
+        <SidebarItem icon={<House />} label="Home Page" open={open} href="/dashboard/home" active={pathname === '/dashboard/home'} />
         <SidebarItem icon={<UserCheck />} label="Users" open={open} href="/dashboard/users" active={pathname === '/dashboard/users'} />
         <SidebarItem icon={<ShoppingCart />} label="Orders" open={open} href="/dashboard/orders" active={pathname === '/dashboard/orders'} />
         <SidebarItem icon={<Package />} label="Product" open={open} href="/dashboard/product" active={pathname === '/dashboard/product'} />
