@@ -294,8 +294,7 @@ const AppDevelopment = () => {
             {pillars.map((pillar, index) => (
               <div
                 key={index}
-                className="p-8 rounded-3xl bg-slate-900/35 border border-slate-800/60 text-left space-y-5 scroll-anim
-                   transition-all duration-500 ease-out transform hover:-translate-y-1 hover:bg-slate-900/50 hover:border-cyan-500/40 group"
+                className="p-8 rounded-3xl bg-slate-900/35 border border-slate-800/60 text-left space-y-5 scroll-anim transition-all duration-500 ease-out transform hover:-translate-y-1 hover:bg-slate-900/50 hover:border-cyan-500/40 group"
               >
                 <div className="flex items-center space-x-4">
                   <div className="p-3 bg-slate-800/60 rounded-2xl transition-colors duration-500 group-hover:bg-cyan-500/20">

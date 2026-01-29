@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import ResetPasswordPage from '@/components/auth/ResetPassword';
+// import ResetPasswordPage from '@/components/auth/ResetPassword';
 
 function ResetPasswordLoading() {
   return (
@@ -12,7 +12,10 @@ function ResetPasswordLoading() {
 export default function ResetPassword() {
   return (
     <Suspense fallback={<ResetPasswordLoading />}>
-      <ResetPasswordPage />
+      {/* <ResetPasswordPage /> */}
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center text-white">
+        <p>Reset Password page - Under construction</p>
+      </div>
     </Suspense>
   );
 }
