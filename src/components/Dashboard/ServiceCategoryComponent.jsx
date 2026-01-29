@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api'}/services`;
+
 export default function ServiceCategoryComponent() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,7 +31,7 @@ export default function ServiceCategoryComponent() {
     try {
       setLoading(true);
       console.log('📡 Fetching service categories');
-      const response = await fetch('http://localhost:4000/api/services/categories', {
+      const response = await fetch(`${API_BASE_URL}/categories`, {
         credentials: 'include',
       });
       
@@ -81,7 +83,7 @@ export default function ServiceCategoryComponent() {
       if (isEditing) {
         // Update existing category
         console.log('🔄 Updating category:', editId);
-        const response = await fetch(`http://localhost:4000/api/services/categories/${editId}`, {
+        const response = await fetch(`${API_BASE_URL}/categories/${editId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -99,7 +101,7 @@ export default function ServiceCategoryComponent() {
       } else {
         // Create new category
         console.log('📤 Creating new category');
-        const response = await fetch('http://localhost:4000/api/services/categories', {
+        const response = await fetch(`${API_BASE_URL}/categories`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -139,7 +141,7 @@ export default function ServiceCategoryComponent() {
 
     try {
       console.log('🗑️ Deleting category:', categoryId);
-      const response = await fetch(`http://localhost:4000/api/services/categories/${categoryId}`, {
+      const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
         method: 'DELETE',
         credentials: 'include',
       });

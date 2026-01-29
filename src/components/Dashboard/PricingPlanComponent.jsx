@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { auth } from "@/lib/firebase";
 
-const API_BASE_URL = "http://localhost:4000/api/pricing";
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api'}/pricing`;
 
 export default function PricingPlanComponent() {
   const [categories, setCategories] = useState([]);

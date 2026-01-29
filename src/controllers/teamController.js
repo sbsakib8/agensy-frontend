@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:4000/api/team';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api';
 
 const getAuthHeaders = () => {
   return {
@@ -10,11 +10,12 @@ const teamController = {
   // ============ Team Categories ============
   
   /**
-   * Get all team categories
+   * Get all team categories (departments)
    */
   getCategories: async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/categories`, {
+      console.log('📡 Fetching team categories from:', `${API_BASE_URL}/team/departments`);
+      const response = await fetch(`${API_BASE_URL}/team/departments`, {
         credentials: 'include',
         headers: getAuthHeaders(),
       });
@@ -23,9 +24,19 @@ const teamController = {
         throw new Error('Failed to fetch categories');
       }
       
-      return await response.json();
+      const result = await response.json();
+      console.log('📦 Categories API Response:', result);
+      
+      // Handle the response structure: { success: true, data: [...] }
+      if (result.success && Array.isArray(result.data)) {
+        console.log('✅ Categories data:', result.data.length, 'categories');
+        return result.data;
+      } else {
+        console.log('⚠️ API response not in expected format');
+        return [];
+      }
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      console.error('❌ Error fetching categories:', error);
       throw error;
     }
   },
@@ -35,7 +46,8 @@ const teamController = {
    */
   getCategoryById: async (categoryId) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
+      console.log('📡 Fetching category by ID:', categoryId);
+      const response = await fetch(`${API_BASE_URL}/team/departments/${categoryId}`, {
         credentials: 'include',
         headers: getAuthHeaders(),
       });
@@ -44,9 +56,11 @@ const teamController = {
         throw new Error('Failed to fetch category');
       }
       
-      return await response.json();
+      const result = await response.json();
+      console.log('📦 Category by ID Response:', result);
+      return result.success ? result.data : result;
     } catch (error) {
-      console.error('Error fetching category:', error);
+      console.error('❌ Error fetching category:', error);
       throw error;
     }
   },
@@ -56,7 +70,8 @@ const teamController = {
    */
   createCategory: async (categoryData) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/categories`, {
+      console.log('📤 Creating category:', categoryData);
+      const response = await fetch(`${API_BASE_URL}/team/departments`, {
         method: 'POST',
         credentials: 'include',
         headers: getAuthHeaders(),
@@ -67,9 +82,11 @@ const teamController = {
         throw new Error('Failed to create category');
       }
       
-      return await response.json();
+      const result = await response.json();
+      console.log('✅ Category created:', result);
+      return result.success ? result.data : result;
     } catch (error) {
-      console.error('Error creating category:', error);
+      console.error('❌ Error creating category:', error);
       throw error;
     }
   },
@@ -79,7 +96,8 @@ const teamController = {
    */
   updateCategory: async (categoryId, categoryData) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
+      console.log('🔄 Updating category:', categoryId, categoryData);
+      const response = await fetch(`${API_BASE_URL}/team/departments/${categoryId}`, {
         method: 'PUT',
         credentials: 'include',
         headers: getAuthHeaders(),
@@ -90,9 +108,11 @@ const teamController = {
         throw new Error('Failed to update category');
       }
       
-      return await response.json();
+      const result = await response.json();
+      console.log('✅ Category updated:', result);
+      return result.success ? result.data : result;
     } catch (error) {
-      console.error('Error updating category:', error);
+      console.error('❌ Error updating category:', error);
       throw error;
     }
   },
@@ -102,7 +122,8 @@ const teamController = {
    */
   deleteCategory: async (categoryId) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
+      console.log('🗑️ Deleting category:', categoryId);
+      const response = await fetch(`${API_BASE_URL}/team/departments/${categoryId}`, {
         method: 'DELETE',
         credentials: 'include',
         headers: getAuthHeaders(),
@@ -112,9 +133,11 @@ const teamController = {
         throw new Error('Failed to delete category');
       }
       
-      return await response.json();
+      const result = await response.json();
+      console.log('✅ Category deleted:', result);
+      return result;
     } catch (error) {
-      console.error('Error deleting category:', error);
+      console.error('❌ Error deleting category:', error);
       throw error;
     }
   },
@@ -126,7 +149,8 @@ const teamController = {
    */
   getMembers: async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/members`, {
+      console.log('📡 Fetching team members from:', `${API_BASE_URL}/team`);
+      const response = await fetch(`${API_BASE_URL}/team`, {
         credentials: 'include',
         headers: getAuthHeaders(),
       });
@@ -135,9 +159,19 @@ const teamController = {
         throw new Error('Failed to fetch team members');
       }
       
-      return await response.json();
+      const result = await response.json();
+      console.log('📦 Members API Response:', result);
+      
+      // Handle the response structure: { success: true, data: [...] }
+      if (result.success && Array.isArray(result.data)) {
+        console.log('✅ Members data:', result.data.length, 'members');
+        return result.data;
+      } else {
+        console.log('⚠️ API response not in expected format');
+        return [];
+      }
     } catch (error) {
-      console.error('Error fetching team members:', error);
+      console.error('❌ Error fetching team members:', error);
       throw error;
     }
   },
@@ -147,7 +181,8 @@ const teamController = {
    */
   getMembersByCategory: async (categoryId) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/members?category=${categoryId}`, {
+      console.log('📡 Fetching members by category:', categoryId);
+      const response = await fetch(`${API_BASE_URL}/team?category=${categoryId}`, {
         credentials: 'include',
         headers: getAuthHeaders(),
       });
@@ -156,9 +191,17 @@ const teamController = {
         throw new Error('Failed to fetch team members');
       }
       
-      return await response.json();
+      const result = await response.json();
+      console.log('📦 Members by Category Response:', result);
+      
+      if (result.success && Array.isArray(result.data)) {
+        console.log('✅ Filtered members data:', result.data.length, 'members');
+        return result.data;
+      } else {
+        return [];
+      }
     } catch (error) {
-      console.error('Error fetching team members by category:', error);
+      console.error('❌ Error fetching team members by category:', error);
       throw error;
     }
   },
@@ -168,7 +211,8 @@ const teamController = {
    */
   getMemberById: async (memberId) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/members/${memberId}`, {
+      console.log('📡 Fetching member by ID:', memberId);
+      const response = await fetch(`${API_BASE_URL}/team/${memberId}`, {
         credentials: 'include',
         headers: getAuthHeaders(),
       });
@@ -177,9 +221,11 @@ const teamController = {
         throw new Error('Failed to fetch team member');
       }
       
-      return await response.json();
+      const result = await response.json();
+      console.log('📦 Member by ID Response:', result);
+      return result.success ? result.data : result;
     } catch (error) {
-      console.error('Error fetching team member:', error);
+      console.error('❌ Error fetching team member:', error);
       throw error;
     }
   },
@@ -189,7 +235,8 @@ const teamController = {
    */
   createMember: async (memberData) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/members`, {
+      console.log('📤 Creating team member:', memberData);
+      const response = await fetch(`${API_BASE_URL}/team`, {
         method: 'POST',
         credentials: 'include',
         headers: getAuthHeaders(),
@@ -200,9 +247,11 @@ const teamController = {
         throw new Error('Failed to create team member');
       }
       
-      return await response.json();
+      const result = await response.json();
+      console.log('✅ Team member created:', result);
+      return result.success ? result.data : result;
     } catch (error) {
-      console.error('Error creating team member:', error);
+      console.error('❌ Error creating team member:', error);
       throw error;
     }
   },
@@ -212,7 +261,8 @@ const teamController = {
    */
   updateMember: async (memberId, memberData) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/members/${memberId}`, {
+      console.log('🔄 Updating team member:', memberId, memberData);
+      const response = await fetch(`${API_BASE_URL}/team/${memberId}`, {
         method: 'PUT',
         credentials: 'include',
         headers: getAuthHeaders(),
@@ -223,9 +273,11 @@ const teamController = {
         throw new Error('Failed to update team member');
       }
       
-      return await response.json();
+      const result = await response.json();
+      console.log('✅ Team member updated:', result);
+      return result.success ? result.data : result;
     } catch (error) {
-      console.error('Error updating team member:', error);
+      console.error('❌ Error updating team member:', error);
       throw error;
     }
   },
@@ -235,7 +287,8 @@ const teamController = {
    */
   deleteMember: async (memberId) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/members/${memberId}`, {
+      console.log('🗑️ Deleting team member:', memberId);
+      const response = await fetch(`${API_BASE_URL}/team/${memberId}`, {
         method: 'DELETE',
         credentials: 'include',
         headers: getAuthHeaders(),
@@ -245,9 +298,11 @@ const teamController = {
         throw new Error('Failed to delete team member');
       }
       
-      return await response.json();
+      const result = await response.json();
+      console.log('✅ Team member deleted:', result);
+      return result;
     } catch (error) {
-      console.error('Error deleting team member:', error);
+      console.error('❌ Error deleting team member:', error);
       throw error;
     }
   },

@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api'}/services`;
+
 export default function ServiceComponent() {
   const [categories, setCategories] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
@@ -56,7 +58,7 @@ export default function ServiceComponent() {
   const fetchCategories = async () => {
     try {
       console.log('📡 Fetching service categories');
-      const response = await fetch('http://localhost:4000/api/services/categories', {
+      const response = await fetch(`${API_BASE_URL}/categories`, {
         credentials: 'include',
       });
       
@@ -89,7 +91,7 @@ export default function ServiceComponent() {
       console.log('📡 Fetching all services');
       
       // Fetch all services
-      const response = await fetch('http://localhost:4000/api/services', {
+      const response = await fetch(`${API_BASE_URL}`, {
         credentials: 'include',
       });
       
@@ -184,7 +186,7 @@ export default function ServiceComponent() {
       if (isEditing) {
         // Update existing service
         console.log('🔄 Updating service:', editId);
-        const response = await fetch(`http://localhost:4000/api/services/${editId}`, {
+        const response = await fetch(`${API_BASE_URL}/${editId}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -202,7 +204,7 @@ export default function ServiceComponent() {
       } else {
         // Create new service
         console.log('📤 Creating new service');
-        const response = await fetch('http://localhost:4000/api/services', {
+        const response = await fetch(`${API_BASE_URL}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -284,7 +286,7 @@ export default function ServiceComponent() {
 
     try {
       console.log('🗑️ Deleting service:', serviceId);
-      const response = await fetch(`http://localhost:4000/api/services/${serviceId}`, {
+      const response = await fetch(`${API_BASE_URL}/${serviceId}`, {
         method: 'DELETE',
         credentials: 'include',
       });

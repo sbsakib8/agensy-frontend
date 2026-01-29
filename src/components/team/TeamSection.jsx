@@ -2,9 +2,26 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import { Linkedin, Twitter, Github, Mail, MapPin, Calendar, Search } from "lucide-react";
+import { teamController } from '@/controllers';
 
 const TeamSection = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  const [teamCategories, setTeamCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const categories = await teamController.getCategories();
+        setTeamCategories(categories);
+        console.log("✅ Getting categories:", categories)
+      } catch (error) {
+        console.error("❌ Failed to load team categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   // Subtle particles (less “party”, more “premium”)
   const [particles] = useState(() => {
