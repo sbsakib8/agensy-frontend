@@ -1,0 +1,246 @@
+const API_BASE_URL = 'http://localhost:4000/api/projects';
+
+const getAuthHeaders = () => {
+  return {
+    'Content-Type': 'application/json',
+  };
+};
+
+const demoController = {
+  // ============ Demo Categories ============
+  
+  /**
+   * Get all demo categories
+   */
+  getCategories: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}`, {
+        credentials: 'include',
+        headers: getAuthHeaders(),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch categories');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get a single category by ID
+   */
+  getCategoryById: async (categoryId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
+        credentials: 'include',
+        headers: getAuthHeaders(),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch category');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching category:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Create a new demo category
+   */
+  createCategory: async (categoryData) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/categories`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(categoryData),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to create category');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error creating category:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Update a demo category
+   */
+  updateCategory: async (categoryId, categoryData) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(categoryData),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update category');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error updating category:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Delete a demo category
+   */
+  deleteCategory: async (categoryId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: getAuthHeaders(),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to delete category');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error deleting category:', error);
+      throw error;
+    }
+  },
+
+  // ============ Demo Projects ============
+  
+  /**
+   * Get all projects in a category
+   */
+  getProjects: async (categoryId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}`, {
+        credentials: 'include',
+        headers: getAuthHeaders(),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch projects');
+      }
+      
+      const result = await response.json();
+      
+      // Filter projects by category if categoryId is provided
+      if (categoryId && result.success) {
+        const category = result.data.find(cat => cat.id === categoryId);
+        return {
+          ...result,
+          data: category ? category.projects : []
+        };
+      }
+      
+      return result;
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get a single project by ID
+   */
+  getProjectById: async (categoryId, projectId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/categories/${categoryId}/projects/${projectId}`, {
+        credentials: 'include',
+        headers: getAuthHeaders(),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch project');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching project:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Create a new project
+   */
+  createProject: async (categoryId, projectData) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/categories/${categoryId}/projects`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(projectData),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to create project');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error creating project:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Update a project
+   */
+  updateProject: async (categoryId, projectId, projectData) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/categories/${categoryId}/projects/${projectId}`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(projectData),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update project');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error updating project:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Delete a project
+   */
+  deleteProject: async (categoryId, projectId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/categories/${categoryId}/projects/${projectId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: getAuthHeaders(),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to delete project');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error deleting project:', error);
+      throw error;
+    }
+  },
+};
+
+export default demoController;

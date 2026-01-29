@@ -2,11 +2,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import { ExternalLink, Sparkles, Zap, TrendingUp, Award } from 'lucide-react';
+import { productsController } from '@/controllers';
 
 const ProductsSection = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredProduct, setHoveredProduct] = useState(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [productsData, setProductsData] = useState([]);
 
   // Generate stable random values for particles using useState
   const [particles] = useState(() => {
@@ -19,6 +21,23 @@ const ProductsSection = () => {
   });
 
   useEffect(() => {
+    // Fetch products from API
+    const fetchProducts = async () => {
+      try {
+        const result = await productsController.getProducts();
+        console.log('📦 Products fetched from API:', result);
+        
+        if (result.success) {
+          console.log('✅ Products data:', result.data);
+          setProductsData(result.data);
+        }
+      } catch (error) {
+        console.error('❌ Error fetching products:', error);
+      }
+    };
+
+    fetchProducts();
+
     // Use a small delay to trigger animation
     const timer = setTimeout(() => {
       setIsVisible(true);

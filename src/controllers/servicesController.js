@@ -1,0 +1,214 @@
+const API_BASE_URL = 'http://localhost:4000/api/services';
+
+const getAuthHeaders = () => {
+  return {
+    'Content-Type': 'application/json',
+  };
+};
+
+const servicesController = {
+  // ============ Service Categories ============
+  
+  /**
+   * Get all service categories
+   */
+  getCategories: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/categories`, {
+        credentials: 'include',
+        headers: getAuthHeaders(),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch categories');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Create a new service category
+   */
+  createCategory: async (categoryData) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/categories`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(categoryData),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to create category');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error creating category:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Update a service category
+   */
+  updateCategory: async (categoryId, categoryData) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(categoryData),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update category');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error updating category:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Delete a service category
+   */
+  deleteCategory: async (categoryId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: getAuthHeaders(),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to delete category');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error deleting category:', error);
+      throw error;
+    }
+  },
+
+  // ============ Services ============
+  
+  /**
+   * Get all services
+   */
+  getServices: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}`, {
+        credentials: 'include',
+        headers: getAuthHeaders(),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch services');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching services:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get a single service by ID
+   */
+  getServiceById: async (serviceId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/${serviceId}`, {
+        credentials: 'include',
+        headers: getAuthHeaders(),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch service');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching service:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Create a new service
+   */
+  createService: async (serviceData) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(serviceData),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to create service');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error creating service:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Update a service
+   */
+  updateService: async (serviceId, serviceData) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/${serviceId}`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(serviceData),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update service');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error updating service:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Delete a service
+   */
+  deleteService: async (serviceId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/${serviceId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: getAuthHeaders(),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to delete service');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error deleting service:', error);
+      throw error;
+    }
+  },
+};
+
+export default servicesController;
