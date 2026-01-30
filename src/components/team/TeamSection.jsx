@@ -1,12 +1,61 @@
 "use client";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { Linkedin, Twitter, Github, Mail, MapPin, Calendar, Search } from "lucide-react";
 
-const TeamSection = () => {
+import teamController from "@/controllers/teamController";
+
+const safeText = (v, fallback = "-") => (typeof v === "string" && v.trim() ? v.trim() : fallback);
+
+const getDepartmentNameFromMember = (m) => {
+  if (!m) return "";
+  if (typeof m.department === "string") return m.department;
+  if (m.department && typeof m.department === "object") return m.department.name || "";
+  // fallback keys
+  return m.departmentName || m.categoryName || "";
+};
+
+const getMemberImage = (m) =>
+  m?.profileImage ||
+  m?.image ||
+  m?.photo ||
+  m?.avatar ||
+  "https://images.unsplash.com/photo-1520975958225-8f3c3c5bb99a?auto=format&fit=crop&w=600&q=80";
+
+const normalizeSkills = (m) => {
+  const s = m?.skills ?? m?.skill ?? m?.tags ?? [];
+  if (Array.isArray(s)) return s.filter(Boolean).map(String);
+  if (typeof s === "string")
+    return s
+      .split(",")
+      .map((x) => x.trim())
+      .filter(Boolean);
+  return [];
+};
+
+const getFullLocation = (loc) => {
+  if (!loc) return "";
+  if (typeof loc === "string") return loc;
+  const parts = [loc.city, loc.state, loc.country].filter(Boolean);
+  return parts.join(", ");
+};
+
+const formatDate = (v) => {
+  if (!v) return "—";
+
+  try {
+    const d = new Date(v);
+    if (Number.isNaN(d.getTime())) return String(v);
+    return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "2-digit" });
+  } catch {
+    return String(v);
+  }
+};
+
+export default function TeamSection() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  // Subtle particles (less “party”, more “premium”)
+  // particles
   const [particles] = useState(() => {
     return [...Array(10)].map(() => ({
       top: Math.random() * 100,
@@ -24,220 +73,194 @@ const TeamSection = () => {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  const teamMembers = useMemo(
-    () => [
-      {
-        id: 1,
-        name: "Sarah Johnson",
-        position: "CEO & Co-Founder",
-        department: "Leadership",
-        image:
-          "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
-        bio: "Visionary leader with 10+ years in tech innovation. Focused on building solutions that scale and create measurable business impact.",
-        location: "San Francisco, CA",
-        joinDate: "Jan 2020",
-        skills: ["Strategy", "Leadership", "Partnerships"],
-        social: {
-          linkedin: "https://linkedin.com/in/sarahjohnson",
-          twitter: "https://twitter.com/sarahjohnson",
-          email: "sarah@bdstacksolutions.com",
-        },
-      },
-      {
-        id: 2,
-        name: "Michael Chen",
-        position: "CTO & Co-Founder",
-        department: "Engineering",
-        image:
-          "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
-        bio: "Full-stack architect specializing in scalable systems and AI integration. Led teams across high-growth environments and enterprise delivery.",
-        location: "Austin, TX",
-        joinDate: "Jan 2020",
-        skills: ["Architecture", "AI/ML", "Engineering Leadership"],
-        social: {
-          linkedin: "https://linkedin.com/in/michaelchen",
-          github: "https://github.com/michaelchen",
-          email: "michael@bdstacksolutions.com",
-        },
-      },
-      {
-        id: 3,
-        name: "Emily Rodriguez",
-        position: "Lead UI/UX Designer",
-        department: "Design",
-        image:
-          "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-        bio: "User-centered designer focused on clarity, conversion, and premium brand systems. Builds interfaces that feel effortless and modern.",
-        location: "New York, NY",
-        joinDate: "Mar 2021",
-        skills: ["Product Design", "Prototyping", "User Research"],
-        social: {
-          linkedin: "https://linkedin.com/in/emilyrodriguez",
-          twitter: "https://twitter.com/emilydesigns",
-          email: "emily@bdstacksolutions.com",
-        },
-      },
-      {
-        id: 4,
-        name: "David Kim",
-        position: "Senior Full-Stack Developer",
-        department: "Engineering",
-        image:
-          "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-        bio: "Product-minded engineer with strong frontend craft and backend reliability. Enjoys building robust apps and mentoring developers.",
-        location: "Seattle, WA",
-        joinDate: "Jul 2021",
-        skills: ["React", "Node.js", "AWS"],
-        social: {
-          linkedin: "https://linkedin.com/in/davidkim",
-          github: "https://github.com/davidkim",
-          email: "david@bdstacksolutions.com",
-        },
-      },
-      {
-        id: 5,
-        name: "Aisha Patel",
-        position: "AI/ML Engineer",
-        department: "Engineering",
-        image:
-          "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1161&q=80",
-        bio: "Machine learning specialist developing intelligent systems and applied AI solutions with strong research fundamentals.",
-        location: "Boston, MA",
-        joinDate: "Sep 2022",
-        skills: ["Machine Learning", "Python", "TensorFlow"],
-        social: {
-          linkedin: "https://linkedin.com/in/aishapatel",
-          github: "https://github.com/aishapatel",
-          email: "aisha@bdstacksolutions.com",
-        },
-      },
-      {
-        id: 6,
-        name: "James Wilson",
-        position: "Mobile App Developer",
-        department: "Engineering",
-        image:
-          "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-        bio: "Mobile developer building polished cross-platform apps with performance focus and clean UX. Strong delivery mindset.",
-        location: "Los Angeles, CA",
-        joinDate: "Nov 2022",
-        skills: ["React Native", "Flutter", "iOS/Android"],
-        social: {
-          linkedin: "https://linkedin.com/in/jameswilson",
-          github: "https://github.com/jameswilson",
-          email: "james@bdstacksolutions.com",
-        },
-      },
-      {
-        id: 7,
-        name: "Alex Thompson",
-        position: "Frontend Development Intern",
-        department: "Intern",
-        image:
-          "https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-        bio: "CS student learning modern web development while contributing to real projects with guidance from senior engineers.",
-        location: "Chicago, IL",
-        joinDate: "Jan 2024",
-        skills: ["React", "JavaScript", "Git"],
-        social: {
-          linkedin: "https://linkedin.com/in/alexthompson",
-          github: "https://github.com/alexthompson",
-          email: "alex.intern@bdstacksolutions.com",
-        },
-      },
-      {
-        id: 8,
-        name: "Maya Singh",
-        position: "UX Design Intern",
-        department: "Intern",
-        image:
-          "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-        bio: "Design student exploring research and interaction design through hands-on product work and structured mentorship.",
-        location: "Portland, OR",
-        joinDate: "Jun 2024",
-        skills: ["Figma", "Prototyping", "User Research"],
-        social: {
-          linkedin: "https://linkedin.com/in/mayasingh",
-          github: "https://github.com/mayasingh",
-          email: "maya.intern@bdstacksolutions.com",
-        },
-      },
-      {
-        id: 9,
-        name: "Daniel Rodriguez",
-        position: "Data Science Intern",
-        department: "Intern",
-        image:
-          "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-        bio: "Stats major focused on practical analytics and ML fundamentals. Supports data tasks and learns production workflows.",
-        location: "Denver, CO",
-        joinDate: "Sep 2024",
-        skills: ["Python", "SQL", "Data Analysis"],
-        social: {
-          linkedin: "https://linkedin.com/in/danielrodriguez",
-          github: "https://github.com/danielrodriguez",
-          email: "daniel.intern@bdstacksolutions.com",
-        },
-      },
-    ],
-    [],
-  );
+  // API states
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [members, setMembers] = useState([]);
 
+  // UI states
   const [selectedDepartment, setSelectedDepartment] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [query, setQuery] = useState("");
 
-  const handleDepartmentChange = (dept) => {
-    setSelectedDepartment(dept);
+  const handleDepartmentChange = (deptKey) => {
+    setSelectedDepartment(deptKey);
     setCurrentPage(1);
   };
 
-  const departments = useMemo(() => {
-    const allCount = teamMembers.length;
-    const counts = {
-      Leadership: teamMembers.filter((m) => m.department === "Leadership").length,
-      Engineering: teamMembers.filter((m) => m.department === "Engineering").length,
-      Design: teamMembers.filter((m) => m.department === "Design").length,
-      Intern: teamMembers.filter((m) => m.department === "Intern").length,
+  // Fetch
+  useEffect(() => {
+    let alive = true;
+
+    const load = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const [catsRaw, memsRaw] = await Promise.all([
+          teamController.getCategories().catch(() => []),
+          teamController.getMembers(),
+        ]);
+
+        if (!alive) return;
+
+        // Normalize API categories
+        const apiCats = Array.isArray(catsRaw)
+          ? catsRaw
+              .map((c) => ({
+                key: c?._id || c?.id || c?.departmentId || c?.value,
+                name: safeText(c?.name || c?.title || c?.departmentName || c?.label, ""),
+                source: "api",
+              }))
+              .filter((c) => c.key && c.name)
+          : [];
+
+        const apiNameToKey = new Map(apiCats.map((c) => [c.name.toLowerCase(), c.key]));
+        const apiKeySet = new Set(apiCats.map((c) => c.key));
+
+        // Normalize members + attach __deptKey consistently
+        const normalizedMembers = Array.isArray(memsRaw)
+          ? memsRaw.map((m) => {
+              const deptName = safeText(getDepartmentNameFromMember(m), "");
+              const deptLower = deptName.toLowerCase();
+
+              // ✅ If member dept matches API category name, use API key
+              let deptKey = apiNameToKey.get(deptLower);
+
+              // ✅ If member has dept already as an API id (rare), accept
+              if (!deptKey && typeof m?.department === "string" && apiKeySet.has(m.department)) {
+                deptKey = m.department;
+              }
+
+              // ✅ Otherwise fallback "local" key based on name
+              if (!deptKey) {
+                deptKey = deptName ? `local:${deptLower}` : "local:unknown";
+              }
+
+              return {
+                ...m,
+                _id: m?._id || m?.id,
+                name: safeText(m?.name || m?.fullName),
+                role: safeText(m?.role || m?.position || m?.designation),
+                bio: safeText(m?.bio || m?.about || m?.description, ""),
+                profileImage: getMemberImage(m),
+                skills: normalizeSkills(m),
+                locationObj: m?.location,
+                locationText:
+                  getFullLocation(m?.location) ||
+                  safeText(m?.location || m?.address || m?.city, ""),
+                joinedDate: m?.joinedDate || m?.joinDate || m?.joinedAt || m?.createdAt || "",
+                status: m?.status || "",
+                socialLinks: {
+                  linkedin: m?.socialLinks?.linkedin || m?.social?.linkedin || m?.linkedin || "",
+                  twitter: m?.socialLinks?.twitter || m?.social?.twitter || m?.twitter || "",
+                  github: m?.socialLinks?.github || m?.social?.github || m?.github || "",
+                  email: m?.socialLinks?.email || m?.social?.email || m?.email || "",
+                },
+                __deptName: deptName || "Unknown",
+                __deptKey: deptKey,
+              };
+            })
+          : [];
+
+        // Build member-derived categories if missing in API
+        const memberDeptMap = new Map();
+        for (const m of normalizedMembers) {
+          const name = (m.__deptName || "").trim();
+          if (!name) continue;
+          const lower = name.toLowerCase();
+          if (!memberDeptMap.has(lower)) memberDeptMap.set(lower, name);
+        }
+
+        const derivedCats = Array.from(memberDeptMap.entries())
+          .filter(([lowerName]) => !apiNameToKey.has(lowerName))
+          .map(([lowerName, displayName]) => ({
+            key: `local:${lowerName}`,
+            name: displayName,
+            source: "derived",
+          }));
+
+        const finalCats = [...apiCats, ...derivedCats];
+
+        setMembers(normalizedMembers);
+        setCategories(finalCats);
+
+        // If selectedDepartment invalid now, reset
+        if (selectedDepartment !== "All" && !finalCats.some((c) => c.key === selectedDepartment)) {
+          setSelectedDepartment("All");
+        }
+      } catch (e) {
+        if (!alive) return;
+        setError(e?.message || "Something went wrong");
+      } finally {
+        if (!alive) return;
+        setLoading(false);
+      }
     };
-    return [
-      { name: "All", count: allCount },
-      { name: "Leadership", count: counts.Leadership },
-      { name: "Engineering", count: counts.Engineering },
-      { name: "Design", count: counts.Design },
-      { name: "Intern", count: counts.Intern },
-    ];
-  }, [teamMembers]);
 
-  const membersPerPage = 9;
+    load();
+    return () => {
+      alive = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
+  // Tabs with counts
+  const departments = useMemo(() => {
+    const allCount = members.length;
+
+    const items = categories
+      .map((c) => {
+        const count = members.filter((m) => m.__deptKey === c.key).length;
+        return { id: c.key, name: c.name, count };
+      })
+      // ✅ empty category hide (All ছাড়া)
+      .filter((d) => d.count > 0);
+
+    return [{ id: "All", name: "All", count: allCount }, ...items];
+  }, [categories, members]);
+
+  // Filtering
   const filteredMembers = useMemo(() => {
     const byDept =
       selectedDepartment === "All"
-        ? teamMembers
-        : teamMembers.filter((m) => m.department === selectedDepartment);
+        ? members
+        : members.filter((m) => m.__deptKey === selectedDepartment);
 
     const q = query.trim().toLowerCase();
     if (!q) return byDept;
 
     return byDept.filter((m) => {
-      return (
-        m.name.toLowerCase().includes(q) ||
-        m.position.toLowerCase().includes(q) ||
-        m.department.toLowerCase().includes(q) ||
-        (m.skills || []).join(" ").toLowerCase().includes(q)
-      );
-    });
-  }, [teamMembers, selectedDepartment, query]);
+      const hay = [
+        m.name,
+        m.role,
+        m.__deptName,
+        m.locationText,
+        ...(m.skills || []),
+        m.status || "",
+      ]
+        .join(" ")
+        .toLowerCase();
 
+      return hay.includes(q);
+    });
+  }, [members, selectedDepartment, query]);
+
+  // Pagination
+  const membersPerPage = 9;
   const totalPages = Math.max(1, Math.ceil(filteredMembers.length / membersPerPage));
   const startIndex = (currentPage - 1) * membersPerPage;
   const endIndex = startIndex + membersPerPage;
   const currentMembers = filteredMembers.slice(startIndex, endIndex);
 
+  useEffect(() => {
+    if (currentPage > totalPages) setCurrentPage(totalPages);
+  }, [totalPages, currentPage]);
+
   return (
     <section className="relative min-h-screen overflow-hidden bg-neon-blue">
-      {/* Background layers from globals.css utilities */}
+      {/* Background */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute inset-0 bg-grid-pattern opacity-[0.08]" />
         <div className="absolute inset-0 bg-neon-vignette opacity-90" />
@@ -323,16 +346,22 @@ const TeamSection = () => {
               />
             </div>
           </div>
+
+          {/* Status */}
+          <div className="mt-6">
+            {loading && <p className="text-sm text-white/55">Loading team data...</p>}
+            {!loading && error && <p className="text-sm text-rose-300/90">{error}</p>}
+          </div>
         </div>
 
-        {/* Department Tabs */}
+        {/* Tabs */}
         <div className="mt-10 flex flex-wrap justify-center gap-2 animate-fade-in-up-delayed">
           {departments.map((dept) => {
-            const active = selectedDepartment === dept.name;
+            const active = selectedDepartment === dept.id;
             return (
               <button
-                key={dept.name}
-                onClick={() => handleDepartmentChange(dept.name)}
+                key={dept.id}
+                onClick={() => handleDepartmentChange(dept.id)}
                 className={[
                   "rounded-full px-4 py-2 text-sm font-medium transition",
                   "border",
@@ -350,11 +379,18 @@ const TeamSection = () => {
           })}
         </div>
 
+        {/* Empty */}
+        {!loading && !error && filteredMembers.length === 0 && (
+          <div className="mt-12 text-center">
+            <p className="text-sm text-white/55">No members found.</p>
+          </div>
+        )}
+
         {/* Grid */}
         <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 animate-fade-in-up-more-delayed">
           {currentMembers.map((member) => (
             <article
-              key={member.id}
+              key={member._id}
               className={[
                 "group relative overflow-hidden rounded-2xl border border-slate-700/40",
                 "bg-slate-900/50 p-6",
@@ -376,7 +412,7 @@ const TeamSection = () => {
               <div className="relative flex items-start gap-4">
                 <div className="relative h-14 w-14 overflow-hidden rounded-xl border border-slate-700/40 bg-slate-800/40">
                   <Image
-                    src={member.image}
+                    src={member.profileImage}
                     alt={member.name}
                     width={64}
                     height={64}
@@ -386,45 +422,59 @@ const TeamSection = () => {
 
                 <div className="min-w-0 flex-1">
                   <h3 className="truncate text-base font-semibold text-white">{member.name}</h3>
-                  <p className="mt-0.5 text-sm text-white/70">{member.position}</p>
+                  <p className="mt-0.5 text-sm text-white/70">{member.role}</p>
 
                   <div className="mt-2 inline-flex items-center rounded-full border border-slate-700/40 bg-slate-800/30 px-3 py-1 text-xs text-white/60">
-                    {member.department}
+                    {member.__deptName || "—"}
                   </div>
+
+                  {member.status && (
+                    <div className="mt-2 ml-2 inline-flex items-center rounded-full border border-white/10 bg-white/3 px-3 py-1 text-[11px] text-white/55">
+                      Status: <span className="ml-1 text-white/75">{member.status}</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
-              <p className="mt-4 line-clamp-3 text-sm leading-relaxed text-white/60">
-                {member.bio}
-              </p>
+              {member.bio ? (
+                <p className="mt-4 line-clamp-3 text-sm leading-relaxed text-white/60">
+                  {member.bio}
+                </p>
+              ) : (
+                <p className="mt-4 line-clamp-3 text-sm leading-relaxed text-white/45">
+                  No bio available.
+                </p>
+              )}
 
               <div className="mt-5 grid gap-2 text-xs text-white/55">
                 <div className="flex items-center gap-2">
                   <MapPin className="h-4 w-4 text-indigo-300/80" />
-                  <span className="truncate">{member.location}</span>
+                  <span className="truncate">{member.locationText || "Remote"}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4 text-indigo-300/80" />
-                  <span>Joined {member.joinDate}</span>
+                  <span>Joined {formatDate(member.joinedDate)}</span>
                 </div>
               </div>
 
-              <div className="mt-5 flex flex-wrap gap-2">
-                {member.skills.slice(0, 3).map((skill) => (
-                  <span
-                    key={skill}
-                    className="rounded-full border border-slate-700/40 bg-slate-800/30 px-3 py-1 text-xs text-white/60 transition group-hover:border-indigo-400/25 group-hover:text-white/80"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
+              {Array.isArray(member.skills) && member.skills.length > 0 && (
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {member.skills.slice(0, 3).map((skill) => (
+                    <span
+                      key={skill}
+                      className="rounded-full border border-slate-700/40 bg-slate-800/30 px-3 py-1 text-xs text-white/60 transition group-hover:border-indigo-400/25 group-hover:text-white/80"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              )}
 
               <div className="mt-6 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  {member.social.linkedin && (
+                  {member?.socialLinks?.linkedin && (
                     <a
-                      href={member.social.linkedin}
+                      href={member.socialLinks.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="icon-btn"
@@ -433,9 +483,9 @@ const TeamSection = () => {
                       <Linkedin className="h-4 w-4 text-indigo-300/80" />
                     </a>
                   )}
-                  {member.social.twitter && (
+                  {member?.socialLinks?.twitter && (
                     <a
-                      href={member.social.twitter}
+                      href={member.socialLinks.twitter}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="icon-btn"
@@ -444,9 +494,9 @@ const TeamSection = () => {
                       <Twitter className="h-4 w-4 text-indigo-300/80" />
                     </a>
                   )}
-                  {member.social.github && (
+                  {member?.socialLinks?.github && (
                     <a
-                      href={member.social.github}
+                      href={member.socialLinks.github}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="icon-btn"
@@ -455,9 +505,9 @@ const TeamSection = () => {
                       <Github className="h-4 w-4 text-indigo-300/80" />
                     </a>
                   )}
-                  {member.social.email && (
+                  {member?.socialLinks?.email && (
                     <a
-                      href={`mailto:${member.social.email}`}
+                      href={`mailto:${member.socialLinks.email}`}
                       className="icon-btn"
                       aria-label="Email"
                     >
@@ -519,12 +569,14 @@ const TeamSection = () => {
           </div>
         )}
 
-        {/* Results Info */}
+        {/* Results info */}
         <div className="mt-6 text-center animate-fade-in-up-delayed">
           <p className="text-sm text-white/45">
             Showing {filteredMembers.length === 0 ? 0 : startIndex + 1}–
             {Math.min(endIndex, filteredMembers.length)} of {filteredMembers.length} members
-            {selectedDepartment !== "All" ? ` in ${selectedDepartment}` : ""}
+            {selectedDepartment !== "All"
+              ? ` in ${departments.find((d) => d.id === selectedDepartment)?.name || "Selected"}`
+              : ""}
             {query.trim() ? ` (filtered)` : ""}
           </p>
         </div>
@@ -559,6 +611,4 @@ const TeamSection = () => {
       `}</style>
     </section>
   );
-};
-
-export default TeamSection;
+}

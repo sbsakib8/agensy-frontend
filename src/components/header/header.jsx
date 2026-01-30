@@ -43,10 +43,7 @@ import Image from 'next/image';
   const services = [
     { name: 'Web Development', desc: 'Custom websites & web apps', href: '/web-development'},
     {name:'AI Agents', desc: 'Intelligent virtual assistants', href: '/ai-agents'},
-    { name: 'Mobile Apps', desc: 'iOS & Android development', href: '/app-development' },
-    { name: 'UI/UX Design', desc: 'Beautiful user experiences' },
-    { name: 'Digital Marketing', desc: 'SEO, PPC & Social Media' },
-    { name: 'Branding', desc: 'Logo & identity design' },
+    { name: 'App Development', desc: 'iOS & Android development', href: '/app-development' },
     { name: 'E-commerce', desc: 'Online store solutions' }
   ];
 
