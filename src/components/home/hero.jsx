@@ -68,7 +68,7 @@ export default function HeroSection() {
         </div>
 
        {/* ===== RIGHT SIDE : FLOATING IMAGE BENTO GRID ===== */}
-<div className="relative grid grid-cols-3 grid-rows-3 gap-4 h-[340px] md:h-[420px]">
+<div className="relative grid grid-cols-3 grid-rows-3 gap-4 h-85 md:h-105">
 
   {/* background glow */}
   <motion.div
@@ -77,84 +77,98 @@ export default function HeroSection() {
     className="absolute -z-10 w-80 h-80 rounded-full bg-sky-500/10 blur-[110px]"
   />
 
-  {/* ===== IMAGE 1 : MAIN ===== */}
-  <motion.div
-    animate={{ y: [0, -10, 0] }}
-    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-    whileHover={{ scale: 1.03 }}
-    className="
-      col-span-2 row-span-2
-      rounded-2xl overflow-hidden
-      bg-gradient-to-br from-sky-500/20 to-blue-600/20
-      border border-white/10
-    "
-  >
-    <img
-      src="https://i.ibb.co.com/wNDjjXSZ/istockphoto-1189378904-612x612.jpg"
-      alt="UI UX"
-      className="w-full h-full object-cover"
-    />
-  </motion.div>
+ {/* ===== IMAGE 1 : MAIN ===== */}
+<motion.div
+  animate={{ y: [0, -10, 0] }}
+  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+  whileHover={{ scale: 1.03 }}
+  className="
+    relative
+    col-span-2 row-span-2
+    rounded-2xl overflow-hidden
+    bg-linear-to-br from-sky-500/20 to-blue-600/20
+    border border-white/10
+  "
+>
+  <Image
+    src="https://i.ibb.co.com/wNDjjXSZ/istockphoto-1189378904-612x612.jpg"
+    alt="UI UX"
+    fill
+    className="object-cover"
+    sizes="(max-width: 768px) 100vw, 50vw"
+    priority
+  />
+</motion.div>
 
-  {/* ===== IMAGE 2 ===== */}
-  <motion.div
-    animate={{ y: [0, 8, 0] }}
-    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-    whileHover={{ y: -6 }}
-    className="rounded-xl overflow-hidden border border-white/10"
-  >
-    <img
-      src="/photo1.jpeg"
-      alt="Visual"
-      className="w-full h-full object-cover"
-    />
-  </motion.div>
+{/* ===== IMAGE 2 ===== */}
+<motion.div
+  animate={{ y: [0, 8, 0] }}
+  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+  whileHover={{ y: -6 }}
+  className="relative rounded-xl overflow-hidden border border-white/10"
+>
+  <Image
+    src="https://i.ibb.co.com/Ng3c9LgV/download-3.jpg"
+    alt="Visual"
+    fill
+    className="object-cover"
+    sizes="(max-width: 768px) 100vw, 33vw"
+  />
+</motion.div>
 
-  {/* ===== IMAGE 3 ===== */}
-  <motion.div
-    animate={{ y: [0, -6, 0] }}
-    transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-    whileHover={{ y: -6 }}
-    className="rounded-xl overflow-hidden border border-white/10"
-  >
-    <img
-      src="/wrodpress.webp"
-      alt="WordPress"
-      className="w-full h-full object-cover"
-    />
-  </motion.div>
+{/* ===== IMAGE 3 ===== */}
+<motion.div
+  animate={{ y: [0, -6, 0] }}
+  transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+  whileHover={{ y: -6 }}
+  className="relative rounded-xl overflow-hidden border border-white/10"
+>
+  <Image
+    src="https://i.ibb.co.com/rKZwj131/images-1.jpg"
+    alt="WordPress"
+    fill
+    className="object-cover"
+    sizes="(max-width: 768px) 100vw, 33vw"
+  />
+</motion.div>
 
-  {/* ===== IMAGE 4 ===== */}
-  <motion.div
-    animate={{ y: [0, 10, 0] }}
-    transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
-    whileHover={{ y: -6 }}
-    className="rounded-xl overflow-hidden border border-white/10"
-  >
-    <img
-      src="/app.jpg"
-      alt="App"
-      className="w-full h-full object-cover"
-    />
-  </motion.div>
+{/* ===== IMAGE 4 ===== */}
+<motion.div
+  animate={{ y: [0, 10, 0] }}
+  transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
+  whileHover={{ y: -6 }}
+  className="relative rounded-xl overflow-hidden border border-white/10"
+>
+  <Image
+    src="https://i.ibb.co.com/Sw1TXJDc/web-development-coding-programming-internet-technology-business-concept-web-development-coding-progr.jpg"
+    alt="App"
+    fill
+    className="object-cover"
+    sizes="(max-width: 768px) 100vw, 33vw"
+  />
+</motion.div>
 
-  {/* ===== IMAGE 5 : WIDE ===== */}
-  <motion.div
-    animate={{ y: [0, -12, 0] }}
-    transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut" }}
-    whileHover={{ scale: 1.05 }}
-    className="
-      col-span-2 row-span-1
-      rounded-xl overflow-hidden
-      border border-white/10
-    "
-  >
-    <img
-      src="/e-commerce.jpg"
-      alt="E-commerce"
-      className="w-full h-full object-cover"
-    />
-  </motion.div>
+{/* ===== IMAGE 5 : WIDE ===== */}
+<motion.div
+  animate={{ y: [0, -12, 0] }}
+  transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut" }}
+  whileHover={{ scale: 1.05 }}
+  className="
+    relative
+    col-span-2 row-span-1
+    rounded-xl overflow-hidden
+    border border-white/10
+  "
+>
+  <Image
+    src="https://i.ibb.co.com/rGtVP9TH/download-2.jpg"
+    alt="E-commerce"
+    fill
+    className="object-cover"
+    sizes="(max-width: 768px) 100vw, 50vw"
+  />
+</motion.div>
+
 
 </div>
 
