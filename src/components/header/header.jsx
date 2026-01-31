@@ -43,10 +43,7 @@ import Image from 'next/image';
   const services = [
     { name: 'Web Development', desc: 'Custom websites & web apps', href: '/web-development'},
     {name:'AI Agents', desc: 'Intelligent virtual assistants', href: '/ai-agents'},
-    { name: 'Mobile Apps', desc: 'iOS & Android development', href: '/app-development' },
-    { name: 'UI/UX Design', desc: 'Beautiful user experiences' },
-    { name: 'Digital Marketing', desc: 'SEO, PPC & Social Media' },
-    { name: 'Branding', desc: 'Logo & identity design' },
+    { name: 'App Development', desc: 'iOS & Android development', href: '/app-development' },
     { name: 'E-commerce', desc: 'Online store solutions' }
   ];
 
@@ -127,6 +124,12 @@ import Image from 'next/image';
                                   ? "/app-development"
                                   : service.name === "UI/UX Design"
                                   ? "/ui-ux-design"
+                                  : service.name === "Digital Marketing"
+                                  ? "/digital-marketing"
+                                  : service.name === "Branding"
+                                  ? "/branding"
+                                  : service.name === "E-commerce"
+                                  ? "/e-commerce"
                                   : `#${service.name.toLowerCase().replace(/\s+/g, '-')}`
                               }
                               className="block px-4 py-3 rounded-lg hover:bg-linear-to-r hover:from-cyan-500/10 hover:to-blue-500/10 transition-all duration-300 group"
@@ -218,7 +221,7 @@ import Image from 'next/image';
                   onMouseEnter={() => handleDropdownEnter('profile')}
                   onMouseLeave={handleDropdownLeave}
                 >
-                  <button className="w-10 h-10 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform duration-200">
+                  <button className="w-10 h-10 rounded-full bg-linear-to-r from-cyan-500 to-blue-500 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform duration-200">
                     {user.image || user.picture ? (
                       <Image 
                         src={user.image || user.picture} 
@@ -425,7 +428,7 @@ import Image from 'next/image';
               {user ? (
                 <div className="space-y-3">
                   <div className="flex items-center space-x-3 px-4 py-3 bg-slate-800/50 rounded-lg">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-full bg-linear-to-r from-cyan-500 to-blue-500 flex items-center justify-center">
                       {user.image || user.picture ? (
                         <Image
                           src={user.image || user.picture} 
