@@ -2,8 +2,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { Linkedin, Twitter, Github, Mail, MapPin, Calendar, Search } from "lucide-react";
+import { teamController } from '@/controllers';
 
-import teamController from "@/controllers/teamController";
 
 const safeText = (v, fallback = "-") => (typeof v === "string" && v.trim() ? v.trim() : fallback);
 

@@ -21,9 +21,10 @@ export const handleApiError = (error, context = '') => {
 
   // Network errors (backend not reachable)
   if (error.code === 'ERR_NETWORK' || !error.response) {
+    const backendUrl = (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api').replace('/api', '');
     return {
       type: ErrorTypes.NETWORK,
-      message: '❌ Cannot connect to backend server at http://localhost:4000\n\nPlease ensure:\n• Backend server is running\n• CORS is configured properly\n• No firewall blocking the connection\n\nRun: npm run dev (in backend folder)',
+      message: `❌ Cannot connect to backend server at ${backendUrl}\n\nPlease ensure:\n• Backend server is running\n• CORS is configured properly\n• No firewall blocking the connection\n\nRun: npm run dev (in backend folder)`,
       technicalMessage: error.message,
     };
   }
@@ -121,7 +122,8 @@ export const formatErrorMessage = (error) => {
  */
 export const checkBackendHealth = async () => {
   try {
-    const response = await fetch('http://localhost:4000/api/health', {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api';
+    const response = await fetch(`${apiBaseUrl}/health`, {
       method: 'GET',
       signal: AbortSignal.timeout(5000), // 5 second timeout
     });

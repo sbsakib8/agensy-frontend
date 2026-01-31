@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api'}/projects`;
+
 export default function DemoProjectComponent() {
   const [categories, setCategories] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState("mobile-apps");
@@ -39,7 +41,7 @@ export default function DemoProjectComponent() {
   const fetchCategories = async () => {
     try {
       console.log('📡 Fetching categories');
-      const response = await fetch('http://localhost:4000/api/projects', {
+      const response = await fetch(`${API_BASE_URL}`, {
         credentials: 'include',
       });
       
@@ -76,7 +78,7 @@ export default function DemoProjectComponent() {
       console.log('📡 Fetching projects for category:', selectedCategoryId);
       
       // Fetch all categories with projects
-      const response = await fetch('http://localhost:4000/api/projects', {
+      const response = await fetch(`${API_BASE_URL}`, {
         credentials: 'include',
       });
       
@@ -134,7 +136,7 @@ export default function DemoProjectComponent() {
       if (isEditing) {
         // Update existing project
         console.log('🔄 Updating project:', editId);
-        const response = await fetch(`http://localhost:4000/api/projects/categories/${selectedCategoryId}/projects/${editId}`, {
+        const response = await fetch(`${API_BASE_URL}/categories/${selectedCategoryId}/projects/${editId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -152,7 +154,7 @@ export default function DemoProjectComponent() {
       } else {
         // Create new project
         console.log('📤 Creating new project');
-        const response = await fetch(`http://localhost:4000/api/projects/categories/${selectedCategoryId}/projects`, {
+        const response = await fetch(`${API_BASE_URL}/categories/${selectedCategoryId}/projects`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -202,7 +204,7 @@ export default function DemoProjectComponent() {
 
     try {
       console.log('🗑️ Deleting project:', projectId);
-      const response = await fetch(`http://localhost:4000/api/projects/categories/${selectedCategoryId}/projects/${projectId}`, {
+      const response = await fetch(`${API_BASE_URL}/categories/${selectedCategoryId}/projects/${projectId}`, {
         method: 'DELETE',
         credentials: 'include',
       });

@@ -1,11 +1,75 @@
 "use client";
 
-import { useState } from "react";
-import { Check } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Check, Loader2 } from "lucide-react";
+
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api'}/pricing`;
 
 export default function PricingSection() {
   const [currency, setCurrency] = useState("USD");
-  const [billing, setBilling] = useState("Ai Agent");
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [plans, setPlans] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchPricingData();
+  }, []);
+
+  const fetchPricingData = async () => {
+    try {
+      setLoading(true);
+      console.log('📡 Fetching pricing data from:', API_BASE_URL);
+      
+      const response = await fetch(API_BASE_URL);
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch pricing data');
+      }
+      
+      const data = await response.json();
+      console.log('📦 Pricing API Response:', data);
+      
+      if (data.success && data.data.categories) {
+        const activeCategories = data.data.categories.filter(cat => cat.isActive);
+        setCategories(activeCategories);
+        
+        // Set first category as default
+        if (activeCategories.length > 0) {
+          setSelectedCategory(activeCategories[0]._id);
+          
+          // Get ALL plans for the first category (not filtering by isActive yet since the first category might not have that field)
+          const firstCategoryPlans = activeCategories[0].plans || [];
+          // Filter out inactive plans if isActive field exists
+          const activePlans = firstCategoryPlans.filter(plan => plan.isActive !== false);
+          setPlans(activePlans);
+          
+          console.log('✅ Loaded categories:', activeCategories.length);
+          console.log('✅ First category plans:', activePlans);
+        }
+      }
+      
+      setError(null);
+    } catch (err) {
+      console.error('❌ Error fetching pricing:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCategoryChange = (categoryId) => {
+    setSelectedCategory(categoryId);
+    const category = categories.find(cat => cat._id === categoryId);
+    if (category) {
+      // Get all plans, filter out inactive ones (isActive: false)
+      const categoryPlans = category.plans || [];
+      const activePlans = categoryPlans.filter(plan => plan.isActive !== false);
+      setPlans(activePlans);
+      console.log('📦 Loaded plans for category:', category.name, activePlans.length, activePlans);
+    }
+  };
 
   return (
     <section className="relative min-h-screen bg-[#070b14] text-white overflow-hidden">
@@ -57,102 +121,113 @@ export default function PricingSection() {
             </div>
           </div>
 
-          {/* ===== Billing Toggle ===== */}
-          <div className="flex justify-center mt-6">
-            <div className="flex bg-white/5 rounded-full p-1 border border-white/10">
-              {["Ai Agent", "App Development", "MERN Stack", "PERN Stack", "WordPress"].map((b) => (
-                <button
-                  key={b}
-                  onClick={() => setBilling(b)}
-                  className={`px-6 py-2 rounded-full text-sm transition
-                    ${billing === b ? "bg-white/10 text-white" : "text-gray-400 hover:text-white"}`}
-                >
-                  {b}
-                </button>
-              ))}
+          {/* ===== Category/Billing Toggle ===== */}
+          {!loading && categories.length > 0 && (
+            <div className="flex justify-center mt-6">
+              <div className="flex flex-wrap justify-center gap-2 bg-white/5 rounded-full p-1 border border-white/10 max-w-4xl">
+                {categories.map((category) => (
+                  <button
+                    key={category._id}
+                    onClick={() => handleCategoryChange(category._id)}
+                    className={`px-6 py-2 rounded-full text-sm transition
+                      ${selectedCategory === category._id ? "bg-white/10 text-white" : "text-gray-400 hover:text-white"}`}
+                  >
+                    {category.name}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
+
+        {/* ===== LOADING STATE ===== */}
+        {loading && (
+          <div className="flex justify-center items-center py-20">
+            <Loader2 className="w-8 h-8 animate-spin text-cyan-400" />
+            <span className="ml-3 text-gray-400">Loading pricing plans...</span>
+          </div>
+        )}
+
+        {/* ===== ERROR STATE ===== */}
+        {error && !loading && (
+          <div className="text-center py-20">
+            <p className="text-red-400">Failed to load pricing: {error}</p>
+            <button 
+              onClick={fetchPricingData}
+              className="mt-4 px-6 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 rounded-lg text-cyan-400 transition"
+            >
+              Retry
+            </button>
+          </div>
+        )}
 
         {/* ===== PRICING CARDS ===== */}
-        <div className="grid md:grid-cols-3 gap-8">
-          <PricingCard
-            title="Startup"
-            color="text-pink-400"
-            price="$3,000"
-            subtitle="Perfect for small teams"
-            features={[
-              "1 Senior Developer (Part Time)",
-              "1 Senior Designer (Part Time)",
-              "Shared Project Manager",
-              "80 Development Hours / Month",
-              "20 Design Hours / Month",
-              "Basic Support (Email + Slack)",
-            ]}
-          />
+        {!loading && !error && plans.length > 0 && (
+          <div className="grid md:grid-cols-3 gap-8">
+            {plans.map((plan, index) => {
+              // Handle both billingCycle and duration fields
+              const cycle = plan.billingCycle || plan.duration || 'month';
+              const subtitle = plan.description || `per ${cycle}`;
+              const isHighlighted = plan.recommended || plan.popular;
+              
+              return (
+                <PricingCard
+                  key={plan.id || plan._id || index}
+                  title={plan.name}
+                  color={index === 0 ? "text-pink-400" : index === 1 ? "text-orange-400" : "text-blue-400"}
+                  price={plan.price?.[currency] ? `${currency === "USD" ? "$" : "৳"}${plan.price[currency].toLocaleString()}` : "Custom"}
+                  subtitle={subtitle}
+                  highlight={isHighlighted}
+                  features={plan.features || []}
+                  cta={plan.cta}
+                />
+              );
+            })}
+          </div>
+        )}
 
-          <PricingCard
-            title="Growth"
-            color="text-orange-400"
-            price="$5,000"
-            subtitle="For growing companies"
-            highlight
-            features={[
-              "1 Senior Developer (Full Time)",
-              "1 Senior Designer (Part Time)",
-              "Dedicated Project Manager",
-              "140 Development Hours / Month",
-              "30 Design Hours / Month",
-              "Priority Support + Weekly Calls",
-            ]}
-          />
-
-          <PricingCard
-            title="Enterprise"
-            color="text-blue-400"
-            price="Custom"
-            subtitle="Custom solutions for large teams"
-            features={[
-              "Custom Development Team",
-              "Custom Design Team",
-              "Senior Project Manager",
-              "Unlimited Hours",
-              "24/7 Priority Support",
-              "Custom Integrations & Solutions",
-            ]}
-          />
-        </div>
+        {/* ===== NO PLANS STATE ===== */}
+        {!loading && !error && plans.length === 0 && (
+          <div className="text-center py-20">
+            <p className="text-gray-400">No pricing plans available for this category.</p>
+          </div>
+        )}
       </div>
     </section>
   );
 }
 
 /* ================= PRICING CARD COMPONENT ================= */
-function PricingCard({ title, subtitle, price, features, color, highlight }) {
+function PricingCard({ title, subtitle, price, features, color, highlight, cta }) {
   return (
     <div
       className={`relative rounded-2xl border border-white/10 bg-linear-to-b from-white/5 to-white/0 p-8 backdrop-blur-md shadow-xl
-        ${highlight ? "ring-1 ring-cyan-400/40" : ""}`}
+        ${highlight ? "ring-2 ring-cyan-400/50 shadow-cyan-400/20" : ""}`}
     >
+      {highlight && (
+        <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-1 rounded-full text-xs font-semibold">
+          Popular
+        </div>
+      )}
+      
       <h3 className={`text-2xl font-bold ${color}`}>{title}</h3>
-      <p className="text-gray-400 mt-1">{subtitle}</p>
+      <p className="text-gray-400 mt-1 text-sm">{subtitle}</p>
 
       <div className="mt-6">
         <span className="text-4xl font-extrabold">{price}</span>
-        {price !== "Custom" && <span className="text-gray-400 text-sm"> / month</span>}
       </div>
 
       <ul className="mt-8 space-y-3">
         {features.map((item, i) => (
           <li key={i} className="flex gap-3 text-gray-300">
-            <Check className="w-5 h-5 text-green-400 mt-0.5" />
-            {item}
+            <Check className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
+            <span className="text-sm">{item}</span>
           </li>
         ))}
       </ul>
 
       <button className="mt-8 w-full rounded-xl bg-white/10 hover:bg-white/20 transition py-3 font-medium">
-        Contact To Get Started
+        {cta?.text || 'Contact To Get Started'}
       </button>
     </div>
   );
