@@ -5,7 +5,7 @@ import { FaTwitter, FaLinkedinIn, FaGithub, FaEnvelope } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-b from-[#0b1220] to-[#050914] text-gray-300 relative">
+    <footer className="bg-linear-to-b from-[#0b1220] to-[#050914] text-gray-300 relative">
       <div className="max-w-7xl mx-auto px-6 py-16 flex flex-col md:flex-row justify-center md:justify-between items-center md:items-start gap-10 text-center md:text-left">
 
         {/* Logo & Brand */}
@@ -42,26 +42,26 @@ export default function Footer() {
 
         {/* Quick Links */}
         <FooterColumn title="Quick Links">
-          <FooterLink href="#">Product</FooterLink>
-          <FooterLink href="#">Services</FooterLink>
-          <FooterLink href="#">Demo</FooterLink>
-          <FooterLink href="#">Pricing</FooterLink>
+          <FooterLink href="/product">Product</FooterLink>
+          <FooterLink href="/e-commerce">Services</FooterLink>
+          <FooterLink href="/demo">Demo</FooterLink>
+          <FooterLink href="/pricing">Pricing</FooterLink>
         </FooterColumn>
 
         {/* Company */}
         <FooterColumn title="Company">
-          <FooterLink href="#">About Us</FooterLink>
-          <FooterLink href="#">Customers</FooterLink>
-          <FooterLink href="#">Careers</FooterLink>
-          <FooterLink href="#">Contact Us</FooterLink>
+          <FooterLink href="/team">About Us</FooterLink>
+          <FooterLink href="/customer">Customers</FooterLink>
+          <FooterLink href="/career">Careers</FooterLink>
+          <FooterLink href="/contact">Contact Us</FooterLink>
         </FooterColumn>
 
         {/* Resources */}
         <FooterColumn title="Resources">
-          <FooterLink href="#">Blog</FooterLink>
-          <FooterLink href="#">Documentation</FooterLink>
-          <FooterLink href="#">Tutorials</FooterLink>
-          <FooterLink href="#">Help Center</FooterLink>
+          <FooterLink href="/blog">Blog</FooterLink>
+          <FooterLink href="/docs">Documentation</FooterLink>
+          <FooterLink href="/tutorial">Tutorials</FooterLink>
+          <FooterLink href="/help-center">Help Center</FooterLink>
         </FooterColumn>
       </div>
 

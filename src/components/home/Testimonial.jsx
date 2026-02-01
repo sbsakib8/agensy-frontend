@@ -103,10 +103,10 @@ export default function Testimonial() {
         </div>
 
         {/* -------- CONTENT (FIXED HEIGHT – NO GROWTH) -------- */}
-        <div className="relative h-[420px]">
+        <div className="relative h-105">
           <div
             key={active}
-            className="h-full bg-white/[0.04] backdrop-blur-xl
+            className="h-full bg-white/4 backdrop-blur-xl
               border border-white/10 rounded-3xl
               p-8 md:p-12 shadow-2xl"
           >

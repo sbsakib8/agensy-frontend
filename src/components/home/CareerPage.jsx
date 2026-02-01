@@ -14,12 +14,8 @@ import {
   User,
   MessageSquare,
   Sparkles,
-  ShieldCheck,
-  Zap,
-  Timer,
 } from "lucide-react";
-import Lottie from "lottie-react";
-import heroAnim from "../../../public/Mobile App Showcase.json";
+
 
 /* ================= Data ================= */
 const services = [
