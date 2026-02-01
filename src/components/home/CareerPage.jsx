@@ -30,7 +30,7 @@ const heroSlides = [
   {
     title: "Design Your Future",
     text: "Work with world-class designers creating meaningful digital experiences.",
-    img: "https://i.ibb.co.com/4ZHKqycS/download-5.jpg",
+    img: "https://i.ibb.co.com/gbJ1LymP/images-5.jpg",
   },
   {
     title: "Build Scalable Products",

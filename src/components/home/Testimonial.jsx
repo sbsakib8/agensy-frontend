@@ -111,7 +111,7 @@ function Testimonial() {
 
   return (
     <section 
-      className="relative w-full py-20 md:py-28 px-4 overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white"
+      className="relative w-full py-20 md:py-28 px-4 overflow-hidden bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 text-white"
       onMouseEnter={() => setIsAutoPlay(false)}
       onMouseLeave={() => setIsAutoPlay(true)}
     >
@@ -402,14 +402,14 @@ function Testimonial() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
           >
-            <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent">
               What Our Clients
             </span>
             <br />
             <span className="text-white">Say About Us</span>
           </motion.h2>
           <motion.div 
-            className="w-24 h-1 bg-gradient-to-r from-cyan-400 to-purple-500 mx-auto rounded-full"
+            className="w-24 h-1 bg-linear-to-r from-cyan-400 to-purple-500 mx-auto rounded-full"
             initial={{ width: 0 }}
             animate={{ width: 96 }}
             transition={{ delay: 0.8, duration: 0.8, ease: "easeOut" }}
@@ -465,7 +465,7 @@ function Testimonial() {
                         damping: 25,
                         duration: 0.4 
                       }}
-                      className={`testimonial-avatar-wrapper flex-shrink-0 w-20 h-20 lg:w-24 lg:h-24 rounded-2xl overflow-hidden border-2 relative group
+                      className={`testimonial-avatar-wrapper shrink-0 w-20 h-20 lg:w-24 lg:h-24 rounded-2xl overflow-hidden border-2 relative group
                         ${isActive 
                           ? "border-cyan-400 ring-4 ring-cyan-400/20 shadow-xl shadow-cyan-400/30" 
                           : "border-gray-600/40 opacity-70 hover:opacity-100 hover:border-gray-500/60"
@@ -482,7 +482,7 @@ function Testimonial() {
                         priority={isActive}
                       />
                       {isActive && (
-                        <div className="absolute inset-0 bg-gradient-to-t from-cyan-400/20 to-transparent" />
+                        <div className="absolute inset-0 bg-linear-to-t from-cyan-400/20 to-transparent" />
                       )}
                     </motion.button>
                   )
@@ -555,7 +555,7 @@ function Testimonial() {
                 y: { duration: 0.6 },
                 rotateX: { duration: 0.5 }
               }}
-              className="testimonial-content-card cursor-grab active:cursor-grabbing bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl group"
+              className="testimonial-content-card cursor-grab active:cursor-grabbing bg-white/3 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl group"
             >
               {/* Quote Icon */}
               <div className="mb-8">
@@ -630,7 +630,7 @@ function Testimonial() {
               onClick={() => handleNavigation(idx)}
               className={`relative overflow-hidden rounded-full transition-all duration-500 ${
                 active === idx 
-                  ? 'w-12 h-3 bg-gradient-to-r from-cyan-400 to-purple-500' 
+                  ? 'w-12 h-3 bg-linear-to-r from-cyan-400 to-purple-500' 
                   : 'w-3 h-3 bg-gray-600 hover:bg-gray-500'
               }`}
               aria-label={`Go to testimonial ${idx + 1}`}
