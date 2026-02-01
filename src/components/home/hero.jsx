@@ -136,14 +136,16 @@ export default function HeroSection() {
     border border-white/10
   "
 >
-  <Image
-    src={bannerData?.images?.[0]?.imageUrl || "https://i.ibb.co.com/wNDjjXSZ/istockphoto-1189378904-612x612.jpg"}
-    alt={bannerData?.images?.[0]?.title || "UI UX"}
-    fill
-    className="object-cover"
-    sizes="(max-width: 768px) 100vw, 50vw"
-    priority
-  />
+  {(bannerData?.images?.[0]?.imageUrl && bannerData.images[0].imageUrl.trim() !== "") && (
+    <Image
+      src={bannerData.images[0].imageUrl}
+      alt={bannerData.images[0].title || "UI UX"}
+      fill
+      className="object-cover"
+      sizes="(max-width: 768px) 100vw, 50vw"
+      priority
+    />
+  )}
 </motion.div>
 
 {/* ===== IMAGE 2 ===== */}
@@ -153,13 +155,15 @@ export default function HeroSection() {
   whileHover={{ y: -6 }}
   className="relative rounded-xl overflow-hidden border border-white/10"
 >
-  <Image
-    src={bannerData?.images?.[1]?.imageUrl || "https://i.ibb.co.com/Ng3c9LgV/download-3.jpg"}
-    alt={bannerData?.images?.[1]?.title || "Visual"}
-    fill
-    className="object-cover"
-    sizes="(max-width: 768px) 100vw, 33vw"
-  />
+  {(bannerData?.images?.[1]?.imageUrl && bannerData.images[1].imageUrl.trim() !== "") && (
+    <Image
+      src={bannerData.images[1].imageUrl}
+      alt={bannerData.images[1].title || "Visual"}
+      fill
+      className="object-cover"
+      sizes="(max-width: 768px) 100vw, 33vw"
+    />
+  )}
 </motion.div>
 
 {/* ===== IMAGE 3 ===== */}
@@ -169,13 +173,15 @@ export default function HeroSection() {
   whileHover={{ y: -6 }}
   className="relative rounded-xl overflow-hidden border border-white/10"
 >
-  <Image
-    src={bannerData?.images?.[2]?.imageUrl || "https://i.ibb.co.com/rKZwj131/images-1.jpg"}
-    alt={bannerData?.images?.[2]?.title || "WordPress"}
-    fill
-    className="object-cover"
-    sizes="(max-width: 768px) 100vw, 33vw"
-  />
+  {(bannerData?.images?.[2]?.imageUrl && bannerData.images[2].imageUrl.trim() !== "") && (
+    <Image
+      src={bannerData.images[2].imageUrl}
+      alt={bannerData.images[2].title || "WordPress"}
+      fill
+      className="object-cover"
+      sizes="(max-width: 768px) 100vw, 33vw"
+    />
+  )}
 </motion.div>
 
 {/* ===== IMAGE 4 ===== */}
@@ -185,13 +191,15 @@ export default function HeroSection() {
   whileHover={{ y: -6 }}
   className="relative rounded-xl overflow-hidden border border-white/10"
 >
-  <Image
-    src={bannerData?.images?.[3]?.imageUrl || "https://i.ibb.co.com/Sw1TXJDc/web-development-coding-programming-internet-technology-business-concept-web-development-coding-progr.jpg"}
-    alt={bannerData?.images?.[3]?.title || "App"}
-    fill
-    className="object-cover"
-    sizes="(max-width: 768px) 100vw, 33vw"
-  />
+  {(bannerData?.images?.[3]?.imageUrl && bannerData.images[3].imageUrl.trim() !== "") && (
+    <Image
+      src={bannerData.images[3].imageUrl}
+      alt={bannerData.images[3].title || "App"}
+      fill
+      className="object-cover"
+      sizes="(max-width: 768px) 100vw, 33vw"
+    />
+  )}
 </motion.div>
 
 {/* ===== IMAGE 5 : WIDE ===== */}
@@ -206,13 +214,15 @@ export default function HeroSection() {
     border border-white/10
   "
 >
-  <Image
-    src={bannerData?.images?.[4]?.imageUrl || "https://i.ibb.co.com/rGtVP9TH/download-2.jpg"}
-    alt={bannerData?.images?.[4]?.title || "E-commerce"}
-    fill
-    className="object-cover"
-    sizes="(max-width: 768px) 100vw, 50vw"
-  />
+  {(bannerData?.images?.[4]?.imageUrl && bannerData.images[4].imageUrl.trim() !== "") && (
+    <Image
+      src={bannerData.images[4].imageUrl}
+      alt={bannerData.images[4].title || "E-commerce"}
+      fill
+      className="object-cover"
+      sizes="(max-width: 768px) 100vw, 50vw"
+    />
+  )}
 </motion.div>
 
 
