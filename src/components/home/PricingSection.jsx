@@ -98,9 +98,9 @@ export default function PricingSection() {
 
       {/* ================= SOFT GLOW FILTERS ================= */}
       <div className="pointer-events-none absolute inset-0 z-1">
-        <div className="absolute -left-48 top-1/4 w-[520px] h-[520px] bg-cyan-500/10 rounded-full blur-[160px] mix-blend-screen" />
-        <div className="absolute -right-48 top-1/3 w-[520px] h-[520px] bg-purple-500/10 rounded-full blur-[160px] mix-blend-screen" />
-        <div className="absolute -bottom-64 left-1/2 -translate-x-1/2 w-[720px] h-[420px] bg-blue-500/10 rounded-full blur-[180px] mix-blend-screen" />
+        <div className="absolute -left-48 top-1/4 w-130 h-130 bg-cyan-500/10 rounded-full blur-[160px] mix-blend-screen" />
+        <div className="absolute -right-48 top-1/3 w-130 h-130 bg-purple-500/10 rounded-full blur-[160px] mix-blend-screen" />
+        <div className="absolute -bottom-64 left-1/2 -translate-x-1/2 w-180 h-105 bg-blue-500/10 rounded-full blur-[180px] mix-blend-screen" />
       </div>
 
       {/* ================= CONTENT ================= */}
@@ -224,7 +224,7 @@ function PricingCard({ title, subtitle, price, features, color, highlight, cta, 
         ${highlight ? "ring-2 ring-cyan-400/50 shadow-cyan-400/20" : ""}`}
     >
       {highlight && (
-        <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-1 rounded-full text-xs font-semibold">
+        <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-linear-to-r from-cyan-500 to-blue-500 px-4 py-1 rounded-full text-xs font-semibold">
           Popular
         </div>
       )}
@@ -239,7 +239,7 @@ function PricingCard({ title, subtitle, price, features, color, highlight, cta, 
       <ul className="mt-8 space-y-3">
         {features.map((item, i) => (
           <li key={i} className="flex gap-3 text-gray-300">
-            <Check className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
+            <Check className="w-5 h-5 text-green-400 mt-0.5 shrink-0" />
             <span className="text-sm">{item}</span>
           </li>
         ))}

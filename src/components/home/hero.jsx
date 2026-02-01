@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, Zap, Palette, Rocket, ShieldCheck } from "lucide-react";
+import { ArrowRight, Sparkles, Zap, Palette, Rocket, ShieldCheck, Link } from "lucide-react";
 import Image from "next/image";
 import { bannerApi } from "@/lib/api";
 
@@ -113,8 +113,8 @@ export default function HeroSection() {
           </div>
         </div>
 
-       {/* ===== RIGHT SIDE : FLOATING IMAGE BENTO GRID ===== */}
-<div className="relative grid grid-cols-3 grid-rows-3 gap-4 h-85 md:h-105">
+      {/* ===== RIGHT SIDE : FLOATING IMAGE BENTO GRID ===== */}
+<div className="relative mt-6 md:mt-12 translate-y-4 grid grid-cols-3 grid-rows-3 gap-4 h-88 md:h-104">
 
   {/* background glow */}
   <motion.div
@@ -225,8 +225,25 @@ export default function HeroSection() {
   )}
 </motion.div>
 
+  {/* ===== IMAGE 5 : WIDE ===== */}
+  <motion.div
+    animate={{ y: [0, -12, 0] }}
+    transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut" }}
+    whileHover={{ scale: 1.05 }}
+    className="relative col-span-2 row-span-1 rounded-xl overflow-hidden border border-white/10"
+  >
+    <Link href="/services/ecommerce">
+      <Image
+        src="https://i.ibb.co.com/rGtVP9TH/download-2.jpg"
+        alt="E-commerce"
+        fill
+        className="object-cover cursor-pointer"
+      />
+    </Link>
+  </motion.div>
 
 </div>
+
 
 
 
