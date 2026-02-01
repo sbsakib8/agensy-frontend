@@ -257,6 +257,230 @@ export const productApi = {
   },
 };
 
+export const bannerApi = {
+  // Get all banners
+  getAllBanners: async () => {
+    console.log('📡 Fetching all banners from: /banner/all');
+    const response = await api.get('banner/all');
+    console.log('📦 Banners response:', response.data);
+    return response.data;
+  },
+
+  // Get single banner by ID
+  getBanner: async (id) => {
+    console.log('📡 Fetching banner:', id);
+    const response = await api.get(`banner/${id}`);
+    console.log('📦 Banner response:', response.data);
+    return response.data;
+  },
+
+  // Create new banner
+  createBanner: async (data) => {
+    console.log('📤 Creating banner:', data);
+    const response = await api.post('banner', data);
+    console.log('✅ Banner created:', response.data);
+    return response.data;
+  },
+
+  // Update banner
+  updateBanner: async (id, data) => {
+    console.log('🔄 Updating banner:', id, data);
+    const response = await api.put(`banner/${id}`, data);
+    console.log('✅ Banner updated:', response.data);
+    return response.data;
+  },
+
+  // Delete banner
+  deleteBanner: async (id) => {
+    console.log('🗑️ Deleting banner:', id);
+    const response = await api.delete(`banner/${id}`);
+    console.log('✅ Banner deleted:', response.data);
+    return response.data;
+  },
+};
+
+export const faqApi = {
+  // Get all FAQs
+  getAllFAQs: async () => {
+    console.log('📡 Fetching all FAQs from: /faqs');
+    const response = await api.get('faqs');
+    console.log('📦 FAQs response:', response.data);
+    return response.data;
+  },
+
+  // Get single FAQ by ID
+  getFAQ: async (id) => {
+    console.log('📡 Fetching FAQ:', id);
+    const response = await api.get(`faqs/${id}`);
+    console.log('📦 FAQ response:', response.data);
+    return response.data;
+  },
+
+  // Create new FAQ
+  createFAQ: async (data) => {
+    console.log('📤 Creating FAQ:', data);
+    const response = await api.post('faqs', data);
+    console.log('✅ FAQ created:', response.data);
+    return response.data;
+  },
+
+  // Update FAQ
+  updateFAQ: async (id, data) => {
+    console.log('🔄 Updating FAQ:', id, data);
+    const response = await api.put(`faqs/${id}`, data);
+    console.log('✅ FAQ updated:', response.data);
+    return response.data;
+  },
+
+  // Patch FAQ (partial update)
+  patchFAQ: async (id, data) => {
+    console.log('🔄 Patching FAQ:', id, data);
+    const response = await api.patch(`faqs/${id}`, data);
+    console.log('✅ FAQ patched:', response.data);
+    return response.data;
+  },
+
+  // Delete FAQ
+  deleteFAQ: async (id) => {
+    console.log('🗑️ Deleting FAQ:', id);
+    const response = await api.delete(`faqs/${id}`);
+    console.log('✅ FAQ deleted:', response.data);
+    return response.data;
+  },
+};
+
+export const testimonialApi = {
+  // Get all testimonials
+  getAllTestimonials: async () => {
+    console.log('📡 Fetching all testimonials from: /testimonials');
+    const response = await api.get('testimonials');
+    console.log('📦 Testimonials response:', response.data);
+    return response.data;
+  },
+
+  // Get single testimonial by ID
+  getTestimonial: async (id) => {
+    console.log('📡 Fetching testimonial:', id);
+    const response = await api.get(`testimonials/${id}`);
+    console.log('📦 Testimonial response:', response.data);
+    return response.data;
+  },
+
+  // Create new testimonial
+  createTestimonial: async (data) => {
+    console.log('📤 Creating testimonial:', data);
+    const response = await api.post('testimonials', data);
+    console.log('✅ Testimonial created:', response.data);
+    return response.data;
+  },
+
+  // Update testimonial (patch)
+  updateTestimonial: async (id, data) => {
+    console.log('🔄 Updating testimonial:', id, data);
+    const response = await api.patch(`testimonials/${id}`, data);
+    console.log('✅ Testimonial updated:', response.data);
+    return response.data;
+  },
+
+  // Delete testimonial
+  deleteTestimonial: async (id) => {
+    console.log('🗑️ Deleting testimonial:', id);
+    const response = await api.delete(`testimonials/${id}`);
+    console.log('✅ Testimonial deleted:', response.data);
+    return response.data;
+  },
+};
+
+export const orderApi = {
+  // Create new order
+  createOrder: async (data) => {
+    console.log('📤 Creating order:', data);
+    const response = await api.post('orders', data);
+    console.log('✅ Order created:', response.data);
+    return response.data;
+  },
+
+  // Get all orders (admin only)
+  getAllOrders: async (params = {}) => {
+    console.log('📡 Fetching all orders');
+    const response = await api.get('orders', { params });
+    console.log('📦 Orders response:', response.data);
+    return response.data;
+  },
+
+  // Get user's orders
+  getUserOrders: async () => {
+    console.log('📡 Fetching user orders');
+    const response = await api.get('orders/my-orders');
+    console.log('📦 User orders:', response.data);
+    return response.data;
+  },
+
+  // Get order by ID
+  getOrderById: async (id) => {
+    console.log('📡 Fetching order:', id);
+    const response = await api.get(`orders/${id}`);
+    console.log('📦 Order response:', response.data);
+    return response.data;
+  },
+
+  // Get order by order number
+  getOrderByOrderNumber: async (orderNumber) => {
+    console.log('📡 Fetching order by number:', orderNumber);
+    const response = await api.get(`orders/number/${orderNumber}`);
+    console.log('📦 Order response:', response.data);
+    return response.data;
+  },
+
+  // Update order status (admin only)
+  updateOrderStatus: async (id, status) => {
+    console.log('🔄 Updating order status:', id, status);
+    const response = await api.patch(`orders/${id}/status`, { status });
+    console.log('✅ Order status updated:', response.data);
+    return response.data;
+  },
+
+  // Update payment status (admin only)
+  updatePaymentStatus: async (id, paymentStatus) => {
+    console.log('🔄 Updating payment status:', id, paymentStatus);
+    const response = await api.patch(`orders/${id}/payment`, { paymentStatus });
+    console.log('✅ Payment status updated:', response.data);
+    return response.data;
+  },
+
+  // Cancel order
+  cancelOrder: async (id) => {
+    console.log('❌ Cancelling order:', id);
+    const response = await api.patch(`orders/${id}/cancel`);
+    console.log('✅ Order cancelled:', response.data);
+    return response.data;
+  },
+
+  // Update order (admin only)
+  updateOrder: async (id, data) => {
+    console.log('🔄 Updating order:', id, data);
+    const response = await api.put(`orders/${id}`, data);
+    console.log('✅ Order updated:', response.data);
+    return response.data;
+  },
+
+  // Delete order (admin only)
+  deleteOrder: async (id) => {
+    console.log('🗑️ Deleting order:', id);
+    const response = await api.delete(`orders/${id}`);
+    console.log('✅ Order deleted:', response.data);
+    return response.data;
+  },
+
+  // Get order statistics (admin only)
+  getOrderStats: async () => {
+    console.log('📊 Fetching order stats');
+    const response = await api.get('orders/stats');
+    console.log('📦 Order stats:', response.data);
+    return response.data;
+  },
+};
+
 export const adminApi = {
   createUser: async (data, adminSecret) => {
     const headers = adminSecret ? { 'x-admin-secret': adminSecret } : {};

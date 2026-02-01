@@ -1,34 +1,29 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
-
-const faqs = [
-  {
-    question: "What services does BD Stack Solutions offer?",
-    answer:
-      "We provide modern software solutions including web and mobile applications, focused on scalability, security, and performance.",
-  },
-  {
-    question: "How can I request a demo?",
-    answer:
-      "Simply click the 'Schedule a Call' button or contact our sales team. We'll arrange a personalized demo for you.",
-  },
-  {
-    question: "What is your client retention rate?",
-    answer:
-      "Our 95% client retention rate reflects our commitment to quality, trust, and long-term partnerships.",
-  },
-  {
-    question: "Do you provide support after deployment?",
-    answer:
-      "Yes! We offer ongoing maintenance, monitoring, and technical support after project delivery.",
-  },
-];
+import { faqApi } from "@/lib/api";
 
 const FAQ = () => {
+  const [faqs, setFaqs] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(null);
+
+  useEffect(() => {
+    const fetchFAQs = async () => {
+      try {
+        const response = await faqApi.getAllFAQs();
+        console.log("📡 FAQ API Response:", response);
+        setFaqs(response.data || []);
+      } catch (err) {
+        console.error("❌ Error fetching FAQs:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchFAQs();
+  }, []);
 
   return (
     <section className="relative w-full py-16 md:py-24 px-4 sm:px-6 md:px-16 text-white overflow-hidden">
