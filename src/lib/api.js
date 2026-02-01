@@ -257,6 +257,140 @@ export const productApi = {
   },
 };
 
+export const bannerApi = {
+  // Get all banners
+  getAllBanners: async () => {
+    console.log('📡 Fetching all banners from: /banner/all');
+    const response = await api.get('banner/all');
+    console.log('📦 Banners response:', response.data);
+    return response.data;
+  },
+
+  // Get single banner by ID
+  getBanner: async (id) => {
+    console.log('📡 Fetching banner:', id);
+    const response = await api.get(`banner/${id}`);
+    console.log('📦 Banner response:', response.data);
+    return response.data;
+  },
+
+  // Create new banner
+  createBanner: async (data) => {
+    console.log('📤 Creating banner:', data);
+    const response = await api.post('banner', data);
+    console.log('✅ Banner created:', response.data);
+    return response.data;
+  },
+
+  // Update banner
+  updateBanner: async (id, data) => {
+    console.log('🔄 Updating banner:', id, data);
+    const response = await api.put(`banner/${id}`, data);
+    console.log('✅ Banner updated:', response.data);
+    return response.data;
+  },
+
+  // Delete banner
+  deleteBanner: async (id) => {
+    console.log('🗑️ Deleting banner:', id);
+    const response = await api.delete(`banner/${id}`);
+    console.log('✅ Banner deleted:', response.data);
+    return response.data;
+  },
+};
+
+export const faqApi = {
+  // Get all FAQs
+  getAllFAQs: async () => {
+    console.log('📡 Fetching all FAQs from: /faqs');
+    const response = await api.get('faqs');
+    console.log('📦 FAQs response:', response.data);
+    return response.data;
+  },
+
+  // Get single FAQ by ID
+  getFAQ: async (id) => {
+    console.log('📡 Fetching FAQ:', id);
+    const response = await api.get(`faqs/${id}`);
+    console.log('📦 FAQ response:', response.data);
+    return response.data;
+  },
+
+  // Create new FAQ
+  createFAQ: async (data) => {
+    console.log('📤 Creating FAQ:', data);
+    const response = await api.post('faqs', data);
+    console.log('✅ FAQ created:', response.data);
+    return response.data;
+  },
+
+  // Update FAQ
+  updateFAQ: async (id, data) => {
+    console.log('🔄 Updating FAQ:', id, data);
+    const response = await api.put(`faqs/${id}`, data);
+    console.log('✅ FAQ updated:', response.data);
+    return response.data;
+  },
+
+  // Patch FAQ (partial update)
+  patchFAQ: async (id, data) => {
+    console.log('🔄 Patching FAQ:', id, data);
+    const response = await api.patch(`faqs/${id}`, data);
+    console.log('✅ FAQ patched:', response.data);
+    return response.data;
+  },
+
+  // Delete FAQ
+  deleteFAQ: async (id) => {
+    console.log('🗑️ Deleting FAQ:', id);
+    const response = await api.delete(`faqs/${id}`);
+    console.log('✅ FAQ deleted:', response.data);
+    return response.data;
+  },
+};
+
+export const testimonialApi = {
+  // Get all testimonials
+  getAllTestimonials: async () => {
+    console.log('📡 Fetching all testimonials from: /testimonials');
+    const response = await api.get('testimonials');
+    console.log('📦 Testimonials response:', response.data);
+    return response.data;
+  },
+
+  // Get single testimonial by ID
+  getTestimonial: async (id) => {
+    console.log('📡 Fetching testimonial:', id);
+    const response = await api.get(`testimonials/${id}`);
+    console.log('📦 Testimonial response:', response.data);
+    return response.data;
+  },
+
+  // Create new testimonial
+  createTestimonial: async (data) => {
+    console.log('📤 Creating testimonial:', data);
+    const response = await api.post('testimonials', data);
+    console.log('✅ Testimonial created:', response.data);
+    return response.data;
+  },
+
+  // Update testimonial (patch)
+  updateTestimonial: async (id, data) => {
+    console.log('🔄 Updating testimonial:', id, data);
+    const response = await api.patch(`testimonials/${id}`, data);
+    console.log('✅ Testimonial updated:', response.data);
+    return response.data;
+  },
+
+  // Delete testimonial
+  deleteTestimonial: async (id) => {
+    console.log('🗑️ Deleting testimonial:', id);
+    const response = await api.delete(`testimonials/${id}`);
+    console.log('✅ Testimonial deleted:', response.data);
+    return response.data;
+  },
+};
+
 export const adminApi = {
   createUser: async (data, adminSecret) => {
     const headers = adminSecret ? { 'x-admin-secret': adminSecret } : {};
