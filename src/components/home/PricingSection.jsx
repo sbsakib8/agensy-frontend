@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Check, Loader2 } from "lucide-react";
+import OrderModal from "@/components/order/OrderModal";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api'}/pricing`;
 
@@ -12,6 +13,10 @@ export default function PricingSection() {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Order Modal State
+  const [orderModalOpen, setOrderModalOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState(null);
 
   useEffect(() => {
     fetchPricingData();
@@ -69,6 +74,11 @@ export default function PricingSection() {
       setPlans(activePlans);
       console.log('📦 Loaded plans for category:', category.name, activePlans.length, activePlans);
     }
+  };
+
+  const handleOrderClick = (plan) => {
+    setSelectedPlan(plan);
+    setOrderModalOpen(true);
   };
 
   return (
@@ -180,6 +190,7 @@ export default function PricingSection() {
                   highlight={isHighlighted}
                   features={plan.features || []}
                   cta={plan.cta}
+                  onOrderClick={() => handleOrderClick(plan)}
                 />
               );
             })}
@@ -193,12 +204,20 @@ export default function PricingSection() {
           </div>
         )}
       </div>
+
+      {/* Order Modal */}
+      <OrderModal
+        isOpen={orderModalOpen}
+        onClose={() => setOrderModalOpen(false)}
+        plan={selectedPlan}
+        currency={currency}
+      />
     </section>
   );
 }
 
 /* ================= PRICING CARD COMPONENT ================= */
-function PricingCard({ title, subtitle, price, features, color, highlight, cta }) {
+function PricingCard({ title, subtitle, price, features, color, highlight, cta, onOrderClick }) {
   return (
     <div
       className={`relative rounded-2xl border border-white/10 bg-linear-to-b from-white/5 to-white/0 p-8 backdrop-blur-md shadow-xl
@@ -226,8 +245,11 @@ function PricingCard({ title, subtitle, price, features, color, highlight, cta }
         ))}
       </ul>
 
-      <button className="mt-8 w-full rounded-xl bg-white/10 hover:bg-white/20 transition py-3 font-medium">
-        {cta?.text || 'Contact To Get Started'}
+      <button 
+        onClick={onOrderClick}
+        className="mt-8 w-full rounded-xl bg-white/10 hover:bg-white/20 transition py-3 font-medium"
+      >
+        {cta?.text || 'Order Now'}
       </button>
     </div>
   );
