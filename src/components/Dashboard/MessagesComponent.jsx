@@ -17,7 +17,6 @@ export default function MessagesComponent() {
 
   useEffect(() => {
     fetchContacts();
-    fetchStats();
   }, []);
 
   const fetchContacts = async () => {
@@ -28,6 +27,8 @@ export default function MessagesComponent() {
       if (response.success) {
         const contactsArray = Array.isArray(response.data) ? response.data : [];
         setContacts(contactsArray);
+        // Calculate stats from contacts
+        calculateStats(contactsArray);
       } else {
         setError(response.message || 'Failed to fetch contacts');
         setContacts([]);
@@ -41,6 +42,23 @@ export default function MessagesComponent() {
     }
   };
 
+  const calculateStats = (contactsList) => {
+    const statusCounts = {
+      new: 0,
+      read: 0,
+      replied: 0,
+      archived: 0
+    };
+    
+    contactsList.forEach(contact => {
+      if (statusCounts.hasOwnProperty(contact.status)) {
+        statusCounts[contact.status]++;
+      }
+    });
+    
+    setStats({ statusCounts });
+  };
+
   const fetchStats = async () => {
     try {
       const response = await contactApi.getContactStats();
@@ -49,14 +67,27 @@ export default function MessagesComponent() {
       }
     } catch (error) {
       console.error('Error fetching stats:', error);
+      // Fallback to calculating from local contacts
+      if (contacts.length > 0) {
+        calculateStats(contacts);
+      }
     }
   };
 
   const handleUpdateStatus = async (id, status) => {
     try {
       await contactApi.updateContactStatus(id, status);
-      await fetchContacts();
-      await fetchStats();
+      
+      // Update contacts list locally without refetching
+      const updatedContacts = contacts.map(contact => 
+        contact._id === id ? { ...contact, status } : contact
+      );
+      setContacts(updatedContacts);
+      
+      // Recalculate stats from updated contacts
+      calculateStats(updatedContacts);
+      
+      // Update selected contact if it's the one being modified
       if (selectedContact?._id === id) {
         setSelectedContact({ ...selectedContact, status });
       }
@@ -69,9 +100,16 @@ export default function MessagesComponent() {
   const handleDelete = async (id) => {
     try {
       await contactApi.deleteContact(id);
-      await fetchContacts();
-      await fetchStats();
+      
+      // Remove contact from local state without refetching
+      const updatedContacts = contacts.filter(contact => contact._id !== id);
+      setContacts(updatedContacts);
+      
+      // Recalculate stats from updated contacts
+      calculateStats(updatedContacts);
+      
       setShowDeleteConfirm(null);
+      
       if (selectedContact?._id === id) {
         setSelectedContact(null);
       }

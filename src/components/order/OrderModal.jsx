@@ -15,10 +15,10 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
 
   const [formData, setFormData] = useState({
     // User Information
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
+    name: user?.displayName || user?.name || "",
+    email: user?.email || "",
+    phone: user?.phone || user?.phoneNumber || "",
+    address: user?.address || "",
     
     // Order Details
     planId: plan?._id || "",
@@ -32,17 +32,24 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
     notes: "",
   });
 
-  // Pre-fill user data if logged in
+  // Pre-fill user data when modal opens or user changes
   useEffect(() => {
-    if (user) {
+    if (user && isOpen) {
+      console.log('🔄 Auto-filling user data:', {
+        name: user.displayName || user.name,
+        email: user.email,
+        phone: user.phone || user.phoneNumber,
+        address: user.address
+      });
       setFormData(prev => ({
         ...prev,
-        name: user.displayName || user.name || "",
-        email: user.email || "",
-        phone: user.phone || user.phoneNumber || "",
+        name: user.displayName || user.name || prev.name || "",
+        email: user.email || prev.email || "",
+        phone: user.phone || user.phoneNumber || prev.phone || "",
+        address: user.address || prev.address || "",
       }));
     }
-  }, [user]);
+  }, [user, isOpen]);
 
   // Update plan details when plan changes
   useEffect(() => {
@@ -186,7 +193,8 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
             <button
               onClick={handleClose}
               disabled={loading}
-              className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors disabled:opacity-50"
+              className="absolute top-4 right-4 z-20 p-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors disabled:opacity-50 shadow-lg"
+              aria-label="Close modal"
             >
               <X size={24} />
             </button>
@@ -253,27 +261,41 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-sm text-gray-400 mb-2">Full Name *</label>
+                          <label className="block text-sm text-gray-400 mb-2">
+                            Full Name * {user && <span className="text-xs text-cyan-400">(From Profile)</span>}
+                          </label>
                           <input
                             type="text"
                             name="name"
-                            value={formData.name}
+                            value={formData.name || ""}
                             onChange={handleInputChange}
                             required
-                            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:border-cyan-400 focus:outline-none transition"
+                            disabled={!!user}
+                            className={`w-full px-4 py-3 border rounded-lg text-white focus:outline-none transition ${
+                              user 
+                                ? 'bg-white/5 border-white/20 cursor-not-allowed opacity-75' 
+                                : 'bg-white/5 border-white/10 focus:border-cyan-400'
+                            }`}
                             placeholder="John Doe"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-sm text-gray-400 mb-2">Email *</label>
+                          <label className="block text-sm text-gray-400 mb-2">
+                            Email * {user && <span className="text-xs text-cyan-400">(From Profile)</span>}
+                          </label>
                           <input
                             type="email"
                             name="email"
-                            value={formData.email}
+                            value={formData.email || ""}
                             onChange={handleInputChange}
                             required
-                            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:border-cyan-400 focus:outline-none transition"
+                            disabled={!!user}
+                            className={`w-full px-4 py-3 border rounded-lg text-white focus:outline-none transition ${
+                              user 
+                                ? 'bg-white/5 border-white/20 cursor-not-allowed opacity-75' 
+                                : 'bg-white/5 border-white/10 focus:border-cyan-400'
+                            }`}
                             placeholder="john@example.com"
                           />
                         </div>
@@ -283,7 +305,7 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
                           <input
                             type="tel"
                             name="phone"
-                            value={formData.phone}
+                            value={formData.phone || ""}
                             onChange={handleInputChange}
                             required
                             className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:border-cyan-400 focus:outline-none transition"
@@ -296,7 +318,7 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
                           <input
                             type="text"
                             name="address"
-                            value={formData.address}
+                            value={formData.address || ""}
                             onChange={handleInputChange}
                             className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:border-cyan-400 focus:outline-none transition"
                             placeholder="City, Country"

@@ -74,7 +74,7 @@ export default function DashboardSidebar() {
         <SidebarItem icon={<UserCheck />} label="Users" open={open} href="/dashboard/users" active={pathname === '/dashboard/users'} />
         <SidebarItem icon={<MessageSquare />} label="Messages" open={open} href="/dashboard/messages" active={pathname === '/dashboard/messages'} />
         <SidebarItem icon={<ShoppingCart />} label="Orders" open={open} href="/dashboard/orders" active={pathname === '/dashboard/orders'} />
-        <SidebarItem icon={<Package />} label="Product" open={open} href="/dashboard/product" active={pathname === '/dashboard/product'} />
+        <SidebarItem icon={<Package />} label="Projects" open={open} href="/dashboard/product" active={pathname === '/dashboard/product'} />
         
         {/* Team Dropdown */}
         <div>

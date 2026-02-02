@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   ArrowRight,
   Code2,
@@ -14,6 +15,7 @@ import {
   User,
   MessageSquare,
   Sparkles,
+  X,
 } from "lucide-react";
 
 
@@ -24,24 +26,116 @@ const services = [
     desc: "Next.js, MERN, high-performance sites.",
     icon: Code2,
     cta: "Learn More",
+    details: {
+      fullDescription: "We create cutting-edge web applications using the latest technologies including Next.js, React, Node.js, and MongoDB. Our focus is on building fast, scalable, and SEO-friendly websites that drive business growth.",
+      features: [
+        "Next.js & React Development",
+        "Full-stack MERN Solutions",
+        "Performance Optimization",
+        "SEO-friendly Architecture",
+        "Responsive Design",
+        "API Integration",
+        "Database Design & Management",
+        "Server-side Rendering (SSR)"
+      ],
+      benefits: [
+        "Lightning-fast load times (< 1s)",
+        "95+ Lighthouse scores",
+        "Scalable architecture for growth",
+        "Mobile-first responsive design",
+        "Secure and maintainable code"
+      ],
+      technologies: ["Next.js", "React", "Node.js", "MongoDB", "Express", "Tailwind CSS", "TypeScript"],
+      pricing: "Starting from $2,500",
+      timeline: "4-8 weeks"
+    }
   },
   {
     title: "UI/UX Design",
     desc: "Modern UI, conversion-focused layouts.",
     icon: PenTool,
     cta: "Learn More",
+    details: {
+      fullDescription: "Our design team creates beautiful, intuitive interfaces that not only look amazing but also convert visitors into customers. We focus on user-centered design principles to deliver exceptional digital experiences.",
+      features: [
+        "User Research & Analysis",
+        "Wireframing & Prototyping",
+        "Visual Design & Branding",
+        "Interactive Prototypes",
+        "Usability Testing",
+        "Design Systems",
+        "Mobile App Design",
+        "Conversion Optimization"
+      ],
+      benefits: [
+        "Increased user engagement",
+        "Higher conversion rates",
+        "Improved user satisfaction",
+        "Brand consistency",
+        "Reduced development time"
+      ],
+      technologies: ["Figma", "Adobe XD", "Sketch", "InVision", "Principle", "Framer"],
+      pricing: "Starting from $1,800",
+      timeline: "2-4 weeks"
+    }
   },
   {
     title: "Branding",
     desc: "Logo, brand kit, social templates.",
     icon: BadgeCheck,
     cta: "Learn More",
+    details: {
+      fullDescription: "We help businesses establish a strong brand identity through comprehensive branding solutions including logo design, brand guidelines, and complete visual identity systems that resonate with your target audience.",
+      features: [
+        "Logo Design & Variations",
+        "Brand Identity Guidelines",
+        "Color Palette & Typography",
+        "Business Card Design",
+        "Social Media Templates",
+        "Marketing Collateral",
+        "Brand Strategy",
+        "Style Guide Creation"
+      ],
+      benefits: [
+        "Professional brand presence",
+        "Stand out from competitors",
+        "Consistent brand messaging",
+        "Ready-to-use templates",
+        "Increased brand recognition"
+      ],
+      technologies: ["Adobe Illustrator", "Photoshop", "InDesign", "Canva Pro"],
+      pricing: "Starting from $1,200",
+      timeline: "2-3 weeks"
+    }
   },
   {
     title: "SEO & Marketing",
     desc: "On-page SEO, performance growth.",
     icon: TrendingUp,
     cta: "Learn More",
+    details: {
+      fullDescription: "Drive organic traffic and improve your search engine rankings with our comprehensive SEO and digital marketing services. We use data-driven strategies to boost your online visibility and generate quality leads.",
+      features: [
+        "Technical SEO Audit",
+        "On-page Optimization",
+        "Keyword Research & Strategy",
+        "Content Optimization",
+        "Link Building",
+        "Performance Tracking",
+        "Local SEO",
+        "Analytics & Reporting"
+      ],
+      benefits: [
+        "Higher search rankings",
+        "Increased organic traffic",
+        "Better conversion rates",
+        "Data-driven insights",
+        "Long-term sustainable growth"
+      ],
+      technologies: ["Google Analytics", "Search Console", "SEMrush", "Ahrefs", "Moz"],
+      pricing: "Starting from $800/month",
+      timeline: "Ongoing (3-6 months for results)"
+    }
   },
 ];
 
@@ -146,6 +240,123 @@ function GlowCard({ children, className = "" }) {
   );
 }
 
+/* ================= Service Modal ================= */
+function ServiceModal({ service, isOpen, onClose }) {
+  if (!isOpen || !service) return null;
+
+  const Icon = service.icon;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-fade-in" onClick={onClose}>
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
+      
+      {/* Modal */}
+      <div 
+        className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute top-6 right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors z-10"
+        >
+          <X className="w-5 h-5 text-white" />
+        </button>
+
+        {/* Header */}
+        <div className="relative p-8 pb-6 border-b border-white/10">
+          <div className="flex items-start gap-6">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/5 border border-white/10 shrink-0">
+              <Icon className="h-8 w-8 text-cyan-200" />
+            </div>
+            <div className="flex-1">
+              <h2 className="text-3xl font-bold text-white mb-2">{service.title}</h2>
+              <p className="text-slate-300 text-lg">{service.details.fullDescription}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="p-8 space-y-8">
+          {/* Features */}
+          <div>
+            <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+              <span className="w-1 h-6 bg-gradient-to-b from-cyan-400 to-blue-500 rounded-full" />
+              What's Included
+            </h3>
+            <div className="grid md:grid-cols-2 gap-3">
+              {service.details.features.map((feature, idx) => (
+                <div key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-white/5 border border-white/10">
+                  <div className="w-2 h-2 rounded-full bg-cyan-400 shrink-0" />
+                  <span className="text-slate-300 text-sm">{feature}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Benefits */}
+          <div>
+            <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+              <span className="w-1 h-6 bg-gradient-to-b from-purple-400 to-blue-500 rounded-full" />
+              Key Benefits
+            </h3>
+            <div className="space-y-3">
+              {service.details.benefits.map((benefit, idx) => (
+                <div key={idx} className="flex items-start gap-3 p-4 rounded-lg bg-white/5 border border-white/10">
+                  <BadgeCheck className="w-5 h-5 text-green-400 shrink-0 mt-0.5" />
+                  <span className="text-slate-300">{benefit}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Technologies */}
+          <div>
+            <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+              <span className="w-1 h-6 bg-gradient-to-b from-blue-400 to-cyan-500 rounded-full" />
+              Technologies We Use
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {service.details.technologies.map((tech, idx) => (
+                <span
+                  key={idx}
+                  className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-slate-300 font-medium"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Pricing & Timeline */}
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/20">
+              <p className="text-sm text-cyan-300 mb-2 font-semibold">Pricing</p>
+              <p className="text-2xl font-bold text-white">{service.details.pricing}</p>
+            </div>
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-500/20">
+              <p className="text-sm text-purple-300 mb-2 font-semibold">Timeline</p>
+              <p className="text-2xl font-bold text-white">{service.details.timeline}</p>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div className="pt-4">
+            <Link 
+              href="/contact"
+              className="w-full inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-cyan-500/50"
+            >
+              Get Started
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ================= Section Header ================= */
 function SectionHeader({ label, title, desc }) {
   return (
@@ -196,9 +407,28 @@ function Stat({ value, label }) {
 export default function NeonAgencyLanding() {
   const mouse = useMouseParallax();
   const particles = useMemo(() => makeParticles(12, 20260201), []);
+  const [selectedService, setSelectedService] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openServiceModal = (service) => {
+    setSelectedService(service);
+    setIsModalOpen(true);
+  };
+
+  const closeServiceModal = () => {
+    setIsModalOpen(false);
+    setTimeout(() => setSelectedService(null), 300);
+  };
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-linear-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
+      {/* Service Modal */}
+      <ServiceModal 
+        service={selectedService} 
+        isOpen={isModalOpen} 
+        onClose={closeServiceModal} 
+      />
+
       {/* ================= Background Animations ================= */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Gradient Orbs */}
@@ -261,14 +491,14 @@ export default function NeonAgencyLanding() {
             </p>
 
             <div className="flex flex-wrap items-center gap-3 pt-1">
-              <button className="btn-shine group inline-flex items-center gap-2 rounded-xl px-7 py-4 bg-linear-to-r from-blue-500 to-cyan-400 text-black transition-all font-semibold shadow-lg hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]">
+              <Link href="/blog" className="btn-shine group inline-flex items-center gap-2 rounded-xl px-7 py-4 bg-linear-to-r from-blue-500 to-cyan-400 text-black transition-all font-semibold shadow-lg hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]">
                 Get a Free Quote
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
-              </button>
+              </Link>
 
-              <button className="inline-flex items-center gap-2 rounded-xl px-7 py-4 bg-white/5 border border-white/10 hover:bg-white/10 transition-all font-semibold text-slate-200">
+              <Link href="/product" className="inline-flex items-center gap-2 rounded-xl px-7 py-4 bg-white/5 border border-white/10 hover:bg-white/10 transition-all font-semibold text-slate-200">
                 View Work
-              </button>
+              </Link>
             </div>
 
             {/* social proof */}
@@ -405,7 +635,10 @@ export default function NeonAgencyLanding() {
                       <p className="mt-3 text-sm leading-relaxed text-slate-300/90">{s.desc}</p>
                     </div>
 
-                    <button className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-cyan-200 hover:text-cyan-100 transition">
+                    <button 
+                      onClick={() => openServiceModal(s)}
+                      className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-cyan-200 hover:text-cyan-100 transition"
+                    >
                       {s.cta}
                       <ArrowRight className="h-4 w-4" />
                     </button>
@@ -488,125 +721,140 @@ export default function NeonAgencyLanding() {
           </div>
         </section>
 
-        {/* CONTACT */}
+        {/* COMPANY INFO SECTION */}
         <section className="space-y-10 md:space-y-12">
-          <SectionHeader label="Contact" title="Start a Project" desc="Response within 24 hours." />
+          <SectionHeader 
+            label="About Us" 
+            title="Why Choose BD Stack Solutions" 
+            desc="Leading the way in innovative digital solutions with expertise and dedication." 
+          />
 
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Company Stats */}
+            <GlowCard className="reveal">
+              <div className="p-8 space-y-6">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-500/10 border border-cyan-500/20">
+                  <TrendingUp className="h-7 w-7 text-cyan-400" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-white mb-2">500+</h3>
+                  <p className="text-sm text-slate-300 mb-1 font-semibold">Projects Completed</p>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Successfully delivered projects across web development, design, and digital marketing
+                  </p>
+                </div>
+              </div>
+            </GlowCard>
+
+            <GlowCard className="reveal">
+              <div className="p-8 space-y-6">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-500/10 border border-blue-500/20">
+                  <BadgeCheck className="h-7 w-7 text-blue-400" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-white mb-2">98%</h3>
+                  <p className="text-sm text-slate-300 mb-1 font-semibold">Client Satisfaction</p>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Our clients trust us for quality work, timely delivery, and exceptional support
+                  </p>
+                </div>
+              </div>
+            </GlowCard>
+
+            <GlowCard className="reveal">
+              <div className="p-8 space-y-6">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-500/10 border border-purple-500/20">
+                  <Code2 className="h-7 w-7 text-purple-400" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-white mb-2">5+</h3>
+                  <p className="text-sm text-slate-300 mb-1 font-semibold">Years Experience</p>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Industry veterans with deep expertise in modern web technologies and frameworks
+                  </p>
+                </div>
+              </div>
+            </GlowCard>
+          </div>
+
+          {/* Company Values */}
           <GlowCard className="reveal">
             <div className="p-8 md:p-12">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                {/* form */}
-                <div className="lg:col-span-7 space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Field icon={User} placeholder="Full Name" />
-                    <Field icon={Mail} placeholder="Email Address" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-6">
+                  <div>
+                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 mb-4">
+                      <Sparkles className="w-6 h-6 text-cyan-400" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-white mb-3">Our Mission</h3>
+                    <p className="text-slate-300 leading-relaxed">
+                      To empower businesses with cutting-edge digital solutions that drive growth, enhance user experiences, and deliver measurable results. We believe in creating technology that makes a difference.
+                    </p>
                   </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <SelectField
-                      placeholder="Service Interested"
-                      options={["Web Development", "UI/UX Design", "Branding", "SEO"]}
-                    />
-                    <SelectField
-                      placeholder="Budget Range"
-                      options={["$500 - $1000", "$1k - $3k", "$3k - $10k"]}
-                    />
-                  </div>
-
-                  <TextareaField icon={MessageSquare} placeholder="Project Details" />
-
-                  <button className="btn-shine w-full md:w-auto px-10 py-4 bg-linear-to-r from-blue-500 to-cyan-400 text-black rounded-xl font-semibold transition-all shadow-lg hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]">
-                    Send Message
-                  </button>
                 </div>
 
-                {/* side card */}
-                <div className="lg:col-span-5">
-                  <div className="rounded-3xl border border-white/10 bg-white/5 p-8 space-y-8">
-                    <div>
-                      <h4 className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-300 mb-4">
-                        Contact Info
-                      </h4>
-                      <div className="space-y-4 text-slate-200/90">
-                        <p className="flex items-center gap-3 text-sm hover:text-cyan-200 transition cursor-pointer">
-                          <Mail className="w-4 h-4" /> hello@youragency.com
-                        </p>
-                        <p className="flex items-center gap-3 text-sm hover:text-cyan-200 transition cursor-pointer">
-                          <Phone className="w-4 h-4" /> +880 1234-567890
-                        </p>
-                      </div>
+                <div className="space-y-6">
+                  <div>
+                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 mb-4">
+                      <BadgeCheck className="w-6 h-6 text-blue-400" />
                     </div>
-
-                    <div className="h-px bg-white/10" />
-
-                    <div>
-                      <h4 className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-300 mb-4">
-                        Process
-                      </h4>
-                      <ul className="space-y-3 text-sm text-slate-200/80 leading-relaxed">
-                        <li className="flex items-center gap-2">
-                          <span className="h-1 w-1 bg-cyan-300 rounded-full" /> Initial Consultation
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="h-1 w-1 bg-cyan-300 rounded-full" /> Strategy & Proposal
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="h-1 w-1 bg-cyan-300 rounded-full" /> Weekly Sprints
-                        </li>
-                      </ul>
-                    </div>
+                    <h3 className="text-xl font-semibold text-white mb-3">Our Approach</h3>
+                    <p className="text-slate-300 leading-relaxed">
+                      We combine technical expertise with creative innovation to deliver solutions that exceed expectations. Every project is treated with care, attention to detail, and a commitment to excellence.
+                    </p>
                   </div>
+                </div>
+              </div>
+
+              <div className="h-px bg-white/10 my-8" />
+
+              {/* Core Values */}
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-6 text-center">Our Core Values</h3>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div className="text-center p-4 rounded-xl bg-white/5 border border-white/10">
+                    <div className="text-3xl mb-2">🎯</div>
+                    <p className="text-sm font-semibold text-slate-200 mb-1">Quality First</p>
+                    <p className="text-xs text-slate-400">Excellence in every detail</p>
+                  </div>
+                  <div className="text-center p-4 rounded-xl bg-white/5 border border-white/10">
+                    <div className="text-3xl mb-2">⚡</div>
+                    <p className="text-sm font-semibold text-slate-200 mb-1">Innovation</p>
+                    <p className="text-xs text-slate-400">Pushing boundaries daily</p>
+                  </div>
+                  <div className="text-center p-4 rounded-xl bg-white/5 border border-white/10">
+                    <div className="text-3xl mb-2">🤝</div>
+                    <p className="text-sm font-semibold text-slate-200 mb-1">Partnership</p>
+                    <p className="text-xs text-slate-400">Your success is our goal</p>
+                  </div>
+                  <div className="text-center p-4 rounded-xl bg-white/5 border border-white/10">
+                    <div className="text-3xl mb-2">🚀</div>
+                    <p className="text-sm font-semibold text-slate-200 mb-1">Results</p>
+                    <p className="text-xs text-slate-400">Measurable outcomes</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="h-px bg-white/10 my-8" />
+
+              {/* Technologies & Expertise */}
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-6 text-center">Technologies We Master</h3>
+                <div className="flex flex-wrap justify-center gap-3">
+                  {['Next.js', 'React', 'Node.js', 'MongoDB', 'TypeScript', 'Tailwind CSS', 'Figma', 'AWS', 'Docker', 'Firebase', 'PostgreSQL', 'GraphQL'].map((tech, idx) => (
+                    <span
+                      key={idx}
+                      className="px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 text-sm text-slate-300 font-medium hover:border-cyan-400/40 transition-colors"
+                    >
+                      {tech}
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>
           </GlowCard>
         </section>
       </div>
-    </div>
-  );
-}
-
-/* ================= Inputs ================= */
-function Field({ icon: Icon, placeholder }) {
-  return (
-    <div className="relative">
-      <Icon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-      <input
-        type="text"
-        placeholder={placeholder}
-        className="w-full rounded-xl bg-white/5 border border-white/10 px-12 py-4 text-sm text-slate-50 placeholder:text-slate-400 outline-none focus:border-cyan-400/50 focus:ring-4 focus:ring-cyan-500/10 transition-all"
-      />
-    </div>
-  );
-}
-
-function SelectField({ placeholder, options }) {
-  return (
-    <select
-      defaultValue=""
-      className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-4 text-sm text-slate-200 outline-none focus:border-cyan-400/50 focus:ring-4 focus:ring-cyan-500/10 transition-all"
-    >
-      <option value="" disabled>
-        {placeholder}
-      </option>
-      {options.map((o, i) => (
-        <option key={i} value={o} className="bg-[#050b2e]">
-          {o}
-        </option>
-      ))}
-    </select>
-  );
-}
-
-function TextareaField({ icon: Icon, placeholder }) {
-  return (
-    <div className="relative">
-      <Icon className="absolute left-4 top-4 w-4 h-4 text-slate-400" />
-      <textarea
-        rows={4}
-        placeholder={placeholder}
-        className="w-full rounded-xl bg-white/5 border border-white/10 px-12 py-4 text-sm text-slate-50 placeholder:text-slate-400 outline-none focus:border-cyan-400/50 focus:ring-4 focus:ring-cyan-500/10 transition-all resize-none"
-      />
     </div>
   );
 }

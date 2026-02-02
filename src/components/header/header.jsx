@@ -50,6 +50,7 @@ const Header = () => {
   const aboutUsItems = [
     { name: "Team", desc: "Meet our talented team", href: "/team" },
     { name: "Career", desc: "Join our growing team", href: "/career" },
+    { name: "Contact Us", desc: "Get in touch with us", href: "/contact" },
   ];
 
   return (
@@ -144,7 +145,7 @@ const Header = () => {
                               ? "/web-development"
                               : service.name === "AI Agents"
                                 ? "/ai-agents"
-                                : service.name === "Mobile Apps"
+                                : service.name === "App Development"
                                   ? "/app-development"
                                   : service.name === "UI/UX Design"
                                     ? "/ui-ux-design"

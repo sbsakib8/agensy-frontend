@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import {
   FaRobot,
   FaCogs,
@@ -183,7 +184,7 @@ const AiAgent = () => {
       </section>
 
       {/* ================= CTA (NOW BEFORE PILLARS) ================= */}
-      <section className="py-20 text-center bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900">
+      <section className="relative py-20 text-center bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 z-10">
         <h2 className="text-4xl font-bold mb-4">
           Partner for Intelligent Automation
         </h2>
@@ -191,9 +192,11 @@ const AiAgent = () => {
           Automate repetitive work and let your team focus on high-impact strategy.
         </p>
 
-        <button className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 px-6 py-3 rounded-lg shadow">
-          Schedule a Call <FaArrowRight />
-        </button>
+        <Link href="/contact" className="inline-block relative z-20">
+          <button className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 px-6 py-3 rounded-lg shadow transition-all hover:scale-105">
+            Schedule a Call <FaArrowRight />
+          </button>
+        </Link>
       </section>
 
       {/* ================= PILLARS ================= */}

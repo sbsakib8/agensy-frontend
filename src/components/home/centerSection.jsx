@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useMemo } from 'react';
 import { ArrowRight, Play, CheckCircle, Sparkles, TrendingUp, Users, Code } from 'lucide-react';
+import Link from 'next/link';
 
  const AboutSection = ()=> {
   const [isVisible, setIsVisible] = useState(false);
@@ -143,22 +144,26 @@ import { ArrowRight, Play, CheckCircle, Sparkles, TrendingUp, Users, Code } from
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <button className="group relative px-8 py-4 rounded-xl font-semibold text-black overflow-hidden transition-all duration-300 hover:scale-105">
-                <div className="absolute inset-0 bg-linear-to-r from-blue-500 to-cyan-400"></div>
-                <div className="absolute inset-0 bg-linear-to-r from-cyan-400 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <span className="relative flex items-center justify-center">
-                  Get Started
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </span>
-                <div className="absolute inset-0 rounded-xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity blur-xl"></div>
-              </button>
+              <Link href="/pricing">
+                <button className="group relative px-8 py-4 rounded-xl font-semibold text-black overflow-hidden transition-all duration-300 hover:scale-105">
+                  <div className="absolute inset-0 bg-linear-to-r from-blue-500 to-cyan-400"></div>
+                  <div className="absolute inset-0 bg-linear-to-r from-cyan-400 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <span className="relative flex items-center justify-center">
+                    Get Started
+                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                  <div className="absolute inset-0 rounded-xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity blur-xl"></div>
+                </button>
+              </Link>
 
-              <button className="group px-8 py-4 rounded-xl font-semibold text-white border-2 border-slate-700 hover:border-cyan-500 transition-all duration-300 hover:bg-cyan-500/5">
-                <span className="flex items-center justify-center">
-                  Learn More
-                  <TrendingUp className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </span>
-              </button>
+              <Link href="/contact">
+                <button className="group px-8 py-4 rounded-xl font-semibold text-white border-2 border-slate-700 hover:border-cyan-500 transition-all duration-300 hover:bg-cyan-500/5">
+                  <span className="flex items-center justify-center">
+                    Learn More
+                    <TrendingUp className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </button>
+              </Link>
             </div>
           </div>
 

@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import animationData from "../../../../public/animation.json";
 
 // ================== LOTTIE (SSR SAFE) ==================
@@ -182,21 +183,25 @@ export default function WebPage() {
           </p>
 
           <div className="flex gap-4 flex-wrap">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 rounded-xl bg-linear-to-r from-blue-500 to-cyan-400 text-black font-semibold shadow-lg hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]"
-            >
-              Get Started
-            </motion.button>
+            <Link href="/pricing">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 rounded-xl bg-linear-to-r from-blue-500 to-cyan-400 text-black font-semibold shadow-lg hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]"
+              >
+                Get Started
+              </motion.button>
+            </Link>
 
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 rounded-xl border border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10"
-            >
-              Learn More
-            </motion.button>
+            <Link href="/contact">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 rounded-xl border border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10"
+              >
+                Learn More
+              </motion.button>
+            </Link>
           </div>
         </motion.div>
 
@@ -293,9 +298,11 @@ export default function WebPage() {
               tailored for your brand.
             </p>
           </div>
-          <button className="whitespace-nowrap px-10 py-5 rounded-2xl bg-white text-black font-bold hover:bg-cyan-400 transition-all active:scale-95 shadow-xl">
-            Let&apos;s Talk Projects
-          </button>
+          <Link href="/contact">
+            <button className="whitespace-nowrap px-10 py-5 rounded-2xl bg-white text-black font-bold hover:bg-cyan-400 transition-all active:scale-95 shadow-xl">
+              Let&apos;s Talk Projects
+            </button>
+          </Link>
         </motion.div>
       </section>
 

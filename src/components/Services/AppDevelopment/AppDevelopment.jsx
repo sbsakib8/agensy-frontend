@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
+import Link from "next/link";
 import Lottie from "lottie-react";
 import mobileAppShowcase from "../../../../public/Mobile App Showcase.json";
 import {
@@ -180,16 +181,6 @@ const AppDevelopment = () => {
         ))}
       </div>
 
-        {/* grid */}
-        <div className="absolute inset-0 opacity-[0.10] bg-[linear-linear(to_right,rgba(56,189,248,0.18)_1px,transparent_1px),linear-linear(to_bottom,rgba(56,189,248,0.18)_1px,transparent_1px)] bg-size-[46px_46px]" />
-
-        {/* stars/particles */}
-        <div className="absolute inset-0 opacity-90">
-          <div className="app-particles app-p1" />
-          <div className="app-particles app-p2" />
-        ))}
-      </div>
-
       <div className="relative max-w-7xl mx-auto route-container z-10">
         {/* SECTION 1: HERO (mb-32) */}
         <div className="flex flex-col lg:flex-row items-center justify-between gap-12 mb-32">
@@ -275,9 +266,11 @@ const AppDevelopment = () => {
           </div>
 
           <div className="flex justify-center scroll-anim">
-            <button className="px-8 py-3 bg-cyan-700 text-white rounded-lg text-sm font-bold hover:bg-cyan-400 hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all active:scale-95">
-              Explore All Features
-            </button>
+            <Link href="/pricing">
+              <button className="px-8 py-3 bg-cyan-700 text-white rounded-lg text-sm font-bold hover:bg-cyan-400 hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all active:scale-95">
+                Explore All Features
+              </button>
+            </Link>
           </div>
         </div>
 
@@ -293,10 +286,12 @@ const AppDevelopment = () => {
             </p>
           </div>
 
-          <button className="px-8 py-4 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-xl transition-all duration-300 flex items-center group shadow-md hover:shadow-lg active:scale-95 whitespace-nowrap">
-            Schedule a Consultation{" "}
-            <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-          </button>
+          <Link href="/contact">
+            <button className="px-8 py-4 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-xl transition-all duration-300 flex items-center group shadow-md hover:shadow-lg active:scale-95 whitespace-nowrap">
+              Schedule a Consultation{" "}
+              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+            </button>
+          </Link>
         </div>
 
         {/* SECTION 5: PILLARS */}

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Lottie from "lottie-react";
-import { Mail, Phone, MapPin, Send, User, MessageSquare, Clock, CheckCircle2, Sparkles, AlertCircle } from "lucide-react";
+import { Mail, Phone, MapPin, Send, User, MessageSquare, Clock, CheckCircle2, Sparkles, AlertCircle, MessageCircle } from "lucide-react";
 import contactAnimation from "../../../public/Contact Us (1).json";
 import { contactApi } from "@/lib/api";
 
@@ -49,6 +49,14 @@ export default function ContactPage() {
 
   const contactInfo = [
     {
+      icon: MessageCircle,
+      title: "WhatsApp Us",
+      value: "+880 1768-820891",
+      link: "https://wa.me/8801768820891",
+      color: "from-green-500 to-emerald-400",
+      recommended: true
+    },
+    {
       icon: Mail,
       title: "Email Us",
       value: "hello@agensy.com",
@@ -58,8 +66,8 @@ export default function ContactPage() {
     {
       icon: Phone,
       title: "Call Us",
-      value: "+880 1712-345678",
-      link: "tel:+8801712345678",
+      value: "+880 1768-820891",
+      link: "tel:+8801768820891",
       color: "from-purple-500 to-pink-400"
     },
     {
@@ -275,6 +283,28 @@ export default function ContactPage() {
                 </div>
               </div>
 
+              {/* Quick WhatsApp Button */}
+              <div className="bg-gradient-to-r from-green-500 to-emerald-400 rounded-2xl p-6 shadow-lg">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                      <MessageCircle size={24} />
+                      Quick Response via WhatsApp
+                    </h3>
+                    <p className="text-white/90 text-sm">Get instant replies to your queries</p>
+                  </div>
+                  <a
+                    href="https://wa.me/8801768820891"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-white text-green-600 px-6 py-3 rounded-xl font-semibold hover:bg-gray-100 transition-all hover:scale-105 flex items-center gap-2 whitespace-nowrap"
+                  >
+                    <MessageCircle size={20} />
+                    Chat Now
+                  </a>
+                </div>
+              </div>
+
               {/* Features */}
               <div className="grid grid-cols-3 gap-4">
                 {features.map((feature, index) => (
@@ -298,14 +328,21 @@ export default function ContactPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
           >
             {contactInfo.map((info, index) => (
               <a
                 key={index}
                 href={info.link}
+                target={info.link.startsWith('http') ? '_blank' : undefined}
+                rel={info.link.startsWith('http') ? 'noopener noreferrer' : undefined}
                 className="group relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all hover:scale-105"
               >
+                {info.recommended && (
+                  <span className="absolute -top-2 -right-2 bg-gradient-to-r from-green-500 to-emerald-400 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                    Recommended
+                  </span>
+                )}
                 <div className={`w-12 h-12 rounded-xl bg-linear-to-r ${info.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                   <info.icon className="text-white" size={24} />
                 </div>

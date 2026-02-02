@@ -58,7 +58,22 @@ export default function Testimonial() {
 
   return (
     <section className="py-28 bg-slate-950 text-white">
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-[6rem_1fr] gap-12 px-4">
+      <div className="max-w-7xl mx-auto px-4">
+        
+        {/* -------- HEADING -------- */}
+        <div className="text-center mb-16">
+          <h2 className="text-5xl md:text-6xl font-bold text-white mb-4">
+            What Our{" "}
+            <span className="bg-linear-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text ">
+              Clients Say
+            </span>
+          </h2>
+          <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+            Dont just take our word for it - hear from our satisfied clients
+          </p>
+        </div>
+
+        <div className="grid lg:grid-cols-[6rem_1fr] gap-12">
 
         {/* -------- LEFT AVATARS -------- */}
         <div className="flex flex-col items-center gap-4">
@@ -102,8 +117,8 @@ export default function Testimonial() {
           </button>
         </div>
 
-        {/* -------- CONTENT (FIXED HEIGHT – NO GROWTH) -------- */}
-        <div className="relative h-105">
+        {/* -------- CONTENT -------- */}
+        <div className="relative min-h-[400px]">
           <div
             key={active}
             className="h-full bg-white/4 backdrop-blur-xl
@@ -143,6 +158,7 @@ export default function Testimonial() {
           </div>
         </div>
 
+        </div>
       </div>
     </section>
   )
