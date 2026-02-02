@@ -478,12 +478,12 @@ const ProductsSection = () => {
           }`}
         >
           <p className="text-slate-400 mb-6 text-lg">Ready to transform your business?</p>
-          <button className="group relative px-10 py-5 bg-linear-to-r from-purple-600 via-pink-600 to-orange-600 rounded-full text-white font-bold text-lg shadow-2xl hover:shadow-purple-500/50 transition-all duration-500 hover:scale-110 overflow-hidden">
+          <button className="group relative px-10 py-5 bg-linear-to-r from-blue-500 to-cyan-400 rounded-full text-black font-bold text-lg shadow-2xl hover:shadow-[0_0_40px_rgba(59,130,246,0.45)] transition-all duration-500 hover:scale-110 overflow-hidden">
             <span className="relative z-10 flex items-center gap-2">
               Get Started Now
               <Zap className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
             </span>
-            <div className="absolute inset-0 bg-linear-to-r from-orange-600 via-pink-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="absolute inset-0 bg-linear-to-r from-cyan-400 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           </button>
         </div>
       </div>

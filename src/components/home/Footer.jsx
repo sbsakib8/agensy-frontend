@@ -71,9 +71,9 @@ export default function Footer() {
           <p>© {new Date().getFullYear()} BD Stack Solutions. All Rights Reserved.</p>
 
           <div className="flex gap-6 flex-wrap justify-center">
-            <Link href="#" className="hover:text-white transition">Privacy Policy</Link>
-            <Link href="#" className="hover:text-white transition">Terms of Service</Link>
-            <Link href="#" className="hover:text-white transition">Cookie Policy</Link>
+            <Link href="/privacy-policy" className="hover:text-white transition">Privacy Policy</Link>
+            <Link href="/terms-of-service" className="hover:text-white transition">Terms of Service</Link>
+            <Link href="/cookie-policy" className="hover:text-white transition">Cookie Policy</Link>
           </div>
         </div>
       </div>

@@ -55,8 +55,18 @@ const formatDate = (v) => {
 export default function TeamSection() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  // particles
-  const [particles] = useState(() => {
+  // Generate stable random values for particles
+  const particles = useMemo(() => {
+    return [...Array(15)].map(() => ({
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+      delay: Math.random() * 5,
+      duration: 10 + Math.random() * 20
+    }));
+  }, []);
+
+  // old particles for backward compat
+  const [oldParticles] = useState(() => {
     return [...Array(10)].map(() => ({
       top: Math.random() * 100,
       left: Math.random() * 100,
@@ -259,12 +269,33 @@ export default function TeamSection() {
   }, [totalPages, currentPage]);
 
   return (
-    <section className="relative min-h-screen overflow-hidden bg-neon-blue">
-      {/* Background */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-grid-pattern opacity-[0.08]" />
-        <div className="absolute inset-0 bg-neon-vignette opacity-90" />
+    <section className="relative min-h-screen overflow-hidden bg-linear-to-b from-slate-950 via-slate-900 to-slate-950">
+      {/* Background Animations */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Gradient Orbs */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-500/20 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/15 rounded-full blur-3xl animate-pulse-slower"></div>
+        
+        {/* Grid Pattern */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+        
+        {/* Floating Elements */}
+        {particles.map((particle, i) => (
+          <div
+            key={i}
+            className="absolute w-2 h-2 bg-cyan-400/30 rounded-full animate-float-random"
+            style={{
+              top: `${particle.top}%`,
+              left: `${particle.left}%`,
+              animationDelay: `${particle.delay}s`,
+              animationDuration: `${particle.duration}s`
+            }}
+          ></div>
+        ))}
+      </div>
 
+      {/* Old Background for compatibility */}
+      <div className="pointer-events-none absolute inset-0">
         <div
           className="absolute -top-24 -left-24 h-105 w-105 rounded-full bg-cyan-500/10 blur-3xl"
           style={{

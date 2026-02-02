@@ -213,16 +213,16 @@ const HomecardSection = () => {
   <Link href="/pricing">
     <button
       className="group relative px-8 py-4
-      bg-linear-to-r from-purple-600 via-pink-600 to-blue-600
-      rounded-full text-white font-bold text-lg
-      shadow-2xl hover:shadow-purple-500/40
+      bg-linear-to-r from-blue-500 to-cyan-400
+      rounded-full text-black font-bold text-lg
+      shadow-2xl hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]
       transition-all duration-300 hover:scale-105 overflow-hidden"
     >
       <span className="relative z-10">Get Started Today</span>
 
       <span
         className="absolute inset-0 bg-linear-to-r
-        from-blue-600 via-purple-600 to-pink-600
+        from-cyan-400 to-blue-500
         opacity-0 group-hover:opacity-100 transition-opacity duration-500"
       />
     </button>

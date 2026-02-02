@@ -112,71 +112,19 @@ const pillars = [
   },
 ];
 
-// ================== CUSTOM BACKGROUND ==================
-const CustomBackground = () => {
-  const { scrollY } = useScroll();
-
-  const ySlow = useTransform(scrollY, [0, 1000], [0, -40]);
-  const yMedium = useTransform(scrollY, [0, 1000], [0, -70]);
-  const yFast = useTransform(scrollY, [0, 1000], [0, -100]);
-
-  const layers = [
-    {
-      size: 600,
-      position: { top: -120, left: -160 },
-      color: "from-purple-500/30 to-pink-500/30",
-      y: ySlow,
-      duration: 40,
-      rotate: [0, 360, 0],
-    },
-    {
-      size: 520,
-      position: { top: 300, left: 200 },
-      color: "from-cyan-400/30 to-blue-500/30",
-      y: yMedium,
-      duration: 35,
-      rotate: [0, -360, 0],
-    },
-    {
-      size: 420,
-      position: { top: 650, left: -120 },
-      color: "from-green-400/20 to-yellow-400/20",
-      y: yFast,
-      duration: 30,
-      rotate: [0, 360, 0],
-    },
-  ];
-
-  return (
-    <div className="absolute inset-0 -z-10 overflow-hidden">
-      {layers.map((layer, index) => (
-        <motion.div
-          key={index}
-          className={`absolute rounded-full blur-[180px] bg-linear-to-br ${layer.color}`}
-          style={{
-            width: layer.size,
-            height: layer.size,
-            ...layer.position,
-            y: layer.y,
-          }}
-          animate={{ rotate: layer.rotate }}
-          transition={{
-            repeat: Infinity,
-            repeatType: "loop",
-            duration: layer.duration,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-
-      <div className="absolute inset-0 bg-linear-to-b from-[#0b1220]/40 via-[#050914]/70 to-[#050914]/95" />
-    </div>
-  );
-};
-
 // ================== MAIN PAGE ==================
 export default function WebPage() {
   const [mounted, setMounted] = useState(false);
+
+  // Generate stable random values for particles
+  const particles = React.useMemo(() => {
+    return [...Array(15)].map(() => ({
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+      delay: Math.random() * 5,
+      duration: 10 + Math.random() * 20
+    }));
+  }, []);
 
   useEffect(() => {
     // SSR error fix
@@ -185,11 +133,33 @@ export default function WebPage() {
   }, []);
 
   return (
-    <main className="relative bg-[#050914] text-gray-300 overflow-hidden font-sans">
-      <CustomBackground />
+    <main className="relative bg-linear-to-b from-slate-950 via-slate-900 to-slate-950 text-gray-300 overflow-hidden font-sans">
+      {/* Background Animations */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Gradient Orbs */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-500/20 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/15 rounded-full blur-3xl animate-pulse-slower"></div>
+        
+        {/* Grid Pattern */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+        
+        {/* Floating Elements */}
+        {particles.map((particle, i) => (
+          <div
+            key={i}
+            className="absolute w-2 h-2 bg-cyan-400/30 rounded-full animate-float-random"
+            style={{
+              top: `${particle.top}%`,
+              left: `${particle.left}%`,
+              animationDelay: `${particle.delay}s`,
+              animationDuration: `${particle.duration}s`
+            }}
+          ></div>
+        ))}
+      </div>
 
       {/* ================= HERO ================= */}
-      <section className="relative max-w-7xl mx-auto px-6 py-32 grid md:grid-cols-2 gap-14 items-center">
+      <section className="relative max-w-7xl mx-auto px-6 py-32 grid md:grid-cols-2 gap-14 items-center z-10">
         <motion.div
           variants={fadeSlideUp}
           initial="hidden"
@@ -215,7 +185,7 @@ export default function WebPage() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 rounded-xl bg-cyan-500 text-black font-semibold shadow-lg hover:bg-cyan-400"
+              className="px-8 py-4 rounded-xl bg-linear-to-r from-blue-500 to-cyan-400 text-black font-semibold shadow-lg hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]"
             >
               Get Started
             </motion.button>

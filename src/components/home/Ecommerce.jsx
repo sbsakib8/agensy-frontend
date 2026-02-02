@@ -214,7 +214,7 @@ const Ecommerce = () => {
         <p className="text-gray-400 mb-8">Subscribe to get the latest deals and product launches.</p>
         <div className="flex justify-center gap-4 flex-wrap">
           <input type="email" placeholder="Enter your email" className="px-6 py-3 rounded-2xl w-72 bg-white/5 border border-white/10 focus:outline-none focus:ring-2 focus:ring-sky-400" />
-          <button className="bg-sky-500 px-6 py-3 rounded-2xl font-bold hover:bg-sky-400 transition">Subscribe</button>
+          <button className="bg-linear-to-r from-blue-500 to-cyan-400 px-6 py-3 rounded-2xl font-bold text-black hover:shadow-[0_0_40px_rgba(59,130,246,0.45)] transition">Subscribe</button>
         </div>
       </section>
 

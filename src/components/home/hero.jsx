@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, Zap, Palette, Rocket, ShieldCheck, Link } from "lucide-react";
+import { ArrowRight, Sparkles, Zap, Palette, Rocket, ShieldCheck, Link as LinkIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { bannerApi } from "@/lib/api";
 
 export default function HeroSection() {
@@ -95,21 +96,25 @@ export default function HeroSection() {
           </p>
 
           <div className="mt-10 flex flex-wrap items-center gap-4">
-            <button className="group inline-flex items-center gap-2 rounded-full bg-linear-to-r from-blue-500 to-cyan-400 px-8 py-4 text-sm font-semibold text-black transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]">
-              {loading 
-                ? "Get Started" 
-                : bannerData?.ctaButtons?.[0]?.text || "Get Started"}
-              <ArrowRight
-                size={18}
-                className="transition-transform group-hover:translate-x-1"
-              />
-            </button>
+            <Link href="/pricing">
+              <button className="group inline-flex items-center gap-2 rounded-full bg-linear-to-r from-blue-500 to-cyan-400 px-8 py-4 text-sm font-semibold text-black transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]">
+                {loading 
+                  ? "Get Started" 
+                  : bannerData?.ctaButtons?.[0]?.text || "Get Started"}
+                <ArrowRight
+                  size={18}
+                  className="transition-transform group-hover:translate-x-1"
+                />
+              </button>
+            </Link>
 
-            <button className="rounded-full border border-white/10 px-8 py-4 text-sm text-gray-300 transition-all hover:border-blue-400/40 hover:text-white">
-              {loading 
-                ? "View Our Work" 
-                : bannerData?.ctaButtons?.[1]?.text || "View Our Work"}
-            </button>
+            <Link href="/product">
+              <button className="rounded-full border border-white/10 px-8 py-4 text-sm text-gray-300 transition-all hover:border-blue-400/40 hover:text-white">
+                {loading 
+                  ? "View Our Work" 
+                  : bannerData?.ctaButtons?.[1]?.text || "View Our Work"}
+              </button>
+            </Link>
           </div>
         </div>
 

@@ -1,146 +1,320 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
-import { motion, } from "framer-motion";
+import { motion } from "framer-motion";
 import Lottie from "lottie-react";
+import { Mail, Phone, MapPin, Send, User, MessageSquare, Clock, CheckCircle2, Sparkles, AlertCircle } from "lucide-react";
 import contactAnimation from "../../../public/Contact Us (1).json";
-export default function ContactPage() {
-  // Floating particles
-  const particles = Array.from({ length: 30 }).map(() => ({
-    left: Math.random() * 100,
-    top: Math.random() * 100,
-    duration: 5 + Math.random() * 5,
-    delay: Math.random() * 5,
-  }));
+import { contactApi } from "@/lib/api";
 
+export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
+    subject: "",
     message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    // Clear error when user starts typing
+    if (error) setError("");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(`Thank you, ${formData.name}! Message received.`);
-    setFormData({ name: "", email: "", message: "" });
+    setIsSubmitting(true);
+    setError("");
+    
+    try {
+      await contactApi.submitContact(formData);
+      setIsSuccess(true);
+      
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
+        setIsSuccess(false);
+      }, 3000);
+    } catch (err) {
+      console.error("Failed to submit contact form:", err);
+      setError(err.response?.data?.message || "Failed to send message. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  const contactInfo = [
+    {
+      icon: Mail,
+      title: "Email Us",
+      value: "hello@agensy.com",
+      link: "mailto:hello@agensy.com",
+      color: "from-blue-500 to-cyan-400"
+    },
+    {
+      icon: Phone,
+      title: "Call Us",
+      value: "+880 1712-345678",
+      link: "tel:+8801712345678",
+      color: "from-purple-500 to-pink-400"
+    },
+    {
+      icon: MapPin,
+      title: "Visit Us",
+      value: "Dhaka, Bangladesh",
+      link: "#",
+      color: "from-orange-500 to-red-400"
+    },
+  ];
+
+  const features = [
+    { icon: Clock, text: "24/7 Support" },
+    { icon: CheckCircle2, text: "Quick Response" },
+    { icon: Sparkles, text: "Expert Team" },
+  ];
 
   return (
-    <main className="relative min-h-screen px-6 py-24 text-white">
-      {/* ================= FULL SCREEN BACKGROUND ================= */}
-      <div className="fixed inset-0 -z-10 overflow-hidden">
-        {/* Animated Grid */}
-        <div className="absolute inset-0 opacity-20">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `
-                linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px)
-              `,
-              backgroundSize: "50px 50px",
-              animation: "grid-move 20s linear infinite",
-            }}
-          />
-        </div>
-
-        {/* Floating Particles */}
-        <div className="absolute inset-0 pointer-events-none">
-          {particles.map((p, i) => (
-            <div
-              key={i}
-              className="absolute w-2 h-2 bg-purple-500 rounded-full opacity-20"
-              style={{
-                left: `${p.left}%`,
-                top: `${p.top}%`,
-                animation: `float ${p.duration}s ease-in-out infinite`,
-                animationDelay: `${p.delay}s`,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Gradient Orbs */}
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl animate-pulse delay-1000" />
-      </div>
-
-      {/* ================= HEADER ================= */}
-      <div className="text-center mb-20 mt-12 md:mt-20">
-        <h1 className="text-5xl md:text-6xl font-bold mb-4 drop-shadow-lg">
-          Contact Us
-        </h1>
-        <p className="max-w-3xl mx-auto text-gray-300 text-lg md:text-xl">
-          Have any questions or want to work with us? Fill out the form and we’ll
-          get back to you shortly.
-        </p>
-      </div>
-
-      {/* ================= FORM + IMAGE ================= */}
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
+    <main className="relative min-h-screen bg-[#05060a] text-white overflow-hidden">
+      {/* ================= BACKGROUND ================= */}
+      <div className="fixed inset-0 -z-10">
+        {/* Grid Pattern */}
+        <div
+          className="absolute inset-0 opacity-[0.15]"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px)
+            `,
+            backgroundSize: "50px 50px",
+            maskImage: "radial-gradient(circle at center, black 40%, transparent 100%)",
+          }}
+        />
         
-        {/* LEFT: FORM */}
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white/5 backdrop-blur-md p-8 rounded-3xl shadow-xl flex flex-col gap-6"
-        >
-          <input
-            type="text"
-            name="name"
-            placeholder="Your Name"
-            value={formData.name}
-            onChange={handleChange}
-            className="px-4 py-3 rounded-lg bg-white/10 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-            required
-          />
-
-          <input
-            type="email"
-            name="email"
-            placeholder="Your Email"
-            value={formData.email}
-            onChange={handleChange}
-            className="px-4 py-3 rounded-lg bg-white/10 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-            required
-          />
-
-          <textarea
-            name="message"
-            placeholder="Your Message"
-            value={formData.message}
-            onChange={handleChange}
-            className="px-4 py-3 rounded-lg bg-white/10 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none h-32"
-            required
-          />
-
-          <button
-            type="submit"
-            className="py-3 bg-linear-to-r from-blue-500 to-cyan-400 rounded-lg font-semibold hover:bg-purple-500 transition"
-          >
-            Send Message
-          </button>
-        </form>
-
-       {/* RIGHT: IMAGE */}
-  {/* Right: Lottie */}
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="relative flex justify-center items-center w-full max-w-lg mx-auto"
-    >
-      <div className="absolute w-72 h-72 bg-blue-500/10 blur-3xl rounded-full animate-pulse" />
-      <div className="relative w-full max-w-90 md:max-w-105">
-        <Lottie animationData={contactAnimation} loop />
+        {/* Gradient Orbs */}
+        <div className="absolute top-20 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-cyan-400/20 rounded-full blur-[120px] animate-pulse delay-700" />
+        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-purple-500/10 rounded-full blur-[140px] animate-pulse delay-1000" />
       </div>
-    </motion.div>
 
+      {/* ================= CONTENT ================= */}
+      <div className="relative z-10 px-6 py-20 md:py-28">
+        <div className="max-w-7xl mx-auto">
+          
+          {/* Header Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-400 text-sm font-semibold mb-6">
+              <Sparkles size={16} />
+              Get in Touch
+            </span>
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+              Lets Start a{" "}
+              <span className="bg-linear-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                Conversation
+              </span>
+            </h1>
+            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+              Have a project in mind? Wed love to hear about it. Send us a message and well respond within 24 hours.
+            </p>
+          </motion.div>
+
+          {/* Main Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
+            
+            {/* LEFT: Contact Form */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <form
+                onSubmit={handleSubmit}
+                className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-10 shadow-2xl"
+              >
+                {/* Success Message Overlay */}
+                {isSuccess && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="absolute inset-0 bg-green-500/90 backdrop-blur-xl rounded-3xl flex flex-col items-center justify-center z-20"
+                  >
+                    <CheckCircle2 size={64} className="text-white mb-4 animate-bounce" />
+                    <h3 className="text-2xl font-bold text-white mb-2">Message Sent!</h3>
+                    <p className="text-white/90">Well get back to you soon.</p>
+                  </motion.div>
+                )}
+
+                {/* Error Message */}
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl flex items-center gap-3"
+                  >
+                    <AlertCircle size={20} className="text-red-400 shrink-0" />
+                    <p className="text-red-400 text-sm">{error}</p>
+                  </motion.div>
+                )}
+
+                <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                  <Send className="text-blue-400" size={24} />
+                  Send us a Message
+                </h2>
+
+                <div className="space-y-5">
+                  {/* Name Input */}
+                  <div className="relative">
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                    <input
+                      type="text"
+                      name="name"
+                      placeholder="Your Name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-400/50 focus:bg-white/10 transition"
+                      required
+                    />
+                  </div>
+
+                  {/* Email & Phone */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="relative">
+                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                      <input
+                        type="email"
+                        name="email"
+                        placeholder="Your Email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-400/50 focus:bg-white/10 transition"
+                        required
+                      />
+                    </div>
+                    <div className="relative">
+                      <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                      <input
+                        type="tel"
+                        name="phone"
+                        placeholder="Phone Number"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-400/50 focus:bg-white/10 transition"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Subject */}
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="subject"
+                      placeholder="Subject"
+                      value={formData.subject}
+                      onChange={handleChange}
+                      className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-400/50 focus:bg-white/10 transition"
+                      required
+                    />
+                  </div>
+
+                  {/* Message */}
+                  <div className="relative">
+                    <MessageSquare className="absolute left-4 top-4 text-gray-400" size={20} />
+                    <textarea
+                      name="message"
+                      placeholder="Your Message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      rows={5}
+                      className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-400/50 focus:bg-white/10 transition resize-none"
+                      required
+                    />
+                  </div>
+
+                  {/* Submit Button */}
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="group w-full py-4 rounded-xl bg-linear-to-r from-blue-500 to-cyan-400 text-black font-semibold transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.45)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        Send Message
+                        <Send size={18} className="group-hover:translate-x-1 transition-transform" />
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+
+            {/* RIGHT: Animation & Info */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="space-y-8"
+            >
+              {/* Lottie Animation */}
+              <div className="relative">
+                <div className="absolute inset-0 bg-blue-500/10 blur-3xl rounded-full" />
+                <div className="relative">
+                  <Lottie animationData={contactAnimation} loop className="w-full max-w-md mx-auto" />
+                </div>
+              </div>
+
+              {/* Features */}
+              <div className="grid grid-cols-3 gap-4">
+                {features.map((feature, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 + index * 0.1 }}
+                    className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 text-center hover:bg-white/10 transition"
+                  >
+                    <feature.icon className="w-6 h-6 mx-auto mb-2 text-blue-400" />
+                    <p className="text-sm text-gray-300 font-medium">{feature.text}</p>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Contact Info Cards */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          >
+            {contactInfo.map((info, index) => (
+              <a
+                key={index}
+                href={info.link}
+                className="group relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all hover:scale-105"
+              >
+                <div className={`w-12 h-12 rounded-xl bg-linear-to-r ${info.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                  <info.icon className="text-white" size={24} />
+                </div>
+                <h3 className="text-lg font-semibold mb-2">{info.title}</h3>
+                <p className="text-gray-400 group-hover:text-gray-300 transition">{info.value}</p>
+              </a>
+            ))}
+          </motion.div>
+        </div>
       </div>
     </main>
   );

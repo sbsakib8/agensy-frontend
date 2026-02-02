@@ -198,13 +198,33 @@ export default function NeonAgencyLanding() {
   const particles = useMemo(() => makeParticles(12, 20260201), []);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-neon-blue text-slate-100">
-      {/* ================= Background FX ================= */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-grid-pattern opacity-[0.085]" />
-        <div className="absolute inset-0 bg-grid-shimmer opacity-[0.11]" />
-        <div className="absolute inset-0 bg-neon-vignette opacity-90" />
+    <div className="relative min-h-screen overflow-hidden bg-linear-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
+      {/* ================= Background Animations ================= */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Gradient Orbs */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-500/20 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/15 rounded-full blur-3xl animate-pulse-slower"></div>
+        
+        {/* Grid Pattern */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+        
+        {/* Floating Elements */}
+        {particles.map((p, i) => (
+          <div
+            key={i}
+            className="absolute w-2 h-2 bg-cyan-400/30 rounded-full animate-float-random"
+            style={{
+              top: `${p.top}%`,
+              left: `${p.left}%`,
+              animationDelay: `${p.delay || 0}s`,
+              animationDuration: `${p.duration || 15}s`
+            }}
+          ></div>
+        ))}
+      </div>
 
+      {/* Old Background for compatibility */}
+      <div className="pointer-events-none absolute inset-0">
         {/* aurora blobs */}
         <div
           className="absolute -top-40 -left-40 h-130 w-130 rounded-full bg-cyan-500/12 blur-3xl animate-aurora-slow"
@@ -214,24 +234,6 @@ export default function NeonAgencyLanding() {
           className="absolute -bottom-44 -right-44 h-155 w-155 rounded-full bg-blue-500/12 blur-3xl animate-aurora-slower"
           style={{ transform: `translate(${mouse.x * -0.01}px, ${mouse.y * -0.01}px)` }}
         />
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 h-105 w-105 rounded-full bg-indigo-500/8 blur-3xl animate-aurora-mid" />
-
-        {/* seeded particles */}
-        {particles.map((p, i) => (
-          <span
-            key={i}
-            className="absolute rounded-full bg-cyan-300/40 animate-float-slow"
-            style={{
-              top: `${p.top}%`,
-              left: `${p.left}%`,
-              width: `${p.size}px`,
-              height: `${p.size}px`,
-              opacity: p.opacity,
-              animationDelay: `${p.delay}s`,
-              animationDuration: `${p.duration}s`,
-            }}
-          />
-        ))}
       </div>
 
       {/* ================= Content ================= */}
@@ -259,7 +261,7 @@ export default function NeonAgencyLanding() {
             </p>
 
             <div className="flex flex-wrap items-center gap-3 pt-1">
-              <button className="btn-shine group inline-flex items-center gap-2 rounded-xl px-7 py-4 bg-blue-600/90 hover:bg-blue-500 transition-all font-semibold shadow-lg shadow-blue-900/30">
+              <button className="btn-shine group inline-flex items-center gap-2 rounded-xl px-7 py-4 bg-linear-to-r from-blue-500 to-cyan-400 text-black transition-all font-semibold shadow-lg hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]">
                 Get a Free Quote
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
               </button>
@@ -513,7 +515,7 @@ export default function NeonAgencyLanding() {
 
                   <TextareaField icon={MessageSquare} placeholder="Project Details" />
 
-                  <button className="btn-shine w-full md:w-auto px-10 py-4 bg-blue-600/90 hover:bg-blue-500 rounded-xl font-semibold transition-all shadow-lg shadow-blue-900/30">
+                  <button className="btn-shine w-full md:w-auto px-10 py-4 bg-linear-to-r from-blue-500 to-cyan-400 text-black rounded-xl font-semibold transition-all shadow-lg hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]">
                     Send Message
                   </button>
                 </div>

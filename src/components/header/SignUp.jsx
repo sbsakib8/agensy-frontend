@@ -10,7 +10,7 @@ import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "@/lib/firebase";
 import { authApi } from "@/lib/api";
 import { formatErrorMessage } from "@/lib/error-handler";
-import { uploadToImgBB } from "@/lib/imgbb-upload";
+import { uploadImageToImgBB } from "@/lib/imgbb-upload";
 
 // Lottie animation
 import signup from "../../../public/Sign up.json";
