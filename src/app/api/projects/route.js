@@ -1,8 +1,15 @@
 import { NextResponse } from 'next/server';
-import clientPromise from '@/lib/mongodb';
+// import clientPromise from '@/lib/mongodb';
 
 // GET /api/projects - Get all categories and projects
 export async function GET(request) {
+  // This route should be handled by your backend server
+  return NextResponse.json(
+    { success: false, message: 'This endpoint is not implemented in the frontend. Please use the backend API.' },
+    { status: 501 }
+  );
+  /* Original implementation - should be in backend
+  try {
   try {
     // Connect to database
     const client = await clientPromise;
@@ -49,10 +56,10 @@ export async function GET(request) {
     }, { status: 200 });
 
   } catch (error) {
-    console.error('Error fetching projects:', error);
     return NextResponse.json(
       { success: false, message: 'Internal server error', error: error.message },
       { status: 500 }
     );
   }
+  */
 }

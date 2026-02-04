@@ -14,10 +14,8 @@ const FAQ = () => {
     const fetchFAQs = async () => {
       try {
         const response = await faqApi.getAllFAQs();
-        console.log("📡 FAQ API Response:", response);
         setFaqs(response.data || []);
       } catch (err) {
-        console.error("❌ Error fetching FAQs:", err);
       } finally {
         setLoading(false);
       }

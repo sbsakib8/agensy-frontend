@@ -34,7 +34,6 @@ export default function DemoCategoryComponent() {
         throw new Error('Failed to fetch demo categories');
       }
       const result = await response.json();
-      console.log('API Response:', result);
       // Handle the response structure: { success: true, data: { categories: [...] } }
       if (result.success && result.data && Array.isArray(result.data.categories)) {
         setCategories(result.data.categories);
@@ -43,7 +42,6 @@ export default function DemoCategoryComponent() {
       }
       setError(null);
     } catch (err) {
-      console.error('Error fetching demo categories:', err);
       setError(err.message);
       setCategories([]); // Set empty array on error
     } finally {
@@ -67,6 +65,7 @@ export default function DemoCategoryComponent() {
         // Update existing category
         const response = await fetch(`${API_BASE_URL}/projects/categories/${editId}`, {
           method: 'PUT',
+        cache: 'no-store',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -79,7 +78,6 @@ export default function DemoCategoryComponent() {
         }
 
         const result = await response.json();
-        console.log('Update Response:', result);
         await fetchDemoCategories();
         setSuccessMessage("Category updated successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -89,6 +87,7 @@ export default function DemoCategoryComponent() {
         // Create new category
         const response = await fetch(`${API_BASE_URL}/projects/categories`, {
           method: 'POST',
+        cache: 'no-store',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -101,7 +100,6 @@ export default function DemoCategoryComponent() {
         }
 
         const result = await response.json();
-        console.log('Create Response:', result);
         await fetchDemoCategories();
         setSuccessMessage("Category added successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -110,7 +108,6 @@ export default function DemoCategoryComponent() {
       setFormData({ name: "", description: "" });
       setError(null);
     } catch (err) {
-      console.error('Error submitting form:', err);
       setError(err.message);
     }
   };
@@ -130,6 +127,7 @@ export default function DemoCategoryComponent() {
     try {
       const response = await fetch(`${API_BASE_URL}/projects/categories/${categoryId}`, {
         method: 'DELETE',
+        cache: 'no-store',
         credentials: 'include', // Include cookies for authentication
       });
 
@@ -138,13 +136,11 @@ export default function DemoCategoryComponent() {
       }
 
       const result = await response.json();
-      console.log('Delete Response:', result);
       await fetchDemoCategories();
       setSuccessMessage("Category deleted successfully!");
       setTimeout(() => setSuccessMessage(""), 3000);
       setError(null);
     } catch (err) {
-      console.error('Error deleting demo category:', err);
       setError(err.message);
     }
   };

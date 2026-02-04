@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await fetch('/api/auth/signin', {
         method: 'POST',
+        cache: 'no-store',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -48,7 +49,6 @@ export const AuthProvider = ({ children }) => {
         return { success: false, message: data.message }
       }
     } catch (error) {
-      console.error('Login error:', error)
       return { success: false, message: 'Login failed' }
     }
   }
@@ -57,9 +57,9 @@ export const AuthProvider = ({ children }) => {
     try {
       await fetch('/api/auth/logout', {
         method: 'POST'
+        cache: 'no-store',
       })
     } catch (error) {
-      console.error('Logout error:', error)
     } finally {
       // Clear state regardless of API call success
       setUser(null)

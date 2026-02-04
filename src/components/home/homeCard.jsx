@@ -16,7 +16,10 @@ const HomecardSection = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
 
   useEffect(() => {
-    setIsVisible(true);
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
+    return () => clearTimeout(timer);
   }, []);
 
   const services = [
@@ -26,6 +29,7 @@ const HomecardSection = () => {
       title: "Custom Web Development",
       gradient: "from-purple-500 via-pink-500 to-red-500",
       iconBg: "bg-purple-500/20",
+      link: "/web-development",
       features: [
         "Responsive website design",
         "Custom UI/UX development",
@@ -41,6 +45,7 @@ const HomecardSection = () => {
       title: "App Development",
       gradient: "from-blue-500 via-cyan-500 to-teal-500",
       iconBg: "bg-blue-500/20",
+      link: "/app-development",
       features: [
         "iOS & Android apps",
         "Cross-platform solutions",
@@ -56,6 +61,7 @@ const HomecardSection = () => {
       title: "AI Agent Development",
       gradient: "from-emerald-500 via-green-500 to-lime-500",
       iconBg: "bg-emerald-500/20",
+      link: "/ai-agents",
       features: [
         "Custom AI agents",
         "Chatbot development",
@@ -71,6 +77,7 @@ const HomecardSection = () => {
       title: "WordPress Development",
       gradient: "from-indigo-500 via-purple-500 to-pink-500",
       iconBg: "bg-indigo-500/20",
+      link: "/web-development",
       features: [
         "Custom themes",
         "Plugin development",
@@ -86,6 +93,7 @@ const HomecardSection = () => {
       title: "Domain & Hosting",
       gradient: "from-orange-500 via-amber-500 to-yellow-500",
       iconBg: "bg-orange-500/20",
+      link: "/web-development",
       features: [
         "Domain management",
         "Cloud hosting",
@@ -101,6 +109,7 @@ const HomecardSection = () => {
       title: "Digital Solutions",
       gradient: "from-rose-500 via-red-500 to-pink-500",
       iconBg: "bg-rose-500/20",
+      link: "/ui-ux-design",
       features: [
         "Digital marketing",
         "Brand identity",
@@ -196,13 +205,14 @@ const HomecardSection = () => {
                     ))}
                   </ul>
 
-                  <button
-                    className={`mt-8 w-full py-3 rounded-xl font-semibold bg-linear-to-r ${service.gradient} text-white transition-all duration-300 ${
+                  <Link 
+                    href={service.link}
+                    className={`relative z-20 mt-8 w-full py-3 rounded-xl font-semibold bg-linear-to-r ${service.gradient} text-white transition-all duration-300 hover:shadow-lg hover:scale-[1.02] flex items-center justify-center ${
                       active ? "opacity-100" : "opacity-0"
                     }`}
                   >
                     Learn More
-                  </button>
+                  </Link>
                 </div>
               </div>
             );
@@ -211,21 +221,7 @@ const HomecardSection = () => {
         {/* ================= CTA ================= */}
 <div className="text-center mt-20">
   <Link href="/pricing">
-    <button
-      className="group relative px-8 py-4
-      bg-linear-to-r from-blue-500 to-cyan-400
-      rounded-full text-black font-bold text-lg
-      shadow-2xl hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]
-      transition-all duration-300 hover:scale-105 overflow-hidden"
-    >
-      <span className="relative z-10">Get Started Today</span>
-
-      <span
-        className="absolute inset-0 bg-linear-to-r
-        from-cyan-400 to-blue-500
-        opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-      />
-    </button>
+  
   </Link>
 </div>
 

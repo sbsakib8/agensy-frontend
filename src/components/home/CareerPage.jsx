@@ -445,7 +445,6 @@ export default function NeonAgencyLanding() {
         // Get latest 3 projects
         setRecentProjects(allProjects.slice(0, 3));
       } catch (error) {
-        console.error("Error fetching projects:", error);
       } finally {
         setProjectsLoading(false);
       }

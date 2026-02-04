@@ -34,7 +34,6 @@ export default function TeamCategoryComponent() {
         throw new Error('Failed to fetch departments');
       }
       const result = await response.json();
-      console.log('API Response:', result);
       // Handle the response structure: { success: true, data: [...] }
       if (result.success && Array.isArray(result.data)) {
         setCategories(result.data);
@@ -43,7 +42,6 @@ export default function TeamCategoryComponent() {
       }
       setError(null);
     } catch (err) {
-      console.error('Error fetching departments:', err);
       setError(err.message);
       setCategories([]); // Set empty array on error
     } finally {
@@ -67,6 +65,7 @@ export default function TeamCategoryComponent() {
         // Update existing department
         const response = await fetch(`${API_BASE_URL}/team/departments/${editId}`, {
           method: 'PUT',
+        cache: 'no-store',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -79,7 +78,6 @@ export default function TeamCategoryComponent() {
         }
 
         const result = await response.json();
-        console.log('Update Response:', result);
         await fetchDepartments();
         setIsEditing(false);
         setEditId(null);
@@ -87,6 +85,7 @@ export default function TeamCategoryComponent() {
         // Create new department
         const response = await fetch(`${API_BASE_URL}/team/departments`, {
           method: 'POST',
+        cache: 'no-store',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -99,7 +98,6 @@ export default function TeamCategoryComponent() {
         }
 
         const result = await response.json();
-        console.log('Create Response:', result);
         await fetchDepartments();
         setSuccessMessage("Category added successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -108,7 +106,6 @@ export default function TeamCategoryComponent() {
       setFormData({ name: "", description: "" });
       setError(null);
     } catch (err) {
-      console.error('Error submitting form:', err);
       setError(err.message);
     }
   };
@@ -128,6 +125,7 @@ export default function TeamCategoryComponent() {
     try {
       const response = await fetch(`${API_BASE_URL}/team/departments/${categoryName}`, {
         method: 'DELETE',
+        cache: 'no-store',
         credentials: 'include', // Include cookies for authentication
       });
 
@@ -136,13 +134,11 @@ export default function TeamCategoryComponent() {
       }
 
       const result = await response.json();
-      console.log('Delete Response:', result);
       await fetchDepartments();
       setSuccessMessage("Category deleted successfully!");
       setTimeout(() => setSuccessMessage(""), 3000);
       setError(null);
     } catch (err) {
-      console.error('Error deleting department:', err);
       setError(err.message);
     }
   };

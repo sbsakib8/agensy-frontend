@@ -18,6 +18,7 @@ export default function UsersPage() {
       setLoading(true);
       const response = await fetch('/api/users', {
         method: 'GET',
+        cache: 'no-store',
         credentials: 'include',
       });
 
@@ -36,7 +37,6 @@ export default function UsersPage() {
         setUsers([]); // Set empty array on error
       }
     } catch (error) {
-      console.error('Error fetching users:', error);
       setError('Failed to load users. Please try again.');
       setUsers([]); // Set empty array on error
     } finally {

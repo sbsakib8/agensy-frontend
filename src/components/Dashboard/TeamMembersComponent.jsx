@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { Plus, X, Upload, Loader2 } from "lucide-react";
+import { uploadImageToImgBB } from "@/lib/imgbb-upload";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api';
 
@@ -13,6 +15,7 @@ export default function TeamMembersComponent() {
   const [successMessage, setSuccessMessage] = useState("");
   const [deleteModal, setDeleteModal] = useState({ show: false, memberId: "", memberName: "" });
   const [showFormModal, setShowFormModal] = useState(false);
+  const [imageUploading, setImageUploading] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -25,7 +28,7 @@ export default function TeamMembersComponent() {
     state: "",
     country: "",
     joinedDate: "",
-    skills: "",
+    skills: [""],
     github: "",
     linkedin: "",
     twitter: "",
@@ -51,20 +54,13 @@ export default function TeamMembersComponent() {
         throw new Error('Failed to fetch team members');
       }
       const result = await response.json();
-      console.log('Members API Response:', result);
-      console.log('Members data:', result.data);
-      console.log('Is array?', Array.isArray(result.data));
-      console.log('Members length:', result.data?.length);
       if (result.success && Array.isArray(result.data)) {
         setMembers(result.data);
-        console.log('Set members to:', result.data);
       } else {
-        console.log('API response not in expected format');
         setMembers([]);
       }
       setError(null);
     } catch (err) {
-      console.error('Error fetching members:', err);
       setError(err.message);
       setMembers([]);
     } finally {
@@ -84,7 +80,6 @@ export default function TeamMembersComponent() {
         }
       }
     } catch (err) {
-      console.error('Error fetching departments:', err);
     }
   };
 
@@ -101,7 +96,9 @@ export default function TeamMembersComponent() {
 
     try {
       // Prepare the data according to API format
-      const skillsArray = formData.skills ? formData.skills.split(',').map(s => s.trim()) : [];
+      const skillsArray = formData.skills
+        .map(s => s.trim())
+        .filter(s => s !== "");
       const payload = {
         name: formData.name,
         role: formData.role,
@@ -128,6 +125,7 @@ export default function TeamMembersComponent() {
         // Update existing member
         const response = await fetch(`${API_BASE_URL}/team/${editId}`, {
           method: 'PUT',
+        cache: 'no-store',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -140,7 +138,6 @@ export default function TeamMembersComponent() {
         }
 
         const result = await response.json();
-        console.log('Update Response:', result);
         await fetchMembers();
         setSuccessMessage("Team member updated successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -150,6 +147,7 @@ export default function TeamMembersComponent() {
         // Create new member
         const response = await fetch(`${API_BASE_URL}/team`, {
           method: 'POST',
+        cache: 'no-store',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -162,7 +160,6 @@ export default function TeamMembersComponent() {
         }
 
         const result = await response.json();
-        console.log('Create Response:', result);
         await fetchMembers();
         setSuccessMessage("Team member added successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -179,7 +176,7 @@ export default function TeamMembersComponent() {
         state: "",
         country: "",
         joinedDate: "",
-        skills: "",
+        skills: [""],
         github: "",
         linkedin: "",
         twitter: "",
@@ -187,7 +184,6 @@ export default function TeamMembersComponent() {
       });
       setError(null);
     } catch (err) {
-      console.error('Error submitting form:', err);
       setError(err.message);
     }
   };
@@ -211,7 +207,7 @@ export default function TeamMembersComponent() {
       state: member.location?.state || "",
       country: member.location?.country || "",
       joinedDate: formattedDate,
-      skills: member.skills ? member.skills.join(', ') : "",
+      skills: Array.isArray(member.skills) && member.skills.length > 0 ? member.skills : [""],
       github: member.socialLinks?.github || "",
       linkedin: member.socialLinks?.linkedin || "",
       twitter: member.socialLinks?.twitter || "",
@@ -228,6 +224,7 @@ export default function TeamMembersComponent() {
     try {
       const response = await fetch(`${API_BASE_URL}/team/${memberId}`, {
         method: 'DELETE',
+        cache: 'no-store',
         credentials: 'include',
       });
 
@@ -236,13 +233,11 @@ export default function TeamMembersComponent() {
       }
 
       const result = await response.json();
-      console.log('Delete Response:', result);
       await fetchMembers();
       setSuccessMessage("Team member deleted successfully!");
       setTimeout(() => setSuccessMessage(""), 3000);
       setError(null);
     } catch (err) {
-      console.error('Error deleting member:', err);
       setError(err.message);
     }
   };
@@ -267,7 +262,7 @@ export default function TeamMembersComponent() {
       state: "",
       country: "",
       joinedDate: "",
-      skills: "",
+      skills: [""],
       github: "",
       linkedin: "",
       twitter: "",
@@ -276,6 +271,61 @@ export default function TeamMembersComponent() {
     setIsEditing(false);
     setEditId(null);
     setShowFormModal(false);
+  };
+
+  // Helper functions for skills management
+  const addSkill = () => {
+    setFormData({ ...formData, skills: [...formData.skills, ""] });
+  };
+
+  const updateSkill = (index, value) => {
+    const newSkills = [...formData.skills];
+    newSkills[index] = value;
+    setFormData({ ...formData, skills: newSkills });
+  };
+
+  const removeSkill = (index) => {
+    const newSkills = formData.skills.filter((_, i) => i !== index);
+    setFormData({ ...formData, skills: newSkills });
+  };
+
+  // Image upload handler
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setError('Please select a valid image file');
+      setTimeout(() => setError(null), 3000);
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Image size should be less than 5MB');
+      setTimeout(() => setError(null), 3000);
+      return;
+    }
+
+    try {
+      setImageUploading(true);
+      const result = await uploadImageToImgBB(file);
+
+      if (result.success) {
+        setFormData({ ...formData, profileImage: result.imageUrl });
+        setSuccessMessage('Image uploaded successfully!');
+        setTimeout(() => setSuccessMessage(''), 3000);
+      } else {
+        setError(result.error || 'Failed to upload image');
+        setTimeout(() => setError(null), 3000);
+      }
+    } catch (err) {
+      setError('Error uploading image');
+      setTimeout(() => setError(null), 3000);
+    } finally {
+      setImageUploading(false);
+    }
   };
 
   const openAddModal = () => {
@@ -431,15 +481,60 @@ export default function TeamMembersComponent() {
                 </div>
               </div>
               <div>
-                <label className="block text-gray-300 mb-2">Profile Image URL</label>
+                <label className="block text-gray-300 mb-2">Profile Image</label>
+                
+                {/* Image Preview */}
+                {formData.profileImage && (
+                  <div className="mb-3 relative w-32 h-32 rounded-lg overflow-hidden border-2 border-blue-500/30">
+                    <Image 
+                      src={formData.profileImage} 
+                      alt="Profile preview" 
+                      fill 
+                      className="object-cover"
+                    />
+                  </div>
+                )}
+
+                {/* URL Input */}
                 <input
                   type="url"
                   name="profileImage"
                   value={formData.profileImage}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 bg-slate-900/50 border border-blue-500/30 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-2 bg-slate-900/50 border border-blue-500/30 rounded-lg text-white focus:outline-none focus:border-blue-500 mb-2"
                   placeholder="https://example.com/image.jpg"
                 />
+
+                {/* File Upload */}
+                <div className="flex gap-2">
+                  <label className="flex-1 cursor-pointer">
+                    <div className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg border-2 border-dashed transition-colors ${
+                      imageUploading 
+                        ? 'border-blue-500/50 bg-blue-500/10 cursor-not-allowed' 
+                        : 'border-blue-500/30 bg-blue-500/5 hover:bg-blue-500/10 hover:border-blue-500/50'
+                    }`}>
+                      {imageUploading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span className="text-sm text-gray-300">Uploading...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-4 h-4 text-blue-400" />
+                          <span className="text-sm text-gray-300">Upload Image</span>
+                        </>
+                      )}
+                    </div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      disabled={imageUploading}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">Upload image or paste URL (Max 5MB)</p>
               </div>
               <div>
                 <label className="block text-gray-300 mb-2">Bio</label>
@@ -512,15 +607,35 @@ export default function TeamMembersComponent() {
                 </div>
               </div>
               <div>
-                <label className="block text-gray-300 mb-2">Skills (comma-separated)</label>
-                <input
-                  type="text"
-                  name="skills"
-                  value={formData.skills}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 bg-slate-900/50 border border-blue-500/30 rounded-lg text-white focus:outline-none focus:border-blue-500"
-                  placeholder="Node.js, React, MongoDB"
-                />
+                <label className="block text-gray-300 mb-2">Skills</label>
+                <div className="space-y-2">
+                  {formData.skills.map((skill, index) => (
+                    <div key={index} className="flex gap-2">
+                      <input
+                        type="text"
+                        value={skill}
+                        onChange={(e) => updateSkill(index, e.target.value)}
+                        className="flex-1 px-4 py-2 bg-slate-900/50 border border-blue-500/30 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                        placeholder="Enter skill"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeSkill(index)}
+                        className="px-3 py-2 bg-red-500/20 hover:bg-red-500/30 rounded-lg transition-colors"
+                      >
+                        <X size={20} />
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={addSkill}
+                    className="flex items-center gap-2 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-lg transition-colors text-sm"
+                  >
+                    <Plus size={16} />
+                    Add Skill
+                  </button>
+                </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>

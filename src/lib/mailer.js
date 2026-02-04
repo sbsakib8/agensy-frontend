@@ -1,7 +1,6 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 
-// Load environment variables
 dotenv.config();
 
 export const transporter = nodemailer.createTransport({
@@ -35,7 +34,6 @@ export const sendVerificationEmail = async (to, subject, htmlContent) => {
       response: result.response,
     };
   } catch (error) {
-    console.error('Email sending error:', error);
     return {
       success: false,
       error: error.message,

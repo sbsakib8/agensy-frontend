@@ -131,17 +131,15 @@ export default function TrackOrder() {
       
       const response = await fetch(`${API_BASE_URL}/orders/user`, {
         credentials: 'include',
-      });
+      }, { cache: 'no-store' });
 
       if (!response.ok) {
         // If API fails, keep static orders
-        console.log('Using static orders');
         setLoadingUserOrders(false);
         return;
       }
 
       const data = await response.json();
-      console.log('📦 User orders:', data);
 
       if (data.success && data.data && data.data.length > 0) {
         // Use real orders if available
@@ -149,7 +147,6 @@ export default function TrackOrder() {
       }
       // Otherwise keep static orders
     } catch (err) {
-      console.error('❌ Error fetching user orders:', err);
       // Keep static orders on error
     } finally {
       setLoadingUserOrders(false);

@@ -7,7 +7,6 @@ const getAuthHeaders = () => {
 };
 
 const pricingController = {
-  // ============ Pricing Categories ============
   
   /**
    * Get all pricing categories
@@ -25,7 +24,6 @@ const pricingController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching categories:', error);
       throw error;
     }
   },
@@ -46,7 +44,6 @@ const pricingController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching category:', error);
       throw error;
     }
   },
@@ -58,7 +55,9 @@ const pricingController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories`, {
         method: 'POST',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(categoryData),
       });
@@ -69,7 +68,6 @@ const pricingController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error creating category:', error);
       throw error;
     }
   },
@@ -81,7 +79,9 @@ const pricingController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
         method: 'PUT',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(categoryData),
       });
@@ -92,7 +92,6 @@ const pricingController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error updating category:', error);
       throw error;
     }
   },
@@ -104,7 +103,9 @@ const pricingController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
         method: 'DELETE',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
       });
       
@@ -114,12 +115,10 @@ const pricingController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error deleting category:', error);
       throw error;
     }
   },
 
-  // ============ Pricing Plans ============
   
   /**
    * Get all pricing plans
@@ -137,7 +136,6 @@ const pricingController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching plans:', error);
       throw error;
     }
   },
@@ -158,7 +156,6 @@ const pricingController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching plans by category:', error);
       throw error;
     }
   },
@@ -179,7 +176,6 @@ const pricingController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching plan:', error);
       throw error;
     }
   },
@@ -191,7 +187,9 @@ const pricingController = {
     try {
       const response = await fetch(`${API_BASE_URL}/plans`, {
         method: 'POST',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(planData),
       });
@@ -202,7 +200,6 @@ const pricingController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error creating plan:', error);
       throw error;
     }
   },
@@ -214,7 +211,9 @@ const pricingController = {
     try {
       const response = await fetch(`${API_BASE_URL}/plans/${planId}`, {
         method: 'PUT',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(planData),
       });
@@ -225,7 +224,6 @@ const pricingController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error updating plan:', error);
       throw error;
     }
   },
@@ -237,7 +235,9 @@ const pricingController = {
     try {
       const response = await fetch(`${API_BASE_URL}/plans/${planId}`, {
         method: 'DELETE',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
       });
       
@@ -247,7 +247,6 @@ const pricingController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error deleting plan:', error);
       throw error;
     }
   },

@@ -1,10 +1,15 @@
 import { NextResponse } from 'next/server';
-import clientPromise from '@/lib/mongodb';
+// import clientPromise from '@/lib/mongodb';
 import { verifyToken } from '@/lib/jwt-middleware';
-import { ObjectId } from 'mongodb';
+// import { ObjectId } from 'mongodb';
 
 // GET /api/projects/categories/:categoryId/projects/:projectId - Get a single project
 export async function GET(request, { params }) {
+  // This route should be handled by your backend server
+  return NextResponse.json(
+    { success: false, message: 'This endpoint is not implemented in the frontend. Please use the backend API.' },
+    { status: 501 }
+  );
   try {
     const { categoryId, projectId } = await params;
 
@@ -39,7 +44,6 @@ export async function GET(request, { params }) {
     }, { status: 200 });
 
   } catch (error) {
-    console.error('Error fetching project:', error);
     return NextResponse.json(
       { success: false, message: 'Internal server error', error: error.message },
       { status: 500 }
@@ -49,6 +53,13 @@ export async function GET(request, { params }) {
 
 // PUT /api/projects/categories/:categoryId/projects/:projectId - Update a project
 export async function PUT(request, { params }) {
+  // This route should be handled by your backend server
+  return NextResponse.json(
+    { success: false, message: 'This endpoint is not implemented in the frontend. Please use the backend API.' },
+    { status: 501 }
+  );
+  
+  /* Original implementation - should be in backend
   try {
     // Verify authentication
     const token = request.cookies.get('token')?.value;
@@ -139,16 +150,23 @@ export async function PUT(request, { params }) {
     }, { status: 200 });
 
   } catch (error) {
-    console.error('Error updating project:', error);
     return NextResponse.json(
       { success: false, message: 'Internal server error', error: error.message },
       { status: 500 }
     );
   }
+  */
 }
 
 // DELETE /api/projects/categories/:categoryId/projects/:projectId - Delete a project
 export async function DELETE(request, { params }) {
+  // This route should be handled by your backend server
+  return NextResponse.json(
+    { success: false, message: 'This endpoint is not implemented in the frontend. Please use the backend API.' },
+    { status: 501 }
+  );
+  
+  /* Original implementation - should be in backend
   try {
     // Verify authentication
     const token = request.cookies.get('token')?.value;
@@ -207,10 +225,10 @@ export async function DELETE(request, { params }) {
     }, { status: 200 });
 
   } catch (error) {
-    console.error('Error deleting project:', error);
     return NextResponse.json(
       { success: false, message: 'Internal server error', error: error.message },
       { status: 500 }
     );
   }
+  */
 }

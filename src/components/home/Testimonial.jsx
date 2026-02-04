@@ -1,10 +1,11 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Image from "next/image"
 import { Star, Quote } from "lucide-react"
 import { FaChevronUp, FaChevronDown } from "react-icons/fa"
 import { testimonialApi } from "@/lib/api"
+
+const FALLBACK_AVATAR = "https://i.pravatar.cc/150";
 
 export default function Testimonial() {
   const [data, setData] = useState([])
@@ -20,18 +21,27 @@ export default function Testimonial() {
         const res = await testimonialApi.getAllTestimonials()
         if (res?.data?.length) {
           setData(
-            res.data.map((i) => ({
-              id: i._id,
-              name: i.name || "Anonymous",
-              role: i.designation || "Client",
-              image: i.avatar || "https://i.pravatar.cc/150",
-              text: i.message || "Great service!",
-              rating: i.rating || 5,
-            }))
+            res.data.map((i) => {
+              // Filter out invalid URLs and use fallback
+              let avatarUrl = i.avatar || "https://i.pravatar.cc/150";
+              
+              // Check if URL is from invalid domains
+              if (avatarUrl.includes('example.com') || avatarUrl.includes('yourdomain.com')) {
+                avatarUrl = "https://i.pravatar.cc/150";
+              }
+              
+              return {
+                id: i._id,
+                name: i.name || "Anonymous",
+                role: i.designation || "Client",
+                image: avatarUrl,
+                text: i.message || "Great service!",
+                rating: i.rating || 5,
+              };
+            })
           )
         }
       } catch (err) {
-        console.error("Failed to load testimonials", err)
       } finally {
         setLoading(false)
       }
@@ -97,12 +107,10 @@ export default function Testimonial() {
                     : "border-gray-600 opacity-60 hover:opacity-100"
                 }`}
             >
-              <Image
+              <img
                 src={item.image}
                 alt={item.name}
-                fill
-                sizes="80px"
-                className="object-cover"
+                className="w-full h-full object-cover"
                 draggable={false}
               />
             </button>
@@ -132,12 +140,10 @@ export default function Testimonial() {
             </p>
 
             <div className="flex items-center gap-4 pt-4 border-t border-white/10">
-              <Image
+              <img
                 src={activeItem.image}
                 alt={activeItem.name}
-                width={64}
-                height={64}
-                className="rounded-xl"
+                className="w-16 h-16 rounded-xl object-cover"
               />
 
               <div>
@@ -150,6 +156,7 @@ export default function Testimonial() {
                       key={i}
                       size={14}
                       fill={i < activeItem.rating ? "currentColor" : "none"}
+                      strokeWidth={0}
                     />
                   ))}
                 </div>

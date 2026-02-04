@@ -7,7 +7,6 @@ const getAuthHeaders = () => {
 };
 
 const productsController = {
-  // ============ Products ============
   
   /**
    * Get all products
@@ -15,6 +14,7 @@ const productsController = {
   getProducts: async () => {
     try {
       const response = await fetch(`${API_BASE_URL}`, {
+        cache: 'no-store',
         credentials: 'include',
         headers: getAuthHeaders(),
       });
@@ -25,7 +25,6 @@ const productsController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching products:', error);
       throw error;
     }
   },
@@ -36,6 +35,7 @@ const productsController = {
   getProductById: async (productId) => {
     try {
       const response = await fetch(`${API_BASE_URL}/${productId}`, {
+        cache: 'no-store',
         credentials: 'include',
         headers: getAuthHeaders(),
       });
@@ -46,7 +46,6 @@ const productsController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching product:', error);
       throw error;
     }
   },
@@ -57,6 +56,7 @@ const productsController = {
   getProductBySlug: async (slug) => {
     try {
       const response = await fetch(`${API_BASE_URL}/slug/${slug}`, {
+        cache: 'no-store',
         credentials: 'include',
         headers: getAuthHeaders(),
       });
@@ -67,7 +67,6 @@ const productsController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching product by slug:', error);
       throw error;
     }
   },
@@ -79,6 +78,7 @@ const productsController = {
     try {
       const response = await fetch(`${API_BASE_URL}`, {
         method: 'POST',
+        cache: 'no-store',
         credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(productData),
@@ -90,7 +90,6 @@ const productsController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error creating product:', error);
       throw error;
     }
   },
@@ -102,6 +101,7 @@ const productsController = {
     try {
       const response = await fetch(`${API_BASE_URL}/${productId}`, {
         method: 'PUT',
+        cache: 'no-store',
         credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(productData),
@@ -113,7 +113,6 @@ const productsController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error updating product:', error);
       throw error;
     }
   },
@@ -125,6 +124,7 @@ const productsController = {
     try {
       const response = await fetch(`${API_BASE_URL}/${productId}`, {
         method: 'DELETE',
+        cache: 'no-store',
         credentials: 'include',
         headers: getAuthHeaders(),
       });
@@ -135,7 +135,6 @@ const productsController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error deleting product:', error);
       throw error;
     }
   },
@@ -147,6 +146,7 @@ const productsController = {
     try {
       const response = await fetch(`${API_BASE_URL}/${productId}/status`, {
         method: 'PATCH',
+        cache: 'no-store',
         credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify({ status }),
@@ -158,7 +158,6 @@ const productsController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error updating product status:', error);
       throw error;
     }
   },
@@ -170,6 +169,7 @@ const productsController = {
     try {
       const response = await fetch(`${API_BASE_URL}/reorder`, {
         method: 'PUT',
+        cache: 'no-store',
         credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify({ productIds }),
@@ -181,10 +181,15 @@ const productsController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error reordering products:', error);
       throw error;
     }
   },
 };
+
+// Named exports for backward compatibility
+export const createProduct = productsController.createProduct;
+export const getAllProducts = productsController.getProducts;
+export const updateProduct = productsController.updateProduct;
+export const deleteProduct = productsController.deleteProduct;
 
 export default productsController;

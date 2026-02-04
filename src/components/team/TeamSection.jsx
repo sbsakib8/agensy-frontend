@@ -69,7 +69,6 @@ export default function TeamSection() {
     }));
   });
 
-  // old particles for backward compat
   const [oldParticles] = useState(() => {
     return [...Array(10)].map(() => ({
       top: Math.random() * 100,
@@ -428,52 +427,52 @@ export default function TeamSection() {
             <article
               key={member._id}
               className={[
-                "group relative overflow-hidden rounded-2xl border border-slate-700/40",
-                "bg-slate-900/50 p-6",
-                "shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_20px_40px_rgba(0,0,0,0.35)]",
-                "transition-all duration-300 ease-out",
-                "hover:-translate-y-2 hover:scale-[1.01]",
-                "hover:border-indigo-400/35",
-                "hover:bg-linear-to-b hover:from-slate-900/70 hover:via-slate-900/60 hover:to-slate-900/50",
-                "hover:shadow-[0_0_0_1px_rgba(99,102,241,0.18),0_30px_70px_rgba(0,0,0,0.55)]",
+                "group relative overflow-hidden rounded-2xl border border-cyan-500/20",
+                "bg-gradient-to-br from-slate-800/60 via-slate-900/70 to-slate-950/80 p-6",
+                "shadow-[0_0_0_1px_rgba(6,182,212,0.05),0_20px_40px_rgba(0,0,0,0.4)]",
+                "transition-all duration-500 ease-out",
+                "hover:-translate-y-3 hover:scale-[1.02]",
+                "hover:border-cyan-400/50",
+                "hover:bg-gradient-to-br hover:from-cyan-950/40 hover:via-slate-900/60 hover:to-blue-950/50",
+                "hover:shadow-[0_0_0_1px_rgba(6,182,212,0.3),0_30px_70px_rgba(6,182,212,0.15),0_0_80px_rgba(6,182,212,0.1)]",
               ].join(" ")}
             >
-              <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                <div className="absolute -top-24 left-1/2 h-60 w-60 -translate-x-1/2 rounded-full bg-indigo-400/15 blur-3xl" />
-                <div className="absolute -bottom-28 right-1/3 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
+              <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+                <div className="absolute -top-24 left-1/2 h-60 w-60 -translate-x-1/2 rounded-full bg-cyan-400/20 blur-3xl" />
+                <div className="absolute -bottom-28 right-1/3 h-72 w-72 rounded-full bg-blue-500/15 blur-3xl" />
               </div>
 
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-linear-to-b from-indigo-400/15 to-transparent opacity-0 transition group-hover:opacity-100" />
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-cyan-400/20 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
               <div className="relative flex items-start gap-4">
-                <div className="relative h-14 w-14 overflow-hidden rounded-xl border border-slate-700/40 bg-slate-800/40">
+                <div className="relative h-14 w-14 overflow-hidden rounded-xl border border-cyan-500/30 bg-gradient-to-br from-cyan-900/40 to-blue-900/30 shadow-lg shadow-cyan-500/10">
                   <Image
                     src={member.profileImage}
                     alt={member.name}
                     width={64}
                     height={64}
-                    className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.06]"
+                    className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
                   />
                 </div>
 
                 <div className="min-w-0 flex-1">
-                  <h3 className="truncate text-base font-semibold text-white">{member.name}</h3>
-                  <p className="mt-0.5 text-sm text-white/70">{member.role}</p>
+                  <h3 className="truncate text-base font-semibold text-white group-hover:text-cyan-100 transition-colors duration-300">{member.name}</h3>
+                  <p className="mt-0.5 text-sm text-white/70 group-hover:text-cyan-200/80 transition-colors duration-300">{member.role}</p>
 
-                  <div className="mt-2 inline-flex items-center rounded-full border border-slate-700/40 bg-slate-800/30 px-3 py-1 text-xs text-white/60">
+                  <div className="mt-2 inline-flex items-center rounded-full border border-cyan-500/30 bg-gradient-to-r from-cyan-900/30 to-blue-900/20 px-3 py-1 text-xs text-cyan-200/90 shadow-sm">
                     {member.__deptName || "—"}
                   </div>
 
                   {member.status && (
-                    <div className="mt-2 ml-2 inline-flex items-center rounded-full border border-white/10 bg-white/3 px-3 py-1 text-[11px] text-white/55">
-                      Status: <span className="ml-1 text-white/75">{member.status}</span>
+                    <div className="mt-2 ml-2 inline-flex items-center rounded-full border border-cyan-500/20 bg-cyan-900/20 px-3 py-1 text-[11px] text-cyan-300/80">
+                      Status: <span className="ml-1 text-cyan-200">{member.status}</span>
                     </div>
                   )}
                 </div>
               </div>
 
               {member.bio ? (
-                <p className="mt-4 line-clamp-3 text-sm leading-relaxed text-white/60">
+                <p className="mt-4 line-clamp-3 text-sm leading-relaxed text-white/65 group-hover:text-white/75 transition-colors duration-300">
                   {member.bio}
                 </p>
               ) : (
@@ -482,13 +481,13 @@ export default function TeamSection() {
                 </p>
               )}
 
-              <div className="mt-5 grid gap-2 text-xs text-white/55">
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-indigo-300/80" />
+              <div className="mt-5 grid gap-2 text-xs text-white/60">
+                <div className="flex items-center gap-2 group-hover:text-cyan-200/80 transition-colors duration-300">
+                  <MapPin className="h-4 w-4 text-cyan-400/90" />
                   <span className="truncate">{member.locationText || "Remote"}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-indigo-300/80" />
+                <div className="flex items-center gap-2 group-hover:text-cyan-200/80 transition-colors duration-300">
+                  <Calendar className="h-4 w-4 text-cyan-400/90" />
                   <span>Joined {formatDate(member.joinedDate)}</span>
                 </div>
               </div>
@@ -498,7 +497,7 @@ export default function TeamSection() {
                   {member.skills.slice(0, 3).map((skill) => (
                     <span
                       key={skill}
-                      className="rounded-full border border-slate-700/40 bg-slate-800/30 px-3 py-1 text-xs text-white/60 transition group-hover:border-indigo-400/25 group-hover:text-white/80"
+                      className="rounded-full border border-cyan-500/25 bg-gradient-to-r from-cyan-900/25 to-blue-900/15 px-3 py-1 text-xs text-cyan-200/80 transition-all duration-300 group-hover:border-cyan-400/40 group-hover:bg-gradient-to-r group-hover:from-cyan-800/30 group-hover:to-blue-800/20 group-hover:text-cyan-100 group-hover:shadow-lg group-hover:shadow-cyan-500/10"
                     >
                       {skill}
                     </span>
@@ -516,7 +515,7 @@ export default function TeamSection() {
                       className="icon-btn"
                       aria-label="LinkedIn"
                     >
-                      <Linkedin className="h-4 w-4 text-indigo-300/80" />
+                      <Linkedin className="h-4 w-4 text-cyan-400/90" />
                     </a>
                   )}
                   {member?.socialLinks?.twitter && (
@@ -527,7 +526,7 @@ export default function TeamSection() {
                       className="icon-btn"
                       aria-label="Twitter"
                     >
-                      <Twitter className="h-4 w-4 text-indigo-300/80" />
+                      <Twitter className="h-4 w-4 text-cyan-400/90" />
                     </a>
                   )}
                   {member?.socialLinks?.github && (
@@ -538,7 +537,7 @@ export default function TeamSection() {
                       className="icon-btn"
                       aria-label="GitHub"
                     >
-                      <Github className="h-4 w-4 text-indigo-300/80" />
+                      <Github className="h-4 w-4 text-cyan-400/90" />
                     </a>
                   )}
                   {member?.socialLinks?.email && (
@@ -547,7 +546,7 @@ export default function TeamSection() {
                       className="icon-btn"
                       aria-label="Email"
                     >
-                      <Mail className="h-4 w-4 text-indigo-300/80" />
+                      <Mail className="h-4 w-4 text-cyan-400/90" />
                     </a>
                   )}
                 </div>
@@ -633,16 +632,18 @@ export default function TeamSection() {
           width: 40px;
           height: 40px;
           border-radius: 12px;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          background: rgba(255, 255, 255, 0.03);
-          color: rgba(255, 255, 255, 0.65);
-          transition: 200ms ease;
+          border: 1px solid rgba(6, 182, 212, 0.25);
+          background: linear-gradient(135deg, rgba(6, 182, 212, 0.08), rgba(59, 130, 246, 0.05));
+          color: rgba(6, 182, 212, 0.9);
+          transition: all 300ms ease;
+          box-shadow: 0 0 0 rgba(6, 182, 212, 0);
         }
         :global(.icon-btn:hover) {
-          border-color: rgba(99, 102, 241, 0.35);
-          background: rgba(255, 255, 255, 0.05);
-          color: rgba(255, 255, 255, 0.9);
-          transform: translateY(-1px);
+          border-color: rgba(6, 182, 212, 0.5);
+          background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(59, 130, 246, 0.1));
+          color: rgba(6, 182, 212, 1);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 16px rgba(6, 182, 212, 0.2);
         }
       `}</style>
     </section>

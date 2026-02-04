@@ -7,7 +7,6 @@ const getAuthHeaders = () => {
 };
 
 const servicesController = {
-  // ============ Service Categories ============
   
   /**
    * Get all service categories
@@ -25,7 +24,6 @@ const servicesController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching categories:', error);
       throw error;
     }
   },
@@ -37,7 +35,9 @@ const servicesController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories`, {
         method: 'POST',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(categoryData),
       });
@@ -48,7 +48,6 @@ const servicesController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error creating category:', error);
       throw error;
     }
   },
@@ -60,7 +59,9 @@ const servicesController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
         method: 'PUT',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(categoryData),
       });
@@ -71,7 +72,6 @@ const servicesController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error updating category:', error);
       throw error;
     }
   },
@@ -83,7 +83,9 @@ const servicesController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
         method: 'DELETE',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
       });
       
@@ -93,12 +95,10 @@ const servicesController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error deleting category:', error);
       throw error;
     }
   },
 
-  // ============ Services ============
   
   /**
    * Get all services
@@ -116,7 +116,6 @@ const servicesController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching services:', error);
       throw error;
     }
   },
@@ -137,7 +136,6 @@ const servicesController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching service:', error);
       throw error;
     }
   },
@@ -149,7 +147,9 @@ const servicesController = {
     try {
       const response = await fetch(`${API_BASE_URL}`, {
         method: 'POST',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(serviceData),
       });
@@ -160,7 +160,6 @@ const servicesController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error creating service:', error);
       throw error;
     }
   },
@@ -172,7 +171,9 @@ const servicesController = {
     try {
       const response = await fetch(`${API_BASE_URL}/${serviceId}`, {
         method: 'PUT',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(serviceData),
       });
@@ -183,7 +184,6 @@ const servicesController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error updating service:', error);
       throw error;
     }
   },
@@ -195,7 +195,9 @@ const servicesController = {
     try {
       const response = await fetch(`${API_BASE_URL}/${serviceId}`, {
         method: 'DELETE',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
       });
       
@@ -205,7 +207,6 @@ const servicesController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error deleting service:', error);
       throw error;
     }
   },

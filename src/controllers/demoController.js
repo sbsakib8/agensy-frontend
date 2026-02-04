@@ -7,7 +7,6 @@ const getAuthHeaders = () => {
 };
 
 const demoController = {
-  // ============ Demo Categories ============
   
   /**
    * Get all demo categories
@@ -25,7 +24,6 @@ const demoController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching categories:', error);
       throw error;
     }
   },
@@ -46,7 +44,6 @@ const demoController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching category:', error);
       throw error;
     }
   },
@@ -58,7 +55,9 @@ const demoController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories`, {
         method: 'POST',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(categoryData),
       });
@@ -69,7 +68,6 @@ const demoController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error creating category:', error);
       throw error;
     }
   },
@@ -81,7 +79,9 @@ const demoController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
         method: 'PUT',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(categoryData),
       });
@@ -92,7 +92,6 @@ const demoController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error updating category:', error);
       throw error;
     }
   },
@@ -104,7 +103,9 @@ const demoController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
         method: 'DELETE',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
       });
       
@@ -114,12 +115,10 @@ const demoController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error deleting category:', error);
       throw error;
     }
   },
 
-  // ============ Demo Projects ============
   
   /**
    * Get all projects in a category
@@ -148,7 +147,6 @@ const demoController = {
       
       return result;
     } catch (error) {
-      console.error('Error fetching projects:', error);
       throw error;
     }
   },
@@ -169,7 +167,6 @@ const demoController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching project:', error);
       throw error;
     }
   },
@@ -181,7 +178,9 @@ const demoController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories/${categoryId}/projects`, {
         method: 'POST',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(projectData),
       });
@@ -192,7 +191,6 @@ const demoController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error creating project:', error);
       throw error;
     }
   },
@@ -204,7 +202,9 @@ const demoController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories/${categoryId}/projects/${projectId}`, {
         method: 'PUT',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(projectData),
       });
@@ -215,7 +215,6 @@ const demoController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error updating project:', error);
       throw error;
     }
   },
@@ -227,7 +226,9 @@ const demoController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories/${categoryId}/projects/${projectId}`, {
         method: 'DELETE',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
       });
       
@@ -237,7 +238,6 @@ const demoController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error deleting project:', error);
       throw error;
     }
   },

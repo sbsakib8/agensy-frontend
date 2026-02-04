@@ -12,9 +12,7 @@ import { authApi } from "@/lib/api";
 import { formatErrorMessage } from "@/lib/error-handler";
 import { uploadImageToImgBB } from "@/lib/imgbb-upload";
 
-// Lottie animation
 import signup from "../../../public/Sign up.json";
-import Image from "next/image";
 
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -88,20 +86,31 @@ export default function SignUpPage() {
       const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
       if (!validTypes.includes(file.type)) {
         setError("Please select a valid image file (JPG, PNG, GIF, or WebP)");
+        // Reset the input
+        e.target.value = '';
         return;
       }
 
       // Check file size (5MB limit)
       if (file.size > 5 * 1024 * 1024) {
         setError("Image size should be less than 5MB");
+        // Reset the input
+        e.target.value = '';
         return;
       }
 
       setError('');
       setImageFile(file);
+      
+      // Create preview
       const reader = new FileReader();
-      reader.onload = (e) => {
-        setImagePreview(e.target.result);
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.onerror = () => {
+        setError("Failed to read image file");
+        setImageFile(null);
+        setImagePreview(null);
       };
       reader.readAsDataURL(file);
     }
@@ -114,6 +123,11 @@ export default function SignUpPage() {
       ...formData,
       image: "",
     });
+    // Reset the file input
+    const fileInput = document.getElementById('profile-image-upload');
+    if (fileInput) {
+      fileInput.value = '';
+    }
   };
 
   const handleEmailSignUp = async (e) => {
@@ -142,11 +156,13 @@ export default function SignUpPage() {
       // Upload image if provided
       if (imageFile) {
         setUploadingImage(true);
+        
         const uploadResult = await uploadImageToImgBB(imageFile);
+        
         if (uploadResult.success) {
           imageUrl = uploadResult.imageUrl;
         } else {
-          setError('Failed to upload image. Please try again.');
+          setError(`Failed to upload image: ${uploadResult.error || 'Unknown error'}`);
           setLoading(false);
           setUploadingImage(false);
           return;
@@ -163,14 +179,9 @@ export default function SignUpPage() {
         image: imageUrl,
       };
 
-      console.log('📤 Sending registration data to backend:', signUpData);
-      console.log('📋 Fields being sent:', Object.keys(signUpData));
-      console.log('📱 Formatted phone number:', formattedPhone);
-
       const response = await authApi.registerWithEmail(signUpData);
 
       if (response.success) {
-        console.log('✅ Registration successful:', response);
         setShowSuccessModal(true);
         // Redirect to signin after 2 seconds
         setTimeout(() => {
@@ -180,7 +191,6 @@ export default function SignUpPage() {
         setError(response.message || 'Sign up failed');
       }
     } catch (err) {
-      console.error('❌ Sign up error:', err);
       setError(formatErrorMessage(err));
     } finally {
       setLoading(false);
@@ -201,7 +211,6 @@ export default function SignUpPage() {
       const response = await authApi.registerWithGoogle(idToken);
 
       if (response.success) {
-        console.log('✅ Google registration successful:', response);
         setShowSuccessModal(true);
         // Redirect to home after showing success modal
         setTimeout(() => {
@@ -211,7 +220,6 @@ export default function SignUpPage() {
         setError(response.message || 'Google sign up failed');
       }
     } catch (err) {
-      console.error('❌ Google sign up error:', err);
       setError(formatErrorMessage(err));
     } finally {
       setLoading(false);
@@ -352,42 +360,47 @@ export default function SignUpPage() {
               <form className="space-y-4" onSubmit={handleEmailSignUp}>
                 {/* Profile Image Upload */}
                 <div className="flex flex-col items-center mb-4">
-                  <div className="relative">
+                  <div className="relative group">
                     {imagePreview ? (
                       <div className="relative">
-                        <Image
-                          src={imagePreview} 
-                          alt="Profile preview"
-                          width={80} 
-                          height={80} 
-                          className="rounded-full object-cover border-2 border-cyan-500/20"
-                        />
+                        <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-cyan-500/30 shadow-lg shadow-cyan-500/20">
+                          <img
+                            src={imagePreview} 
+                            alt="Profile preview"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
                         <button
                           type="button"
                           onClick={removeImage}
-                          className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600 transition"
+                          className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600 transition shadow-lg hover:scale-110"
+                          title="Remove image"
                         >
                           ×
                         </button>
                       </div>
                     ) : (
-                      <div className="w-20 h-20 rounded-full bg-[#020617] border-2 border-dashed border-cyan-500/20 flex items-center justify-center">
-                        <Camera className="w-6 h-6 text-cyan-400" />
+                      <div className="w-24 h-24 rounded-full bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border-2 border-dashed border-cyan-500/30 flex items-center justify-center group-hover:border-cyan-400/50 transition-all">
+                        <Camera className="w-8 h-8 text-cyan-400 group-hover:scale-110 transition-transform" />
                       </div>
                     )}
                   </div>
-                  <label className="mt-2 cursor-pointer">
+                  <label className="mt-3 cursor-pointer">
                     <input
                       type="file"
-                      accept="image/*"
+                      accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
                       onChange={handleImageChange}
                       className="hidden"
+                      id="profile-image-upload"
                     />
-                    <div className="flex items-center gap-2 text-xs text-cyan-400 hover:text-cyan-300 transition">
-                      <Upload size={14} />
-                      {imagePreview ? "Change Photo" : "Upload Photo (Optional)"}
+                    <div className="flex items-center gap-2 text-sm text-cyan-400 hover:text-cyan-300 transition-colors bg-cyan-500/10 hover:bg-cyan-500/20 px-4 py-2 rounded-lg border border-cyan-500/20 hover:border-cyan-500/40">
+                      <Upload size={16} />
+                      {imagePreview ? "Change Photo" : "Upload Photo"}
                     </div>
                   </label>
+                  <p className="text-xs text-gray-500 mt-2 text-center">
+                    JPG, PNG, GIF or WebP • Max 5MB
+                  </p>
                 </div>
 
                 {/* Form Fields */}
@@ -465,10 +478,28 @@ export default function SignUpPage() {
 
                 <button
                   type="submit"
-                  disabled={uploadingImage}
-                  className="w-full py-2.5 rounded-lg bg-linear-to-r from-cyan-500 to-blue-600 text-white font-medium hover:shadow-[0_0_30px_rgba(56,189,248,0.6)] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm mt-4"
+                  disabled={loading || uploadingImage}
+                  className="w-full py-2.5 rounded-lg bg-linear-to-r from-cyan-500 to-blue-600 text-white font-medium hover:shadow-[0_0_30px_rgba(56,189,248,0.6)] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm mt-4 relative overflow-hidden"
                 >
-                  {uploadingImage ? "Uploading Image..." : "Create account"}
+                  {uploadingImage ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Uploading Image...
+                    </span>
+                  ) : loading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Creating account...
+                    </span>
+                  ) : (
+                    "Create account"
+                  )}
                 </button>
               </form>
 
@@ -480,7 +511,8 @@ export default function SignUpPage() {
 
               <button
                 onClick={handleGoogleSignUp}
-                className="w-full py-2.5 rounded-lg border border-cyan-500/20 text-white font-medium hover:bg-cyan-500/10 transition flex items-center justify-center gap-3 text-sm mb-8"
+                disabled={loading}
+                className="w-full py-2.5 rounded-lg border border-cyan-500/20 text-white font-medium hover:bg-cyan-500/10 transition flex items-center justify-center gap-3 text-sm mb-8 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24">
                   <path

@@ -21,10 +21,8 @@ export default function TrackOrderComponent() {
         setLoading(true);
         setError(null);
         const response = await orderApi.trackOrderByEmail(user.email);
-        console.log("📦 Track Order Response:", response);
         setOrders(response.data || []);
       } catch (err) {
-        console.error("❌ Error tracking orders:", err);
         setError(err.response?.data?.message || "Failed to track orders");
       } finally {
         setLoading(false);

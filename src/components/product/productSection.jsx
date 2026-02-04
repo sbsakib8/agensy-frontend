@@ -39,7 +39,6 @@ const ProductsSection = () => {
         setError("");
 
         const result = await productsController.getProducts();
-        console.log("🔎 getProducts raw result:", result);
 
         // ✅ handle: { success:true, data:[...] }
         if (result?.success && Array.isArray(result.data)) {
@@ -61,7 +60,6 @@ const ProductsSection = () => {
 
         setProductsData([]);
       } catch (err) {
-        console.error("❌ Error fetching products:", err);
         setError(err?.message || "Failed to fetch products");
         setProductsData([]);
       } finally {

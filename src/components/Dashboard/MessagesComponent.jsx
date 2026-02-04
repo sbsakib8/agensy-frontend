@@ -34,7 +34,6 @@ export default function MessagesComponent() {
         setContacts([]);
       }
     } catch (error) {
-      console.error('Error fetching contacts:', error);
       setError(error.userMessage || 'Failed to load messages. Please try again.');
       setContacts([]);
     } finally {
@@ -66,7 +65,6 @@ export default function MessagesComponent() {
         setStats(response.data);
       }
     } catch (error) {
-      console.error('Error fetching stats:', error);
       // Fallback to calculating from local contacts
       if (contacts.length > 0) {
         calculateStats(contacts);
@@ -92,7 +90,6 @@ export default function MessagesComponent() {
         setSelectedContact({ ...selectedContact, status });
       }
     } catch (error) {
-      console.error('Error updating status:', error);
       alert(error.userMessage || 'Failed to update status');
     }
   };
@@ -114,7 +111,6 @@ export default function MessagesComponent() {
         setSelectedContact(null);
       }
     } catch (error) {
-      console.error('Error deleting contact:', error);
       alert(error.userMessage || 'Failed to delete message');
     }
   };

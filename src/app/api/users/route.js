@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server'
 import { verifyToken } from '@/lib/jwt-middleware'
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api';
+
 // GET all users from Express backend
 export async function GET(request) {
   try {
-    console.log('🔍 Getting all users')
 
     // Verify authentication
     const auth = verifyToken(request)
@@ -26,8 +27,9 @@ export async function GET(request) {
     }
 
     // Forward request to Express backend
-    const expressResponse = await fetch('http://localhost:5001/api/users', {
+    const expressResponse = await fetch(`${API_BASE_URL}/users`, {
       method: 'GET',
+        cache: 'no-store',
       headers: {
         'Content-Type': 'application/json',
         'Cookie': `auth-token=${authToken}`
@@ -36,7 +38,6 @@ export async function GET(request) {
 
     if (!expressResponse.ok) {
       const errorText = await expressResponse.text()
-      console.error('❌ Express backend error:', errorText)
       return NextResponse.json(
         { success: false, message: `Backend error: ${expressResponse.status}` },
         { status: expressResponse.status }
@@ -44,7 +45,6 @@ export async function GET(request) {
     }
 
     const usersData = await expressResponse.json()
-    console.log(`✅ Retrieved ${usersData.length || 0} users successfully`)
 
     const response = NextResponse.json({
       success: true,
@@ -54,13 +54,12 @@ export async function GET(request) {
     })
 
     // Add CORS headers
-    response.headers.set('Access-Control-Allow-Origin', 'http://localhost:5001')
+    response.headers.set('Access-Control-Allow-Origin', API_BASE_URL.replace('/api', ''))
     response.headers.set('Access-Control-Allow-Credentials', 'true')
 
     return response
 
   } catch (error) {
-    console.error('❌ Get users error:', error)
     return NextResponse.json(
       { success: false, message: 'Failed to get users data' },
       { status: 500 }
@@ -72,7 +71,7 @@ export async function GET(request) {
 export async function OPTIONS(request) {
   const response = new NextResponse(null, { status: 200 })
   
-  response.headers.set('Access-Control-Allow-Origin', 'http://localhost:5001')
+  response.headers.set('Access-Control-Allow-Origin', API_BASE_URL.replace('/api', ''))
   response.headers.set('Access-Control-Allow-Credentials', 'true')
   response.headers.set('Access-Control-Allow-Methods', 'GET, OPTIONS')
   response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, Cookie')

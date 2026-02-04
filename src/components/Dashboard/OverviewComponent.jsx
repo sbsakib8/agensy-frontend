@@ -47,13 +47,11 @@ export default function OverviewComponent() {
     try {
       setLoading(true);
       const response = await dashboardApi.getDashboardStats();
-      console.log('📊 Dashboard Data:', response);
       if (response.success) {
         setDashboardData(response);
       }
       setError(null);
     } catch (err) {
-      console.error('❌ Error fetching dashboard data:', err);
       setError(err.message || 'Failed to fetch dashboard data');
     } finally {
       setLoading(false);

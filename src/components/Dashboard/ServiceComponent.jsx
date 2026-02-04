@@ -1,6 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import { Plus, X, Upload, Loader2 } from "lucide-react";
+import { uploadImageToImgBB } from "@/lib/imgbb-upload";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api'}/services`;
 
@@ -12,12 +15,13 @@ export default function ServiceComponent() {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [deleteModal, setDeleteModal] = useState({ show: false, serviceName: "", serviceId: "" });
+  const [imageUploading, setImageUploading] = useState(false);
 
   const [formData, setFormData] = useState({
     title: "",
     shortDescription: "",
     category: "",
-    tags: "",
+    tags: [""],
     thumbnail: "",
     gallery: "",
     liveDemo: "",
@@ -57,7 +61,6 @@ export default function ServiceComponent() {
 
   const fetchCategories = async () => {
     try {
-      console.log('📡 Fetching service categories');
       const response = await fetch(`${API_BASE_URL}/categories`, {
         credentials: 'include',
       });
@@ -67,7 +70,6 @@ export default function ServiceComponent() {
       }
       
       const result = await response.json();
-      console.log('📦 Categories Response:', result);
       
       if (result.success && result.data && Array.isArray(result.data)) {
         setCategories(result.data);
@@ -81,14 +83,12 @@ export default function ServiceComponent() {
         }
       }
     } catch (err) {
-      console.error('❌ Error fetching categories:', err);
     }
   };
 
   const fetchServices = async () => {
     try {
       setLoading(true);
-      console.log('📡 Fetching all services');
       
       // Fetch all services
       const response = await fetch(`${API_BASE_URL}`, {
@@ -100,7 +100,6 @@ export default function ServiceComponent() {
       }
       
       const result = await response.json();
-      console.log('📦 Services Response:', result);
       
       if (result.success && result.data && Array.isArray(result.data)) {
         // Filter services by selected category if a category is selected
@@ -117,7 +116,6 @@ export default function ServiceComponent() {
       }
       setError(null);
     } catch (err) {
-      console.error('❌ Error fetching services:', err);
       setError(err.message);
       setServices([]);
     } finally {
@@ -144,7 +142,6 @@ export default function ServiceComponent() {
         .filter(item => item !== '');
       
       const tagsArray = formData.tags
-        .split(',')
         .map(item => item.trim())
         .filter(item => item !== '');
       
@@ -185,9 +182,9 @@ export default function ServiceComponent() {
 
       if (isEditing) {
         // Update existing service
-        console.log('🔄 Updating service:', editId);
         const response = await fetch(`${API_BASE_URL}/${editId}`, {
           method: 'PATCH',
+        cache: 'no-store',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           body: JSON.stringify(serviceData),
@@ -195,7 +192,6 @@ export default function ServiceComponent() {
         
         if (!response.ok) throw new Error('Failed to update service');
         const result = await response.json();
-        console.log('✅ Update Response:', result);
         await fetchServices();
         setSuccessMessage("Service updated successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -203,9 +199,9 @@ export default function ServiceComponent() {
         setEditId(null);
       } else {
         // Create new service
-        console.log('📤 Creating new service');
         const response = await fetch(`${API_BASE_URL}`, {
           method: 'POST',
+        cache: 'no-store',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           body: JSON.stringify(serviceData),
@@ -213,7 +209,6 @@ export default function ServiceComponent() {
         
         if (!response.ok) throw new Error('Failed to create service');
         const result = await response.json();
-        console.log('✅ Create Response:', result);
         await fetchServices();
         setSuccessMessage("Service added successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -223,7 +218,7 @@ export default function ServiceComponent() {
         title: "",
         shortDescription: "",
         category: "",
-        tags: "",
+        tags: [""],
         thumbnail: "",
         gallery: "",
         liveDemo: "",
@@ -246,7 +241,6 @@ export default function ServiceComponent() {
       });
       setError(null);
     } catch (err) {
-      console.error('❌ Error submitting form:', err);
       setError(err.message);
     }
   };
@@ -256,7 +250,7 @@ export default function ServiceComponent() {
       title: service.title || "",
       shortDescription: service.shortDescription || "",
       category: service.category || "",
-      tags: Array.isArray(service.tags) ? service.tags.join(', ') : "",
+      tags: Array.isArray(service.tags) && service.tags.length > 0 ? service.tags : [""],
       thumbnail: service.images?.thumbnail || "",
       gallery: Array.isArray(service.images?.gallery) ? service.images.gallery.join(', ') : "",
       liveDemo: service.links?.liveDemo || "",
@@ -285,21 +279,19 @@ export default function ServiceComponent() {
     setDeleteModal({ show: false, serviceName: "", serviceId: "" });
 
     try {
-      console.log('🗑️ Deleting service:', serviceId);
       const response = await fetch(`${API_BASE_URL}/${serviceId}`, {
         method: 'DELETE',
+        cache: 'no-store',
         credentials: 'include',
       });
       
       if (!response.ok) throw new Error('Failed to delete service');
       const result = await response.json();
-      console.log('✅ Delete Response:', result);
       await fetchServices();
       setSuccessMessage("Service deleted successfully!");
       setTimeout(() => setSuccessMessage(""), 3000);
       setError(null);
     } catch (err) {
-      console.error('❌ Error deleting service:', err);
       setError(err.message);
     }
   };
@@ -317,7 +309,7 @@ export default function ServiceComponent() {
       title: "",
       shortDescription: "",
       category: "",
-      tags: "",
+      tags: [""],
       thumbnail: "",
       gallery: "",
       liveDemo: "",
@@ -340,6 +332,61 @@ export default function ServiceComponent() {
     });
     setIsEditing(false);
     setEditId(null);
+  };
+
+  // Helper functions for tags management
+  const addTag = () => {
+    setFormData({ ...formData, tags: [...formData.tags, ""] });
+  };
+
+  const updateTag = (index, value) => {
+    const newTags = [...formData.tags];
+    newTags[index] = value;
+    setFormData({ ...formData, tags: newTags });
+  };
+
+  const removeTag = (index) => {
+    const newTags = formData.tags.filter((_, i) => i !== index);
+    setFormData({ ...formData, tags: newTags });
+  };
+
+  // Image upload handler
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setError('Please select a valid image file');
+      setTimeout(() => setError(null), 3000);
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Image size should be less than 5MB');
+      setTimeout(() => setError(null), 3000);
+      return;
+    }
+
+    try {
+      setImageUploading(true);
+      const result = await uploadImageToImgBB(file);
+
+      if (result.success) {
+        setFormData({ ...formData, thumbnail: result.imageUrl });
+        setSuccessMessage('Image uploaded successfully!');
+        setTimeout(() => setSuccessMessage(''), 3000);
+      } else {
+        setError(result.error || 'Failed to upload image');
+        setTimeout(() => setError(null), 3000);
+      }
+    } catch (err) {
+      setError('Error uploading image');
+      setTimeout(() => setError(null), 3000);
+    } finally {
+      setImageUploading(false);
+    }
   };
 
   return (
@@ -479,18 +526,38 @@ export default function ServiceComponent() {
                 </div>
                 
                 <div>
-                  <label className="block text-gray-300 mb-2">Tags (comma-separated) *</label>
-                  <input
-                    type="text"
-                    name="tags"
-                    value={formData.tags}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 bg-slate-900/50 border border-blue-500/30 rounded-lg text-white focus:outline-none focus:border-blue-500"
-                    placeholder="website, business, seo, responsive"
-                  />
+                  <label className="block text-gray-300 mb-2">Tags *</label>
+                  <div className="space-y-2">
+                    {formData.tags.map((tag, index) => (
+                      <div key={index} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={tag}
+                          onChange={(e) => updateTag(index, e.target.value)}
+                          className="flex-1 px-4 py-2 bg-slate-900/50 border border-blue-500/30 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                          placeholder="Enter tag"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeTag(index)}
+                          className="px-3 py-2 bg-red-500/20 hover:bg-red-500/30 rounded-lg transition-colors"
+                        >
+                          <X size={20} />
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={addTag}
+                      className="flex items-center gap-2 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-lg transition-colors text-sm"
+                    >
+                      <Plus size={16} />
+                      Add Tag
+                    </button>
+                  </div>
                 </div>
                 
-                <div>
+                <div>"
                   <label className="block text-gray-300 mb-2">Status</label>
                   <select
                     name="status"
@@ -510,15 +577,60 @@ export default function ServiceComponent() {
                 <h3 className="text-lg font-semibold text-blue-300 border-b border-blue-500/30 pb-2">Images</h3>
                 
                 <div>
-                  <label className="block text-gray-300 mb-2">Thumbnail URL</label>
+                  <label className="block text-gray-300 mb-2">Thumbnail</label>
+                  
+                  {/* Image Preview */}
+                  {formData.thumbnail && (
+                    <div className="mb-3 relative w-full h-48 rounded-lg overflow-hidden border-2 border-blue-500/30">
+                      <Image 
+                        src={formData.thumbnail} 
+                        alt="Thumbnail preview" 
+                        fill 
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
+
+                  {/* URL Input */}
                   <input
                     type="url"
                     name="thumbnail"
                     value={formData.thumbnail}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 bg-slate-900/50 border border-blue-500/30 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-2 bg-slate-900/50 border border-blue-500/30 rounded-lg text-white focus:outline-none focus:border-blue-500 mb-2"
                     placeholder="https://example.com/images/web-thumb.png"
                   />
+
+                  {/* File Upload */}
+                  <div className="flex gap-2">
+                    <label className="flex-1 cursor-pointer">
+                      <div className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg border-2 border-dashed transition-colors ${
+                        imageUploading 
+                          ? 'border-blue-500/50 bg-blue-500/10 cursor-not-allowed' 
+                          : 'border-blue-500/30 bg-blue-500/5 hover:bg-blue-500/10 hover:border-blue-500/50'
+                      }`}>
+                        {imageUploading ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            <span className="text-sm text-gray-300">Uploading...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-4 h-4 text-blue-400" />
+                            <span className="text-sm text-gray-300">Upload Image</span>
+                          </>
+                        )}
+                      </div>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        disabled={imageUploading}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">Upload image or paste URL (Max 5MB)</p>
                 </div>
                 
                 <div>

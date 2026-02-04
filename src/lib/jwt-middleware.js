@@ -13,7 +13,6 @@ export function verifyToken(request) {
     }
 
     if (!process.env.JWT_SECRET) {
-      console.error('JWT_SECRET is not defined in environment variables')
       return { 
         success: false, 
         status: 500, 
@@ -25,7 +24,6 @@ export function verifyToken(request) {
     return { success: true, user: decoded }
 
   } catch (error) {
-    console.error('Token verification error:', error.message)
     
     if (error.name === 'TokenExpiredError') {
       return { 

@@ -12,7 +12,7 @@ export const ErrorTypes = {
 };
 
 export const handleApiError = (error, context = '') => {
-  console.error(`🔴 Error in ${context}:`, {
+  console.error(`[${context}] API Error:`, {
     message: error.message,
     code: error.code,
     status: error.response?.status,
@@ -125,11 +125,11 @@ export const checkBackendHealth = async () => {
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api';
     const response = await fetch(`${apiBaseUrl}/health`, {
       method: 'GET',
+        cache: 'no-store',
       signal: AbortSignal.timeout(5000), // 5 second timeout
     });
     return response.ok;
   } catch (error) {
-    console.error('❌ Backend health check failed:', error);
     return false;
   }
 };
@@ -138,11 +138,4 @@ export const checkBackendHealth = async () => {
  * Log error to console with context
  */
 export const logError = (context, error, additionalInfo = {}) => {
-  console.group(`🔴 Error: ${context}`);
-  console.error('Message:', error.message);
-  console.error('Code:', error.code);
-  console.error('Status:', error.response?.status);
-  console.error('Response:', error.response?.data);
-  console.error('Additional Info:', additionalInfo);
-  console.groupEnd();
 };

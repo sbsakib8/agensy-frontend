@@ -60,6 +60,7 @@ export default function PricingCategoryComponent() {
 
       const idToken = await user.getIdToken();
       const response = await fetch(API_BASE_URL, {
+        cache: 'no-store',
         headers: {
           "Authorization": `Bearer ${idToken}`,
         },
@@ -69,7 +70,6 @@ export default function PricingCategoryComponent() {
         setCategories(data.data.categories);
       }
     } catch (error) {
-      console.error("Error fetching categories:", error);
       showToast("Failed to fetch categories", "error");
     } finally {
       setLoading(false);
@@ -106,6 +106,7 @@ export default function PricingCategoryComponent() {
         // Update existing category
         const response = await fetch(`${API_BASE_URL}/categories/${editingId}`, {
           method: "PUT",
+        cache: 'no-store',
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${idToken}`,
@@ -125,6 +126,7 @@ export default function PricingCategoryComponent() {
         // Create new category
         const response = await fetch(`${API_BASE_URL}/categories`, {
           method: "POST",
+        cache: 'no-store',
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${idToken}`,
@@ -143,7 +145,6 @@ export default function PricingCategoryComponent() {
       }
       setFormData({ name: "", isActive: true });
     } catch (error) {
-      console.error("Error saving category:", error);
       showToast("Failed to save category", "error");
     } finally {
       setLoading(false);
@@ -164,6 +165,7 @@ export default function PricingCategoryComponent() {
       const idToken = await user.getIdToken();
       const response = await fetch(`${API_BASE_URL}/categories/${id}`, {
         method: "DELETE",
+        cache: 'no-store',
         headers: {
           "Authorization": `Bearer ${idToken}`,
         },
@@ -177,7 +179,6 @@ export default function PricingCategoryComponent() {
         showToast(error.message || "Failed to delete category", "error");
       }
     } catch (error) {
-      console.error("Error deleting category:", error);
       showToast("Failed to delete category", "error");
     } finally {
       setLoading(false);

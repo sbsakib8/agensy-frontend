@@ -73,6 +73,7 @@ export default function PricingPlanComponent() {
       if (!idToken) return;
 
       const response = await fetch(API_BASE_URL, {
+        cache: 'no-store',
         headers: {
           "Authorization": `Bearer ${idToken}`,
         },
@@ -96,7 +97,6 @@ export default function PricingPlanComponent() {
         setPlans(allPlans);
       }
     } catch (error) {
-      console.error("Error fetching categories:", error);
       showToast("Failed to fetch categories", "error");
     } finally {
       setLoading(false);
@@ -155,6 +155,7 @@ export default function PricingPlanComponent() {
         // Update existing plan using PATCH
         const response = await fetch(`${API_BASE_URL}/categories/${formData.categoryId}/plans/${editingId}`, {
           method: "PATCH",
+        cache: 'no-store',
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${idToken}`,
@@ -181,6 +182,7 @@ export default function PricingPlanComponent() {
         // Create new plan
         const response = await fetch(`${API_BASE_URL}/categories/${formData.categoryId}/plans`, {
           method: "POST",
+        cache: 'no-store',
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${idToken}`,
@@ -214,7 +216,6 @@ export default function PricingPlanComponent() {
         isActive: true,
       });
     } catch (error) {
-      console.error("Error saving plan:", error);
       showToast("Failed to save plan", "error");
     } finally {
       setLoading(false);
@@ -231,6 +232,7 @@ export default function PricingPlanComponent() {
 
       const response = await fetch(`${API_BASE_URL}/categories/${categoryId}/plans/${planId}`, {
         method: "DELETE",
+        cache: 'no-store',
         headers: {
           "Authorization": `Bearer ${idToken}`,
         },
@@ -244,7 +246,6 @@ export default function PricingPlanComponent() {
         showToast(error.message || "Failed to delete plan", "error");
       }
     } catch (error) {
-      console.error("Error deleting plan:", error);
       showToast("Failed to delete plan", "error");
     } finally {
       setLoading(false);
