@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { ShoppingCart, ArrowRight, Star, ShieldCheck, Zap, Sparkles } from "lucide-react";
-import heroAnimation from "../../../public/Shopping.json";
+import heroAnimation from "../../../../public/Shopping.json";
 
 const Player = dynamic(
   () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),

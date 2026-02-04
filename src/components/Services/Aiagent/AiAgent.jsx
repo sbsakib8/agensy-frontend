@@ -199,7 +199,7 @@ const AiAgent = () => {
         </p>
 
         <Link href="/contact" className="inline-block relative z-20">
-          <button className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 px-6 py-3 rounded-lg shadow transition-all hover:scale-105">
+          <button className="group inline-flex items-center gap-2 rounded-full bg-linear-to-r from-blue-500 to-cyan-400 px-8 py-4 text-sm font-semibold text-black transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]">
             Schedule a Call <FaArrowRight />
           </button>
         </Link>

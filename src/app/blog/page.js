@@ -1,5 +1,5 @@
 
-import BlogPage from '@/components/home/BlogPage'
+import BlogPage from '@/components/home/HomeBlog/BlogPage'
 import React from 'react'
 
 function page() {

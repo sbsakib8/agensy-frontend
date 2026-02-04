@@ -30,7 +30,7 @@ const Player = dynamic(
   { ssr: false }
 );
 
-import careerAnimation from "../../../public/businessman path.json";
+import careerAnimation from "../../../../public/businessman path.json";
 
 
 /* ================= Data ================= */
@@ -337,7 +337,7 @@ function ServiceModal({ service, isOpen, onClose }) {
           <div className="pt-4">
             <Link 
               href="/contact"
-              className="w-full inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-cyan-500/50"
+              className="w-full inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-linear-to-r from-blue-500 to-cyan-400 text-black font-semibold transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]"
             >
               Get Started
               <ArrowRight className="w-5 h-5" />

@@ -3,10 +3,15 @@
 import { useState, useEffect } from "react";
 import { Check, Loader2 } from "lucide-react";
 import OrderModal from "@/components/order/OrderModal";
+import { useCustomAuth } from "@/hooks/useCustomAuth";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api'}/pricing`;
 
 export default function PricingSection() {
+  const router = useRouter();
+  const { user, loading: authLoading } = useCustomAuth();
   const [currency, setCurrency] = useState("USD");
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -71,6 +76,16 @@ export default function PricingSection() {
   };
 
   const handleOrderClick = (plan) => {
+    // Check if user is logged in
+    if (!user && !authLoading) {
+      toast.warning("Please sign up to get started with our pricing plans!", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      router.push('/signup');
+      return;
+    }
+    
     setSelectedPlan(plan);
     setOrderModalOpen(true);
   };

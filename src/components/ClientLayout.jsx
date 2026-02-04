@@ -4,6 +4,8 @@ import { usePathname } from "next/navigation";
 import Header from "@/components/header/header";
 import Footer from "@/components/home/Footer";
 import { LayoutProvider } from "@/context/LayoutContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ClientLayout({ children }) {
   const pathname = usePathname();
@@ -35,6 +37,21 @@ export default function ClientLayout({ children }) {
       {!hideHeaderFooter && <Header />}
       {children}
       {!hideHeaderFooter && <Footer />}
+      
+      {/* Toast Notifications */}
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        className="mt-16"
+      />
     </LayoutProvider>
   );
 }

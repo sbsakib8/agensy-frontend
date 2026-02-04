@@ -1,8 +1,8 @@
-import AboutSection from "@/components/home/centerSection";
-import FAQ from "@/components/home/FAQ";
-import HeroSection from "@/components/home/hero";
-import HomecardSection from "@/components/home/homeCard";
-import Testimonial from "@/components/home/Testimonial";
+import AboutSection from "@/components/home/HomeCenter/centerSection";
+import FAQ from "@/components/home/HomeFAQ/FAQ";
+import HeroSection from "@/components/home/HomeHero/hero";
+import HomecardSection from "@/components/home/HomeCards/homeCard";
+import Testimonial from "@/components/home/HomeTestimonial/Testimonial";
 
 
 

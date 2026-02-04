@@ -1,5 +1,5 @@
 
-import CustomersPage from '@/components/home/CustomerPage'
+import CustomersPage from '@/components/home/HomeCustomer/CustomerPage'
 import React from 'react'
 
 function page() {
