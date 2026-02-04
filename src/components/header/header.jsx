@@ -394,14 +394,16 @@ const Header = () => {
             {/* CTA Button */}
             {!user && !loading && (
               <div className="hidden lg:block">
-                <button className="relative px-6 py-2.5 rounded-full font-semibold text-white overflow-hidden group">
-                  <div className="absolute inset-0 bg-linear-to-r from-cyan-500 to-blue-600 transition-transform duration-300 group-hover:scale-105"></div>
-                  <div className="absolute inset-0 bg-linear-to-r from-blue-600 to-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <span className="relative flex items-center cursor-pointer">
-                    Schedule a call
-                    <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-                  </span>
-                </button>
+                <Link href="/contact">
+                  <button className="relative px-6 py-2.5 rounded-full font-semibold text-white overflow-hidden group">
+                    <div className="absolute inset-0 bg-linear-to-r from-cyan-500 to-blue-600 transition-transform duration-300 group-hover:scale-105"></div>
+                    <div className="absolute inset-0 bg-linear-to-r from-blue-600 to-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <span className="relative flex items-center cursor-pointer">
+                      Schedule a call
+                      <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                    </span>
+                  </button>
+                </Link>
               </div>
             )}
           </div>
@@ -561,9 +563,11 @@ const Header = () => {
             </div>
 
             {!user && !loading && (
-              <button className="w-full mt-4 px-6 py-3 cursor-pointer rounded-full bg-linear-to-r from-blue-500 to-cyan-400 text-black font-semibold hover:shadow-[0_0_40px_rgba(59,130,246,0.45)] transition-all duration-300">
-                Schedule a call
-              </button>
+              <Link href="/contact" className="w-full">
+                <button className="w-full mt-4 px-6 py-3 cursor-pointer rounded-full bg-linear-to-r from-blue-500 to-cyan-400 text-black font-semibold hover:shadow-[0_0_40px_rgba(59,130,246,0.45)] transition-all duration-300">
+                  Schedule a call
+                </button>
+              </Link>
             )}
           </div>
         </div>

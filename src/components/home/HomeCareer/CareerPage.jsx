@@ -30,7 +30,7 @@ const Player = dynamic(
   { ssr: false }
 );
 
-import careerAnimation from "../../../public/businessman path.json";
+import careerAnimation from "../../../../public/businessman path.json";
 
 
 /* ================= Data ================= */
