@@ -130,32 +130,7 @@ export default function DashboardSidebar() {
           )}
         </div>
         
-        {/* Service Dropdown */}
-        <div>
-          <SidebarItem 
-            icon={<Settings />} 
-            label="Service" 
-            open={open} 
-            active={pathname.startsWith('/dashboard/service')}
-            onClick={() => setServiceDropdownOpen(!serviceDropdownOpen)}
-            hasDropdown={true}
-            dropdownOpen={serviceDropdownOpen}
-          />
-          {serviceDropdownOpen && open && (
-            <div className="ml-4 mt-1 space-y-1">
-              <SidebarSubItem 
-                label="Service Category" 
-                href="/dashboard/service/category" 
-                active={pathname === '/dashboard/service/category'} 
-              />
-              <SidebarSubItem 
-                label="Our Services" 
-                href="/dashboard/service" 
-                active={pathname === '/dashboard/service'} 
-              />
-            </div>
-          )}
-        </div>
+     
         
         {/* Pricing Dropdown */}
         <div>

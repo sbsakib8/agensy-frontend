@@ -1,6 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import { Plus, X, Upload, Loader2 } from "lucide-react";
+import { uploadImageToImgBB } from "@/lib/imgbb-upload";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api'}/projects`;
 
@@ -12,11 +15,12 @@ export default function DemoProjectComponent() {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [deleteModal, setDeleteModal] = useState({ show: false, projectName: "", projectId: "" });
+  const [imageUploading, setImageUploading] = useState(false);
 
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    tags: "",
+    tags: [""],
     thumbnail: "",
     previewUrl: "",
     isFeatured: false,
@@ -122,9 +126,8 @@ export default function DemoProjectComponent() {
     e.preventDefault();
     
     try {
-      // Convert tags string to array
+      // Convert tags array to filtered array
       const tagsArray = formData.tags
-        .split(',')
         .map(tag => tag.trim())
         .filter(tag => tag !== '');
 
@@ -172,7 +175,7 @@ export default function DemoProjectComponent() {
       setFormData({ 
         title: "", 
         description: "", 
-        tags: "", 
+        tags: [""], 
         thumbnail: "", 
         previewUrl: "",
         isFeatured: false,
@@ -189,7 +192,7 @@ export default function DemoProjectComponent() {
     setFormData({
       title: project.title,
       description: project.description,
-      tags: Array.isArray(project.tags) ? project.tags.join(', ') : "",
+      tags: Array.isArray(project.tags) && project.tags.length > 0 ? project.tags : [""],
       thumbnail: project.thumbnail || "",
       previewUrl: project.previewUrl || "",
       isFeatured: project.isFeatured || false,
@@ -234,7 +237,7 @@ export default function DemoProjectComponent() {
     setFormData({ 
       title: "", 
       description: "", 
-      tags: "", 
+      tags: [""], 
       thumbnail: "", 
       previewUrl: "",
       isFeatured: false,
@@ -242,6 +245,61 @@ export default function DemoProjectComponent() {
     });
     setIsEditing(false);
     setEditId(null);
+  };
+
+  // Helper functions for tags management
+  const addTag = () => {
+    setFormData({ ...formData, tags: [...formData.tags, ""] });
+  };
+
+  const updateTag = (index, value) => {
+    const newTags = [...formData.tags];
+    newTags[index] = value;
+    setFormData({ ...formData, tags: newTags });
+  };
+
+  const removeTag = (index) => {
+    const newTags = formData.tags.filter((_, i) => i !== index);
+    setFormData({ ...formData, tags: newTags });
+  };
+
+  // Image upload handler
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setError('Please select a valid image file');
+      setTimeout(() => setError(null), 3000);
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Image size should be less than 5MB');
+      setTimeout(() => setError(null), 3000);
+      return;
+    }
+
+    try {
+      setImageUploading(true);
+      const result = await uploadImageToImgBB(file);
+
+      if (result.success) {
+        setFormData({ ...formData, thumbnail: result.imageUrl });
+        setSuccessMessage('Image uploaded successfully!');
+        setTimeout(() => setSuccessMessage(''), 3000);
+      } else {
+        setError(result.error || 'Failed to upload image');
+        setTimeout(() => setError(null), 3000);
+      }
+    } catch (err) {
+      setError('Error uploading image');
+      setTimeout(() => setError(null), 3000);
+    } finally {
+      setImageUploading(false);
+    }
   };
 
   return (
@@ -357,15 +415,60 @@ export default function DemoProjectComponent() {
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-300 mb-2">Thumbnail URL</label>
+                  <label className="block text-gray-300 mb-2">Thumbnail</label>
+                  
+                  {/* Image Preview */}
+                  {formData.thumbnail && (
+                    <div className="mb-3 relative w-full h-48 rounded-lg overflow-hidden border-2 border-blue-500/30">
+                      <Image 
+                        src={formData.thumbnail} 
+                        alt="Thumbnail preview" 
+                        fill 
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
+
+                  {/* URL Input */}
                   <input
                     type="url"
                     name="thumbnail"
                     value={formData.thumbnail}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 bg-slate-900/50 border border-blue-500/30 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-2 bg-slate-900/50 border border-blue-500/30 rounded-lg text-white focus:outline-none focus:border-blue-500 mb-2"
                     placeholder="https://example.com/image.jpg"
                   />
+
+                  {/* File Upload */}
+                  <div className="flex gap-2">
+                    <label className="flex-1 cursor-pointer">
+                      <div className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg border-2 border-dashed transition-colors ${
+                        imageUploading 
+                          ? 'border-blue-500/50 bg-blue-500/10 cursor-not-allowed' 
+                          : 'border-blue-500/30 bg-blue-500/5 hover:bg-blue-500/10 hover:border-blue-500/50'
+                      }`}>
+                        {imageUploading ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            <span className="text-sm text-gray-300">Uploading...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-4 h-4 text-blue-400" />
+                            <span className="text-sm text-gray-300">Upload Image</span>
+                          </>
+                        )}
+                      </div>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        disabled={imageUploading}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">Upload image or paste URL (Max 5MB)</p>
                 </div>
               </div>
               
@@ -383,15 +486,35 @@ export default function DemoProjectComponent() {
               </div>
 
               <div>
-                <label className="block text-gray-300 mb-2">Tags (comma-separated)</label>
-                <input
-                  type="text"
-                  name="tags"
-                  value={formData.tags}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 bg-slate-900/50 border border-blue-500/30 rounded-lg text-white focus:outline-none focus:border-blue-500"
-                  placeholder="nextjs, react, mongodb"
-                />
+                <label className="block text-gray-300 mb-2">Tags</label>
+                <div className="space-y-2">
+                  {formData.tags.map((tag, index) => (
+                    <div key={index} className="flex gap-2">
+                      <input
+                        type="text"
+                        value={tag}
+                        onChange={(e) => updateTag(index, e.target.value)}
+                        className="flex-1 px-4 py-2 bg-slate-900/50 border border-blue-500/30 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                        placeholder="Enter tag"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeTag(index)}
+                        className="px-3 py-2 bg-red-500/20 hover:bg-red-500/30 rounded-lg transition-colors"
+                      >
+                        <X size={20} />
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={addTag}
+                    className="flex items-center gap-2 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-lg transition-colors text-sm"
+                  >
+                    <Plus size={16} />
+                    Add Tag
+                  </button>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
