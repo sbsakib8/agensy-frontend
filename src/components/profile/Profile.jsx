@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
@@ -12,10 +12,14 @@ import {
   Shield,
   Edit2,
   Save,
-  CheckCircle
+  CheckCircle,
+  TrendingUp,
+  Camera,
+  Upload
 } from 'lucide-react'
 import { updateUserProfile } from '../../controllers/userController'
 import { useCustomAuth } from '../../hooks/useCustomAuth'
+import { uploadImageToImgBB } from '../../lib/imgbb-upload'
 
 export default function Profile() {
   const { user: authUser, loading: authLoading } = useCustomAuth();
@@ -24,14 +28,64 @@ export default function Profile() {
   const [editForm, setEditForm] = useState({})
   const [updating, setUpdating] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
+  const [uploadingImage, setUploadingImage] = useState(false)
+  const [previewImage, setPreviewImage] = useState(null)
+  const fileInputRef = useRef(null)
 
   // Use authUser directly from useCustomAuth - no need to fetch again!
   useEffect(() => {
     if (authUser) {
       console.log('✅ Using profile data from useCustomAuth:', authUser);
       setEditForm(authUser);
+      setPreviewImage(authUser.photoURL || null);
     }
   }, [authUser]);
+
+  const handleImageSelect = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Image size should be less than 5MB');
+      return;
+    }
+
+    try {
+      setUploadingImage(true);
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+
+      // Upload to ImgBB
+      const uploadResult = await uploadImageToImgBB(file);
+
+      if (uploadResult.success) {
+        // Update form with new image URL
+        setEditForm({ ...editForm, photoURL: uploadResult.imageUrl });
+        console.log('✅ Image uploaded successfully:', uploadResult.imageUrl);
+      } else {
+        alert('Failed to upload image: ' + uploadResult.error);
+        setPreviewImage(authUser.photoURL || null);
+      }
+    } catch (error) {
+      console.error('❌ Image upload error:', error);
+      alert('Failed to upload image');
+      setPreviewImage(authUser.photoURL || null);
+    } finally {
+      setUploadingImage(false);
+    }
+  };
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault()
@@ -155,54 +209,92 @@ export default function Profile() {
   }
 
   return (
-    <div className="min-h-screen bg-[#05060a] py-8 px-4">
-      <div className="max-w-5xl mt-[100px] mx-auto">
-        
-    
-        <div className="relative  mb-8">
-          {/* Background Card */}
-          <div className="relative rounded-3xl bg-gradient-to-r from-slate-900 via-blue-900 to-cyan-900 border border-white/10 overflow-hidden">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.2),transparent_50%)]" />
+    <div className="relative min-h-screen p-6 overflow-auto text-slate-200">
+      {/* Animated Background - Similar to OverviewComponent */}
+      <div className="fixed inset-0 bg-gradient-to-br from-slate-900 via-slate-900 to-blue-950 -z-10" />
+      
+      <div className="max-w-6xl mx-auto mt-20">
+        {/* Header Section */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white mb-2">User Profile</h1>
+          <p className="text-gray-400">Manage your personal information and account settings</p>
+        </div>
+
+        {/* Profile Header Card */}
+        <div className="relative mb-8">
+          <div className="bg-[#0a0f23]/60 backdrop-blur-xl border border-blue-500/30 rounded-2xl overflow-hidden shadow-[0_0_20px_rgba(59,130,246,0.1)] hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] transition-all duration-500">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/5" />
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/5" />
             
             {/* Content */}
             <div className="relative p-8">
               <div className="flex flex-col lg:flex-row items-center gap-8">
                 
                 {/* Profile Image */}
-                <div className="relative">
-                  <div className="w-32 h-32 rounded-full overflow-hidden bg-gradient-to-r from-cyan-400 to-blue-500 p-1">
-                    <div className="w-full h-full rounded-full overflow-hidden bg-slate-900 flex items-center justify-center">
-                      {authUser.photoURL ? (
-                        <Image
-                          src={authUser.photoURL}
-                          alt={authUser.displayName || 'User'}
-                          width={120}
-                          height={120}
-                          className="object-cover rounded-full"
-                          onError={() => {
-                            const imgElement = document.querySelector('#profile-fallback');
-                            if (imgElement) {
-                              imgElement.style.display = 'flex';
-                            }
-                          }}
-                        />
-                      ) : (
-                        <User className="text-white w-12 h-12" />
-                      )}
-                      <div id="profile-fallback" className="absolute inset-0 hidden items-center justify-center bg-slate-900 rounded-full">
-                        <User className="text-white w-12 h-12" />
+                <div className="relative flex items-center gap-4">
+                  <div className="relative">
+                    <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-xl" />
+                    <div className="relative w-32 h-32 rounded-full overflow-hidden bg-gradient-to-r from-blue-400 to-purple-500 p-1 shadow-[0_0_30px_rgba(59,130,246,0.3)]">
+                      <div className="w-full h-full rounded-full overflow-hidden bg-[#0a0f23] flex items-center justify-center">
+                        {previewImage ? (
+                          <Image
+                            src={previewImage}
+                            alt={authUser.displayName || 'User'}
+                            width={120}
+                            height={120}
+                            unoptimized
+                            className="object-cover rounded-full"
+                            onError={() => {
+                              const imgElement = document.querySelector('#profile-fallback');
+                              if (imgElement) {
+                                imgElement.style.display = 'flex';
+                              }
+                            }}
+                          />
+                        ) : (
+                          <User className="text-white w-12 h-12" />
+                        )}
+                        <div id="profile-fallback" className="absolute inset-0 hidden items-center justify-center bg-[#0a0f23] rounded-full">
+                          <User className="text-white w-12 h-12" />
+                        </div>
                       </div>
                     </div>
+
+                    {/* Upload Button - Show only in edit mode */}
+                    {isEditing && (
+                      <>
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageSelect}
+                          className="hidden"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => fileInputRef.current?.click()}
+                          disabled={uploadingImage}
+                          className="absolute bottom-0 right-0 p-2.5 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed border-2 border-[#0a0f23]"
+                          title="Upload profile picture"
+                        >
+                          {uploadingImage ? (
+                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          ) : (
+                            <Camera size={20} />
+                          )}
+                        </button>
+                      </>
+                    )}
                   </div>
                   
-                  {/* Role Badge */}
-                  <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
-                    <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-white text-xs font-semibold shadow-lg ${
+                  {/* Role Badge - Positioned to the right of image */}
+                  <div className="flex items-center">
+                    <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-white text-sm font-semibold shadow-lg ${
                       authUser.role === 'admin'
-                        ? 'bg-gradient-to-r from-pink-500 to-purple-600'
-                        : 'bg-gradient-to-r from-cyan-400 to-blue-500'
+                        ? 'bg-gradient-to-r from-purple-500 to-pink-500'
+                        : 'bg-gradient-to-r from-blue-500 to-cyan-500'
                     }`}>
-                      <Shield size={12} />
+                      <Shield size={14} />
                       {(authUser.role || 'user').toUpperCase()}
                     </span>
                   </div>
@@ -210,32 +302,32 @@ export default function Profile() {
 
                 {/* Profile Info */}
                 <div className="flex-1 text-center lg:text-left">
-                  <h1 className="text-4xl lg:text-5xl font-bold text-white mb-2">
+                  <h1 className="text-3xl lg:text-4xl font-bold text-white mb-2">
                     {authUser.displayName || 'User'}
                   </h1>
-                  <p className="text-xl text-cyan-300 mb-6">{authUser.email}</p>
+                  <p className="text-lg text-blue-300 mb-6">{authUser.email}</p>
                   
                   {/* Quick Stats */}
-                  <div className="flex flex-wrap justify-center lg:justify-start gap-4">
+                  <div className="flex flex-wrap justify-center lg:justify-start gap-6">
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-cyan-400">
+                      <div className="text-xl font-bold text-blue-400">
                         {authUser.role === 'admin' ? 'Full' : 'Limited'}
                       </div>
-                      <div className="text-sm text-white/60">Access Level</div>
+                      <div className="text-sm text-gray-400">Access Level</div>
                     </div>
-                    <div className="w-px h-12 bg-white/20"></div>
+                    <div className="w-px h-12 bg-blue-500/30"></div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-green-400">Active</div>
-                      <div className="text-sm text-white/60">Status</div>
+                      <div className="text-xl font-bold text-green-400">Active</div>
+                      <div className="text-sm text-gray-400">Status</div>
                     </div>
                     {authUser.createdAt && (
                       <>
-                        <div className="w-px h-12 bg-white/20"></div>
+                        <div className="w-px h-12 bg-blue-500/30"></div>
                         <div className="text-center">
-                          <div className="text-2xl font-bold text-purple-400">
+                          <div className="text-xl font-bold text-purple-400">
                             {new Date(authUser.createdAt).getFullYear()}
                           </div>
-                          <div className="text-sm text-white/60">Member Since</div>
+                          <div className="text-sm text-gray-400">Member Since</div>
                         </div>
                       </>
                     )}
@@ -245,11 +337,17 @@ export default function Profile() {
                 {/* Edit Button */}
                 <div className="lg:ml-8">
                   <button
-                    onClick={() => setIsEditing(!isEditing)}
-                    className="group px-8 py-4 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-xl"
+                    onClick={() => {
+                      if (isEditing) {
+                        setEditForm(authUser);
+                        setPreviewImage(authUser.photoURL || null);
+                      }
+                      setIsEditing(!isEditing);
+                    }}
+                    className="group px-6 py-3 rounded-xl bg-blue-500/20 hover:bg-blue-500/30 backdrop-blur-md border border-blue-500/30 text-white transition-all duration-300 flex items-center gap-3 shadow-[0_0_20px_rgba(59,130,246,0.1)] hover:shadow-[0_0_30px_rgba(59,130,246,0.2)]"
                   >
-                    <Edit2 size={20} className="group-hover:scale-110 transition-transform" />
-                    <span className="font-medium">{isEditing ? 'Cancel Edit' : 'Edit Profile'}</span>
+                    <Edit2 size={18} className="text-blue-400 group-hover:scale-110 transition-transform" />
+                    <span className="font-semibold">{isEditing ? 'Cancel Edit' : 'Edit Profile'}</span>
                   </button>
                 </div>
               </div>
@@ -258,37 +356,58 @@ export default function Profile() {
         </div>
 
         {/* ================= PROFILE DETAILS ================= */}
-        <div className="grid lg:grid-cols-1 gap-8">
+        <div className="grid lg:grid-cols-1 gap-6">
           
           {/* Profile Information Card */}
-          <div className="relative rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-blue-500/5" />
+          <div className="bg-[#0a0f23]/60 backdrop-blur-xl border border-blue-500/30 rounded-2xl overflow-hidden shadow-[0_0_20px_rgba(59,130,246,0.1)] hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] transition-all duration-500">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5" />
             
             <div className="relative p-8">
               {!isEditing ? (
                 <>
-                  <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
-                    <div className="w-2 h-8 bg-gradient-to-b from-cyan-400 to-blue-500 rounded-full"></div>
-                    Personal Information
-                  </h2>
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-2xl font-bold text-white mb-1">Personal Information</h2>
+                      <p className="text-sm text-gray-400">Your profile details and contact information</p>
+                    </div>
+                    <div className="flex items-center gap-2 text-green-400">
+                      <TrendingUp size={20} />
+                      <span className="text-sm font-semibold">Profile Complete</span>
+                    </div>
+                  </div>
                   
                   <div className="grid md:grid-cols-2 gap-6">
-                    <InfoCard icon={User} label="Firebase UID" value={authUser.firebaseUid || authUser.uid || 'Not available'} />
                     <InfoCard icon={Mail} label="Email Address" value={authUser.email} />
                     <InfoCard icon={Phone} label="Phone Number" value={authUser.phoneNumber || 'Not provided'} />
                     <InfoCard icon={MapPin} label="Location" value={authUser.address || 'Not provided'} />
                     <InfoCard icon={Calendar} label="Member Since" value={authUser.createdAt ? formatDate(authUser.createdAt) : 'Recently joined'} />
                     <InfoCard icon={Shield} label="Account Role" value={(authUser.role || 'user').toUpperCase()} />
+                    <InfoCard icon={User} label="Full Name" value={authUser.displayName || 'Not set'} />
                   </div>
                 </>
               ) : (
                 <>
-                  <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
-                    <div className="w-2 h-8 bg-gradient-to-b from-purple-400 to-pink-500 rounded-full"></div>
-                    Edit Profile
-                  </h2>
+                  <div className="mb-6">
+                    <h2 className="text-2xl font-bold text-white mb-1">Edit Profile</h2>
+                    <p className="text-sm text-gray-400">Update your personal information</p>
+                  </div>
                   
                   <form onSubmit={handleUpdateProfile} className="space-y-6">
+                    {/* Image Upload Info */}
+                    {uploadingImage && (
+                      <div className="flex items-center gap-3 p-4 rounded-xl bg-blue-500/10 border border-blue-500/30">
+                        <div className="w-5 h-5 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
+                        <p className="text-sm text-blue-300">Uploading image to ImgBB...</p>
+                      </div>
+                    )}
+
+                    {editForm.photoURL && editForm.photoURL !== authUser.photoURL && !uploadingImage && (
+                      <div className="flex items-center gap-3 p-4 rounded-xl bg-green-500/10 border border-green-500/30">
+                        <CheckCircle size={20} className="text-green-400" />
+                        <p className="text-sm text-green-300">New profile picture uploaded! Click Save to update.</p>
+                      </div>
+                    )}
+
                     <div className="grid md:grid-cols-2 gap-6">
                       <ModernInput label="Full Name" value={editForm.displayName} onChange={(v) => setEditForm({ ...editForm, displayName: v })} icon={User} />
                       <ModernInput label="Email Address" value={editForm.email} onChange={(v) => setEditForm({ ...editForm, email: v })} icon={Mail} disabled={true} />
@@ -299,14 +418,18 @@ export default function Profile() {
                     <div className="flex gap-4 pt-6">
                       <button
                         type="button"
-                        onClick={() => setIsEditing(false)}
-                        className="flex-1 py-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold transition-all duration-300"
+                        onClick={() => {
+                          setIsEditing(false);
+                          setEditForm(authUser);
+                          setPreviewImage(authUser.photoURL || null);
+                        }}
+                        className="flex-1 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-blue-500/30 text-white font-semibold transition-all duration-300"
                       >
                         Cancel
                       </button>
                       <button
                         disabled={updating}
-                        className="flex-1 py-4 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        className="flex-1 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(59,130,246,0.3)]"
                       >
                         {updating ? (
                           <>
@@ -332,14 +455,14 @@ export default function Profile() {
       {/* ================= SUCCESS MODAL ================= */}
       {showSuccessModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
-          <div className="relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 mx-4 max-w-md w-full">
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+          <div className="relative bg-[#0a0f23]/90 backdrop-blur-xl border border-blue-500/30 rounded-2xl p-8 mx-4 max-w-md w-full shadow-[0_0_50px_rgba(59,130,246,0.3)]">
             <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center">
+              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(34,197,94,0.5)]">
                 <CheckCircle size={32} className="text-white" />
               </div>
               <h3 className="text-2xl font-bold text-white mb-2">Profile Updated!</h3>
-              <p className="text-white/70">Your profile has been successfully updated.</p>
+              <p className="text-gray-400">Your profile has been successfully updated.</p>
             </div>
           </div>
         </div>
@@ -349,17 +472,16 @@ export default function Profile() {
   )
 }
 
-
 function InfoCard({ icon: Icon, label, value }) {
   return (
-    <div className="group relative p-6 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-300">
+    <div className="group relative p-5 rounded-xl bg-white/5 hover:bg-white/10 border border-blue-500/20 hover:border-blue-500/40 transition-all duration-300 shadow-[0_0_10px_rgba(59,130,246,0.05)] hover:shadow-[0_0_20px_rgba(59,130,246,0.15)]">
       <div className="flex items-start gap-4">
-        <div className="flex-shrink-0 p-3 rounded-lg bg-gradient-to-br from-cyan-400/20 to-blue-500/20 border border-cyan-400/20">
-          <Icon size={20} className="text-cyan-400" />
+        <div className="flex-shrink-0 p-3 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-blue-500/20">
+          <Icon size={20} className="text-blue-400" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-white/60 mb-1">{label}</p>
-          <p className="text-white font-semibold truncate" title={value}>{value}</p>
+          <p className="text-xs font-medium text-gray-400 mb-1 uppercase tracking-wider">{label}</p>
+          <p className="text-white font-semibold break-words">{value}</p>
         </div>
       </div>
     </div>
@@ -369,17 +491,17 @@ function InfoCard({ icon: Icon, label, value }) {
 function ModernInput({ label, value, onChange, icon: Icon, disabled = false }) {
   return (
     <div className="space-y-2">
-      <label className="text-white/80 text-sm font-medium flex items-center gap-2">
-        <Icon size={16} className="text-cyan-400" />
+      <label className="text-gray-300 text-sm font-medium flex items-center gap-2">
+        <Icon size={16} className="text-blue-400" />
         {label}
-        {disabled && <span className="text-xs text-white/40">(Read-only)</span>}
+        {disabled && <span className="text-xs text-gray-500">(Read-only)</span>}
       </label>
       <input
         value={value || ''}
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
-        className={`w-full px-4 py-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 transition-all duration-300 ${
-          disabled ? 'opacity-50 cursor-not-allowed' : ''
+        className={`w-full px-4 py-3 rounded-xl bg-white/5 border border-blue-500/20 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 ${
+          disabled ? 'opacity-50 cursor-not-allowed bg-white/5' : 'hover:border-blue-500/30'
         }`}
         placeholder={`Enter your ${label.toLowerCase()}`}
       />

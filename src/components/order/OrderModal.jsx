@@ -3,10 +3,10 @@
 import { useState, useEffect } from "react";
 import { X, Loader2, CheckCircle, AlertCircle, User, Mail, Phone, MapPin, CreditCard, FileText } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAuth } from "@/hooks/useAuth";
+import { useCustomAuth } from "@/hooks/useCustomAuth";
 
 export default function OrderModal({ isOpen, onClose, plan, currency }) {
-  const { user } = useAuth();
+  const { user } = useCustomAuth();
   const [step, setStep] = useState(1); // 1: User Info, 2: Payment Method, 3: Transaction
   const [loading, setLoading] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
@@ -28,26 +28,37 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
     
     // Payment Information
     paymentMethod: "bkash", // bkash, nagad, rocket, card
+    receiverNumber: user?.phone || user?.phoneNumber || "", // Number sending money from
     transactionId: "",
     notes: "",
   });
 
-  // Pre-fill user data when modal opens or user changes
+  // Pre-fill and log user data when modal opens or user changes
   useEffect(() => {
     if (user && isOpen) {
-      console.log('🔄 Auto-filling user data:', {
-        name: user.displayName || user.name,
-        email: user.email,
-        phone: user.phone || user.phoneNumber,
-        address: user.address
+      console.log('👤 User data from useCustomAuth:', user);
+      console.log('📧 Email:', user.email);
+      console.log('👤 Name:', user.displayName || user.name);
+      console.log('📱 Phone:', user.phone || user.phoneNumber);
+      console.log('📍 Address:', user.address);
+      console.log('🆔 UID:', user.uid || user.firebaseUid);
+      console.log('📦 Full user object:', JSON.stringify(user, null, 2));
+      
+      const phoneNumber = user.phone || user.phoneNumber || "";
+      console.log('📞 Setting receiverNumber to:', phoneNumber);
+      
+      setFormData(prev => {
+        const updated = {
+          ...prev,
+          name: user.displayName || user.name || prev.name || "",
+          email: user.email || prev.email || "",
+          phone: user.phone || user.phoneNumber || prev.phone || "",
+          address: user.address || prev.address || "",
+          receiverNumber: phoneNumber,
+        };
+        console.log('✅ FormData after user update:', updated);
+        return updated;
       });
-      setFormData(prev => ({
-        ...prev,
-        name: user.displayName || user.name || prev.name || "",
-        email: user.email || prev.email || "",
-        phone: user.phone || user.phoneNumber || prev.phone || "",
-        address: user.address || prev.address || "",
-      }));
     }
   }, [user, isOpen]);
 
@@ -66,7 +77,12 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    console.log(`🔄 Input changed - ${name}:`, value);
+    setFormData(prev => {
+      const updated = { ...prev, [name]: value };
+      console.log('📝 Updated formData:', updated);
+      return updated;
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -86,6 +102,10 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
         throw new Error('Currency information is missing.');
       }
 
+      if (!formData.receiverNumber) {
+        throw new Error('Please provide your payment number (number you are sending money from).');
+      }
+
       // Use the simplified format that the backend expects
       const orderData = {
         customer: {
@@ -97,11 +117,13 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
         planName: formData.planName,
         planPrice: `${formData.currency === "USD" ? "$" : "৳"}${formData.price}`,
         paymentMethod: formData.paymentMethod,
+        receiverNumber: formData.receiverNumber || formData.phone, // Fallback to phone if not provided
         transactionId: formData.transactionId,
         notes: formData.notes || ""
       };
 
-      console.log('📤 Submitting order:', orderData);
+      console.log('📤 Submitting order with receiverNumber:', orderData);
+      console.log('🔍 Form data receiverNumber:', formData.receiverNumber);
 
       // Try to use orderApi if user is authenticated, otherwise use fetch
       let result;
@@ -165,6 +187,7 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
       price: 0,
       currency: "USD",
       paymentMethod: "bkash",
+      receiverNumber: user?.phone || user?.phoneNumber || "",
       transactionId: "",
       notes: "",
     });
@@ -262,7 +285,7 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm text-gray-400 mb-2">
-                            Full Name * {user && <span className="text-xs text-cyan-400">(From Profile)</span>}
+                            Full Name * <span className="text-xs text-cyan-400">(Cannot be changed)</span>
                           </label>
                           <input
                             type="text"
@@ -270,19 +293,15 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
                             value={formData.name || ""}
                             onChange={handleInputChange}
                             required
-                            disabled={!!user}
-                            className={`w-full px-4 py-3 border rounded-lg text-white focus:outline-none transition ${
-                              user 
-                                ? 'bg-white/5 border-white/20 cursor-not-allowed opacity-75' 
-                                : 'bg-white/5 border-white/10 focus:border-cyan-400'
-                            }`}
+                            disabled={true}
+                            className="w-full px-4 py-3 border rounded-lg text-white focus:outline-none transition bg-white/5 border-white/20 cursor-not-allowed opacity-75"
                             placeholder="John Doe"
                           />
                         </div>
 
                         <div>
                           <label className="block text-sm text-gray-400 mb-2">
-                            Email * {user && <span className="text-xs text-cyan-400">(From Profile)</span>}
+                            Email * <span className="text-xs text-cyan-400">(Cannot be changed)</span>
                           </label>
                           <input
                             type="email"
@@ -290,37 +309,39 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
                             value={formData.email || ""}
                             onChange={handleInputChange}
                             required
-                            disabled={!!user}
-                            className={`w-full px-4 py-3 border rounded-lg text-white focus:outline-none transition ${
-                              user 
-                                ? 'bg-white/5 border-white/20 cursor-not-allowed opacity-75' 
-                                : 'bg-white/5 border-white/10 focus:border-cyan-400'
-                            }`}
+                            disabled={true}
+                            className="w-full px-4 py-3 border rounded-lg text-white focus:outline-none transition bg-white/5 border-white/20 cursor-not-allowed opacity-75"
                             placeholder="john@example.com"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-sm text-gray-400 mb-2">Phone *</label>
+                          <label className="block text-sm text-gray-400 mb-2">
+                            Phone * <span className="text-xs text-cyan-400">(Cannot be changed)</span>
+                          </label>
                           <input
                             type="tel"
                             name="phone"
                             value={formData.phone || ""}
                             onChange={handleInputChange}
                             required
-                            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:border-cyan-400 focus:outline-none transition"
+                            disabled={true}
+                            className="w-full px-4 py-3 border rounded-lg text-white focus:outline-none transition bg-white/5 border-white/20 cursor-not-allowed opacity-75"
                             placeholder="+880 1XXX-XXXXXX"
                           />
                         </div>
 
                         <div className="md:col-span-2">
-                          <label className="block text-sm text-gray-400 mb-2">Address</label>
+                          <label className="block text-sm text-gray-400 mb-2">
+                            Address <span className="text-xs text-cyan-400">(Cannot be changed)</span>
+                          </label>
                           <input
                             type="text"
                             name="address"
                             value={formData.address || ""}
                             onChange={handleInputChange}
-                            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:border-cyan-400 focus:outline-none transition"
+                            disabled={true}
+                            className="w-full px-4 py-3 border rounded-lg text-white focus:outline-none transition bg-white/5 border-white/20 cursor-not-allowed opacity-75"
                             placeholder="City, Country"
                           />
                         </div>
@@ -365,11 +386,25 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
                         ))}
                       </div>
 
+                      {/* Payment Number */}
+                      <div className="p-6 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/30 rounded-xl">
+                        <div className="text-center">
+                          <p className="text-sm text-gray-300 mb-2">Send money to this number:</p>
+                          <div className="flex items-center justify-center gap-3 mb-3">
+                            <Phone className="w-5 h-5 text-cyan-400" />
+                            <p className="text-3xl font-bold text-white tracking-wide">01626420774</p>
+                          </div>
+                          <p className="text-xs text-cyan-400 font-medium uppercase tracking-wider">
+                            For {formData.paymentMethod.toUpperCase()} Payment
+                          </p>
+                        </div>
+                      </div>
+
                       {/* Payment Instructions */}
                       <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
                         <h4 className="text-sm font-semibold text-blue-400 mb-2">Payment Instructions:</h4>
                         <ol className="text-xs text-gray-300 space-y-1 list-decimal list-inside">
-                          <li>Send {currency === "USD" ? "$" : "৳"}{plan?.price?.[currency]?.toLocaleString()} to our {formData.paymentMethod.toUpperCase()} number</li>
+                          <li>Send {currency === "USD" ? "$" : "৳"}{plan?.price?.[currency]?.toLocaleString()} to <span className="font-semibold text-white">01626420774</span> via {formData.paymentMethod.toUpperCase()}</li>
                           <li>Note the transaction ID from your payment confirmation</li>
                           <li>Enter the transaction ID in the next step</li>
                           <li>Well verify and activate your plan within 24 hours</li>
@@ -407,6 +442,27 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
                         Transaction Details
                       </h3>
 
+                      {/* Receiver Number (Number sending money from) */}
+                      <div>
+                        <label className="block text-sm text-gray-400 mb-2">
+                          Your Payment Number * <span className="text-xs text-cyan-400">(Number you are sending money from)</span>
+                        </label>
+                        <input
+                          type="tel"
+                          name="receiverNumber"
+                          value={formData.receiverNumber || ""}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:border-cyan-400 focus:outline-none transition"
+                          placeholder="+880 1XXX-XXXXXX"
+                        />
+                        <p className="text-xs text-yellow-400 mt-1 flex items-center gap-1">
+                          <AlertCircle className="w-3 h-3" />
+                          Please provide the phone number you are using to send the money
+                        </p>
+                      </div>
+
+                      {/* Transaction ID */}
                       <div>
                         <label className="block text-sm text-gray-400 mb-2">Transaction ID / Reference Number *</label>
                         <input
@@ -423,6 +479,7 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
                         </p>
                       </div>
 
+                      {/* Additional Notes */}
                       <div>
                         <label className="block text-sm text-gray-400 mb-2">Additional Notes (Optional)</label>
                         <textarea
@@ -446,6 +503,10 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
                           <span className="text-gray-400">Payment Method:</span>
                           <span className="text-white font-medium capitalize">{formData.paymentMethod}</span>
                         </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-400">Your Payment Number:</span>
+                          <span className="text-white font-medium">{formData.receiverNumber || 'Not provided'}</span>
+                        </div>
                         <div className="border-t border-white/10 my-2 pt-2 flex justify-between">
                           <span className="text-white font-semibold">Total:</span>
                           <span className="text-cyan-400 font-bold text-lg">
@@ -465,7 +526,7 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
                         </button>
                         <button
                           type="submit"
-                          disabled={loading || !formData.transactionId}
+                          disabled={loading || !formData.transactionId || !formData.receiverNumber}
                           className="flex-1 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold rounded-lg transition disabled:opacity-50 flex items-center justify-center gap-2"
                         >
                           {loading ? (

@@ -2,20 +2,24 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { ArrowRight, Play, CheckCircle, Sparkles, TrendingUp, Users, Code } from 'lucide-react';
 import Link from 'next/link';
+import { useRestartAnimations } from '@/hooks/useRestartAnimations';
 
  const AboutSection = ()=> {
+  // Restart animations when component mounts
+  useRestartAnimations();
+
   const [isVisible, setIsVisible] = useState(false);
   const [activeFeature, setActiveFeature] = useState(0);
 
   // Generate stable random values for particles
-  const particles = useMemo(() => {
+  const [particles] = useState(() => {
     return [...Array(15)].map(() => ({
       top: Math.random() * 100,
       left: Math.random() * 100,
       delay: Math.random() * 5,
       duration: 10 + Math.random() * 20
     }));
-  }, []);
+  });
 
   useEffect(() => {
     setIsVisible(true);
@@ -49,8 +53,9 @@ import Link from 'next/link';
       {/* Background Animations */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Gradient Orbs */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-500/20 rounded-full blur-3xl animate-pulse-slow"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/15 rounded-full blur-3xl animate-pulse-slower"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-500/40 rounded-full blur-3xl animate-float-slow"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/35 rounded-full blur-3xl animate-float-slower"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-500/30 rounded-full blur-3xl animate-float-reverse"></div>
         
         {/* Grid Pattern */}
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>

@@ -479,6 +479,14 @@ export const orderApi = {
     console.log('📦 Order stats:', response.data);
     return response.data;
   },
+
+  // Track orders by email
+  trackOrderByEmail: async (email) => {
+    console.log('📍 Tracking orders for email:', email);
+    const response = await api.get(`orders/track/${email}`);
+    console.log('📦 Track order response:', response.data);
+    return response.data;
+  },
 };
 
 export const adminApi = {
@@ -544,6 +552,17 @@ export const contactApi = {
     console.log('🗑️ Deleting multiple contacts:', ids);
     const response = await api.post('contact/delete-multiple', { ids });
     console.log('✅ Contacts deleted:', response.data);
+    return response.data;
+  },
+};
+
+// ==================== DASHBOARD API ====================
+export const dashboardApi = {
+  // Get dashboard statistics
+  getDashboardStats: async () => {
+    console.log('📊 Fetching dashboard stats');
+    const response = await api.get('dashboard');
+    console.log('📦 Dashboard stats:', response.data);
     return response.data;
   },
 };

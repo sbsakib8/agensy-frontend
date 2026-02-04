@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   Search,
   Layout,
@@ -13,24 +13,29 @@ import {
 import Image from "next/image";
 import Lottie from "lottie-react";
 import animationData from "../../../../public/UIUX Designer.json";
+import { useRestartAnimations } from "@/hooks/useRestartAnimations";
 export default function UiUxDesignPage() {
+  // Restart animations when component mounts
+  useRestartAnimations();
+
   // Generate stable random values for particles
-  const particles = React.useMemo(() => {
+  const [particles] = useState(() => {
     return [...Array(15)].map(() => ({
       top: Math.random() * 100,
       left: Math.random() * 100,
       delay: Math.random() * 5,
       duration: 10 + Math.random() * 20
     }));
-  }, []);
+  });
 
   return (
     <main className="min-h-screen bg-linear-to-b from-slate-950 via-slate-900 to-slate-950 text-white font-sans selection:bg-blue-500/30">
       {/* Background Animations */}
       <div className="fixed inset-0 overflow-hidden">
         {/* Gradient Orbs */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-500/20 rounded-full blur-3xl animate-pulse-slow"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/15 rounded-full blur-3xl animate-pulse-slower"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-500/40 rounded-full blur-3xl animate-float-slow"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/35 rounded-full blur-3xl animate-float-slower"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-500/30 rounded-full blur-3xl animate-float-reverse"></div>
         
         {/* Grid Pattern */}
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>

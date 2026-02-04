@@ -4,12 +4,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { ExternalLink, Sparkles, Zap, TrendingUp, Award, Github, MessageSquare } from "lucide-react";
 import { productsController } from "@/controllers";
+import { useRestartAnimations } from "@/hooks/useRestartAnimations";
 
 const safeText = (v, fallback = "") => (typeof v === "string" && v.trim() ? v.trim() : fallback);
 
 const safeArray = (v) => (Array.isArray(v) ? v.filter(Boolean) : []);
 
 const ProductsSection = () => {
+  // Restart animations when component mounts
+  useRestartAnimations();
+
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredProduct, setHoveredProduct] = useState(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });

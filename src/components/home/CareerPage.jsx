@@ -3,6 +3,9 @@
 import React, { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import { useRestartAnimations } from "@/hooks/useRestartAnimations";
+import demoController from "@/controllers/demoController";
 import {
   ArrowRight,
   Code2,
@@ -17,6 +20,17 @@ import {
   Sparkles,
   X,
 } from "lucide-react";
+
+// ================== LOTTIE (SSR SAFE) ==================
+const Player = dynamic(
+  () =>
+    import("@lottiefiles/react-lottie-player").then(
+      (mod) => mod.Player
+    ),
+  { ssr: false }
+);
+
+import careerAnimation from "../../../public/businessman path.json";
 
 
 /* ================= Data ================= */
@@ -139,29 +153,7 @@ const services = [
   },
 ];
 
-const caseStudies = [
-  {
-    title: "Roquet",
-    subtitle: "SaaS Dashboard",
-    metric: "Load time ↑ 40%",
-    img: "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=1200&auto=format&fit=crop",
-    cta: "Learn More",
-  },
-  {
-    title: "GolfHub",
-    subtitle: "Tour Booking Website",
-    metric: "Leads ↑ 2.1x",
-    img: "https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1200&auto=format&fit=crop",
-    cta: "View Case Study",
-  },
-  {
-    title: "RSFinance",
-    subtitle: "Fintech Platform",
-    metric: "Growth ↑ 260%",
-    img: "https://images.unsplash.com/photo-1556761175-4b46a572b786?q=80&w=1200&auto=format&fit=crop",
-    cta: "View Case Study",
-  },
-];
+// Projects will be fetched from API
 
 const testimonials = [
   {
@@ -283,7 +275,7 @@ function ServiceModal({ service, isOpen, onClose }) {
           <div>
             <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
               <span className="w-1 h-6 bg-gradient-to-b from-cyan-400 to-blue-500 rounded-full" />
-              What's Included
+              What is Included
             </h3>
             <div className="grid md:grid-cols-2 gap-3">
               {service.details.features.map((feature, idx) => (
@@ -409,6 +401,8 @@ export default function NeonAgencyLanding() {
   const particles = useMemo(() => makeParticles(12, 20260201), []);
   const [selectedService, setSelectedService] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [recentProjects, setRecentProjects] = useState([]);
+  const [projectsLoading, setProjectsLoading] = useState(true);
 
   const openServiceModal = (service) => {
     setSelectedService(service);
@@ -419,6 +413,46 @@ export default function NeonAgencyLanding() {
     setIsModalOpen(false);
     setTimeout(() => setSelectedService(null), 300);
   };
+
+  // Restart animations when component mounts
+  useRestartAnimations();
+
+  // Fetch latest 3 projects
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        setProjectsLoading(true);
+        const res = await demoController.getProjects();
+        
+        const raw = Array.isArray(res?.data)
+          ? res.data
+          : Array.isArray(res?.data?.categories)
+          ? res.data.categories
+          : [];
+
+        // Flatten all projects from all categories
+        const allProjects = raw.flatMap((cat) =>
+          Array.isArray(cat?.projects) ? cat.projects.map((p) => ({
+            id: p?.id || p?._id,
+            title: p?.title || p?.name || "Untitled Project",
+            image: p?.image || p?.thumbnail || "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop",
+            slug: p?.slug || p?.id || p?._id,
+            previewUrl: p?.previewUrl || p?.liveUrl || "",
+            categoryName: cat?.name || "Project"
+          })) : []
+        );
+
+        // Get latest 3 projects
+        setRecentProjects(allProjects.slice(0, 3));
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      } finally {
+        setProjectsLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-linear-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
@@ -432,8 +466,9 @@ export default function NeonAgencyLanding() {
       {/* ================= Background Animations ================= */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Gradient Orbs */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-500/20 rounded-full blur-3xl animate-pulse-slow"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/15 rounded-full blur-3xl animate-pulse-slower"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-500/40 rounded-full blur-3xl animate-float-slow"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/35 rounded-full blur-3xl animate-float-slower"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-500/30 rounded-full blur-3xl animate-float-reverse"></div>
         
         {/* Grid Pattern */}
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
@@ -522,88 +557,19 @@ export default function NeonAgencyLanding() {
 
           {/* Right */}
           <div className="lg:col-span-6 reveal">
-            <div className="relative">
+            <div className="relative flex items-center justify-center">
               {/* glow */}
               <div className="absolute -inset-10 rounded-[3rem] bg-[radial-linear(closest-side,rgba(34,211,238,.14),transparent_70%)] blur-2xl" />
               <div className="absolute -inset-14 rounded-[3rem] bg-[radial-linear(closest-side,rgba(59,130,246,.10),transparent_70%)] blur-3xl" />
 
-              <div className="grid gap-4">
-                {/* main showcase card */}
-                <div className="relative rounded-[2.2rem] border border-white/10 bg-white/5 backdrop-blur-2xl overflow-hidden shadow-[0_30px_90px_rgba(0,0,0,0.55)]">
-                  <div className="absolute inset-0 bg-[linear-linear(120deg,rgba(34,211,238,0.10),transparent_40%,rgba(59,130,246,0.10))]" />
-                  <div className="absolute -top-20 -left-16 h-64 w-64 rounded-full bg-cyan-400/10 blur-3xl" />
-                  <div className="absolute -bottom-20 -right-16 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
-
-                  {/* top bar */}
-                  <div className="relative flex items-center justify-between px-6 py-4 border-b border-white/10">
-                    <div className="flex items-center gap-2">
-                      <span className="h-2 w-2 rounded-full bg-red-400/70" />
-                      <span className="h-2 w-2 rounded-full bg-yellow-300/70" />
-                      <span className="h-2 w-2 rounded-full bg-green-400/70" />
-                    </div>
-                    <p className="text-xs font-semibold tracking-widest text-slate-300/80 uppercase">
-                      Featured Project
-                    </p>
-                    <span className="h-8 w-16 rounded-full bg-white/5 border border-white/10" />
-                  </div>
-
-                  {/* image */}
-                  <div className="relative h-90 md:h-90 p-5">
-                    <div className="relative h-full w-full rounded-2xl overflow-hidden border border-white/10">
-                      <Image
-                        src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1600&auto=format&fit=crop"
-                        alt="Project Preview"
-                        fill
-                        className="object-cover"
-                        priority
-                      />
-                      <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/10 to-transparent" />
-                    </div>
-
-                    {/* overlay chips */}
-                    <div className="absolute bottom-8 left-8 right-8 flex flex-wrap items-center gap-2">
-                      <span className="rounded-full border border-white/10 bg-black/35 px-3 py-1.5 text-xs font-semibold text-slate-100">
-                        Next.js + Tailwind
-                      </span>
-                      <span className="rounded-full border border-white/10 bg-black/35 px-3 py-1.5 text-xs font-semibold text-slate-100">
-                        Lighthouse 95+
-                      </span>
-                      <span className="rounded-full border border-white/10 bg-black/35 px-3 py-1.5 text-xs font-semibold text-slate-100">
-                        SEO Ready
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* mini KPI cards */}
-                <div className="grid grid-cols-3 gap-4">
-                  <GlowCard>
-                    <div className="p-5">
-                      <p className="text-[11px] uppercase tracking-[0.18em] text-slate-300/80">
-                        conversion
-                      </p>
-                      <p className="mt-1 text-lg font-semibold text-slate-50">+38%</p>
-                    </div>
-                  </GlowCard>
-
-                  <GlowCard>
-                    <div className="p-5">
-                      <p className="text-[11px] uppercase tracking-[0.18em] text-slate-300/80">
-                        speed
-                      </p>
-                      <p className="mt-1 text-lg font-semibold text-slate-50">0.9s</p>
-                    </div>
-                  </GlowCard>
-
-                  <GlowCard>
-                    <div className="p-5">
-                      <p className="text-[11px] uppercase tracking-[0.18em] text-slate-300/80">
-                        leads
-                      </p>
-                      <p className="mt-1 text-lg font-semibold text-slate-50">2.1x</p>
-                    </div>
-                  </GlowCard>
-                </div>
+              {/* Lottie Animation - Smaller Size */}
+              <div className="relative w-full max-w-md h-80 md:h-96">
+                <Player
+                  autoplay
+                  loop
+                  src={careerAnimation}
+                  style={{ height: '100%', width: '100%' }}
+                />
               </div>
             </div>
           </div>
@@ -657,38 +623,59 @@ export default function NeonAgencyLanding() {
             desc="Real outcomes for real growing businesses."
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {caseStudies.map((c, i) => (
-              <GlowCard key={i} className="reveal">
-                <div className="p-5 space-y-5">
-                  <div className="relative h-48 rounded-2xl overflow-hidden border border-white/10">
-                    <Image src={c.img} alt={c.title} fill className="object-cover" />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/65 via-black/15 to-transparent" />
-                    <span className="absolute top-4 left-4 text-xs font-semibold text-cyan-100 bg-cyan-500/10 px-2 py-1 rounded border border-white/10">
-                      {c.metric}
-                    </span>
-                  </div>
+          {projectsLoading ? (
+            <div className="text-center py-12">
+              <p className="text-slate-300">Loading projects...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {recentProjects.length > 0 ? (
+                recentProjects.map((project, i) => (
+                  <GlowCard key={project.id || i} className="reveal">
+                    <div className="p-5 space-y-5">
+                      <div className="relative h-48 rounded-2xl overflow-hidden border border-white/10">
+                        <Image 
+                          src={project.image} 
+                          alt={project.title} 
+                          fill 
+                          className="object-cover" 
+                        />
+                        <div className="absolute inset-0 bg-linear-to-t from-black/65 via-black/15 to-transparent" />
+                        <span className="absolute top-4 left-4 text-xs font-semibold text-cyan-100 bg-cyan-500/10 px-2 py-1 rounded border border-white/10">
+                          {project.categoryName}
+                        </span>
+                      </div>
 
-                  <div className="px-1">
-                    <h3 className="text-lg font-semibold tracking-tight text-slate-50">
-                      {c.title}
-                    </h3>
-                    <p className="text-sm text-slate-300/90 leading-relaxed">{c.subtitle}</p>
+                      <div className="px-1">
+                        <h3 className="text-lg font-semibold tracking-tight text-slate-50">
+                          {project.title}
+                        </h3>
+                        <p className="text-sm text-slate-300/90 leading-relaxed">Slug: {project.slug}</p>
 
-                    <div className="mt-4 flex items-center justify-between">
-                      <button className="text-sm font-semibold text-slate-300 hover:text-slate-100 transition inline-flex items-center gap-2">
-                        {c.cta} <ArrowRight className="w-4 h-4" />
-                      </button>
-
-                      <div className="h-9 w-9 rounded-xl border border-white/10 bg-white/5 grid place-items-center text-cyan-200">
-                        <ArrowRight className="w-4 h-4" />
+                        <div className="mt-4">
+                          <button 
+                            onClick={() => project.previewUrl ? window.open(project.previewUrl, "_blank") : null}
+                            disabled={!project.previewUrl}
+                            className={`w-full py-2.5 rounded-xl font-semibold transition-all inline-flex items-center justify-center gap-2 ${
+                              project.previewUrl 
+                                ? "bg-linear-to-r from-cyan-400 to-blue-500 text-white hover:shadow-lg hover:shadow-cyan-500/30" 
+                                : "bg-gray-600/50 text-gray-400 cursor-not-allowed"
+                            }`}
+                          >
+                            Go Live <ArrowRight className="w-4 h-4" />
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </GlowCard>
+                ))
+              ) : (
+                <div className="col-span-3 text-center py-12">
+                  <p className="text-slate-300">No projects available</p>
                 </div>
-              </GlowCard>
-            ))}
-          </div>
+              )}
+            </div>
+          )}
         </section>
 
         {/* TESTIMONIALS */}

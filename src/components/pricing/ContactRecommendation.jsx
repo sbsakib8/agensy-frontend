@@ -3,8 +3,12 @@
 import { useState } from "react";
 import { Mail, Phone, MessageCircle, Send, Loader2, CheckCircle } from "lucide-react";
 import { motion } from "framer-motion";
+import { useRestartAnimations } from "@/hooks/useRestartAnimations";
 
 export default function ContactRecommendation() {
+  // Restart animations when component mounts
+  useRestartAnimations();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -56,8 +60,8 @@ export default function ContactRecommendation() {
     <section className="relative py-20 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/40 rounded-full blur-3xl animate-float-slow" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/40 rounded-full blur-3xl animate-float-slower" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">

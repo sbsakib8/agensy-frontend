@@ -103,9 +103,9 @@ export default function ContactPage() {
         />
         
         {/* Gradient Orbs */}
-        <div className="absolute top-20 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-cyan-400/20 rounded-full blur-[120px] animate-pulse delay-700" />
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-purple-500/10 rounded-full blur-[140px] animate-pulse delay-1000" />
+        <div className="absolute top-20 left-1/4 w-96 h-96 bg-blue-500/40 rounded-full blur-[120px] animate-float-slow" />
+        <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-cyan-400/40 rounded-full blur-[120px] animate-float-slower delay-700" />
+        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-purple-500/30 rounded-full blur-[140px] animate-float-reverse delay-1000" />
       </div>
 
       {/* ================= CONTENT ================= */}
