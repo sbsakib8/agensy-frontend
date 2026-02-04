@@ -1,14 +1,19 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { ExternalLink, Sparkles, Zap, TrendingUp, Award, Github } from "lucide-react";
+import Link from "next/link";
+import { ExternalLink, Sparkles, Zap, TrendingUp, Award, Github, MessageSquare } from "lucide-react";
 import { productsController } from "@/controllers";
+import { useRestartAnimations } from "@/hooks/useRestartAnimations";
 
 const safeText = (v, fallback = "") => (typeof v === "string" && v.trim() ? v.trim() : fallback);
 
 const safeArray = (v) => (Array.isArray(v) ? v.filter(Boolean) : []);
 
 const ProductsSection = () => {
+  // Restart animations when component mounts
+  useRestartAnimations();
+
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredProduct, setHoveredProduct] = useState(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -206,7 +211,7 @@ const ProductsSection = () => {
             Our
             <span className="bg-linear-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
               {" "}
-              Products
+              Projects
             </span>
           </h1>
 
@@ -228,15 +233,7 @@ const ProductsSection = () => {
           </div>
 
           {/* Debug Info */}
-          <div className="mt-6">
-            {loading && <p className="text-slate-400">Loading products...</p>}
-            {!loading && error && <p className="text-rose-300/90 text-sm">{error}</p>}
-            {!loading && !error && (
-              <p className="text-slate-500 text-sm">
-                API products count: {productsData.length} | Showing: {products.length}
-              </p>
-            )}
-          </div>
+        
         </div>
 
         {/* Products Grid */}
@@ -426,6 +423,14 @@ const ProductsSection = () => {
                         </div>
                       )}
 
+                      {/* Contact to Get Project Button */}
+                      <Link href="/contact">
+                        <button className="w-full mb-4 py-3 rounded-xl border-2 border-blue-500/50 bg-blue-500/10 text-blue-400 font-semibold hover:bg-blue-500/20 hover:border-blue-400 transition-all flex items-center justify-center gap-2 group">
+                          <MessageSquare className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                          Contact to Get Project
+                        </button>
+                      </Link>
+
                       {/* CTA */}
                       <a
                         href={product.ctaUrl}
@@ -478,13 +483,15 @@ const ProductsSection = () => {
           }`}
         >
           <p className="text-slate-400 mb-6 text-lg">Ready to transform your business?</p>
-          <button className="group relative px-10 py-5 bg-linear-to-r from-purple-600 via-pink-600 to-orange-600 rounded-full text-white font-bold text-lg shadow-2xl hover:shadow-purple-500/50 transition-all duration-500 hover:scale-110 overflow-hidden">
-            <span className="relative z-10 flex items-center gap-2">
-              Get Started Now
-              <Zap className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
-            </span>
-            <div className="absolute inset-0 bg-linear-to-r from-orange-600 via-pink-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          </button>
+          <Link href="/pricing">
+            <button className="group relative px-10 py-5 bg-linear-to-r from-blue-500 to-cyan-400 rounded-full text-black font-bold text-lg shadow-2xl hover:shadow-[0_0_40px_rgba(59,130,246,0.45)] transition-all duration-500 hover:scale-110 overflow-hidden">
+              <span className="relative z-10 flex items-center gap-2">
+                Get Started Now
+                <Zap className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
+              </span>
+              <div className="absolute inset-0 bg-linear-to-r from-cyan-400 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            </button>
+          </Link>
         </div>
       </div>
 

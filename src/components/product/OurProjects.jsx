@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import Image from "next/image"
+import Link from "next/link"
 import { useEffect, useMemo, useState } from "react"
 import demoController from "@/controllers/demoController" 
 
@@ -10,6 +11,16 @@ export default function OurProjects() {
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
+
+  // Generate stable random values for particles
+  const particles = useMemo(() => {
+    return [...Array(15)].map(() => ({
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+      delay: Math.random() * 5,
+      duration: 10 + Math.random() * 20
+    }));
+  }, []);
 
   // ================= FETCH DATA =================
   useEffect(() => {
@@ -86,10 +97,31 @@ export default function OurProjects() {
 
   // ================= UI =================
   return (
-    <section className="relative w-full min-h-screen bg-[#050B18] overflow-hidden">
-      {/* Glow */}
-      <div className="absolute -top-40 left-1/4 w-150 h-150 bg-cyan-500/20 blur-[180px]" />
-      <div className="absolute -bottom-40 right-1/4 w-150 h-150 bg-purple-500/20 blur-[180px]" />
+    <section className="relative w-full min-h-screen bg-linear-to-b from-slate-950 via-slate-900 to-slate-950 overflow-hidden">
+      {/* Background Animations */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Gradient Orbs */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-500/40 rounded-full blur-3xl animate-float-slow"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/35 rounded-full blur-3xl animate-float-slower"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-500/30 rounded-full blur-3xl animate-float-reverse"></div>
+        
+        {/* Grid Pattern */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+        
+        {/* Floating Elements */}
+        {particles.map((particle, i) => (
+          <div
+            key={i}
+            className="absolute w-2 h-2 bg-cyan-400/30 rounded-full animate-float-random"
+            style={{
+              top: `${particle.top}%`,
+              left: `${particle.left}%`,
+              animationDelay: `${particle.delay}s`,
+              animationDuration: `${particle.duration}s`
+            }}
+          ></div>
+        ))}
+      </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-24">
         {/* Title */}
@@ -176,16 +208,24 @@ export default function OurProjects() {
 
                 <p className="text-gray-400 text-sm mb-4">{item.desc}</p>
 
-                <button
-                  onClick={() =>
-                    item.preview
-                      ? window.open(item.preview, "_blank")
-                      : alert("Preview not available")
-                  }
-                  className="w-full py-2 rounded-xl bg-linear-to-r from-cyan-400 to-blue-500 text-white font-semibold"
-                >
-                  Preview
-                </button>
+                <div className="space-y-2">
+                  <button
+                    onClick={() =>
+                      item.preview
+                        ? window.open(item.preview, "_blank")
+                        : alert("Preview not available")
+                    }
+                    className="w-full py-2 rounded-xl bg-linear-to-r from-cyan-400 to-blue-500 text-white font-semibold hover:shadow-lg transition-all"
+                  >
+                    Preview
+                  </button>
+
+                  <Link href="/contact">
+                    <button className="w-full py-2 rounded-xl border-2 border-blue-500/50 bg-blue-500/10 text-blue-400 font-semibold hover:bg-blue-500/20 hover:border-blue-400 transition-all">
+                      Contact to Get Project
+                    </button>
+                  </Link>
+                </div>
               </motion.div>
             ))}
         </div>

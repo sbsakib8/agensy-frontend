@@ -93,7 +93,7 @@ export default function ForgotPasswordPage() {
         {/* RIGHT SIDE: LOTTIE AREA */}
         <div className="hidden md:flex md:w-1/2 relative bg-[#0f172a] items-center justify-center overflow-hidden">
           {/* Animated Glow Backdrops */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-[100px] animate-pulse" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/30 rounded-full blur-[100px] animate-float-slow" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[100px] animate-pulse delay-700" />
 
           {/* Background Grid Pattern */}

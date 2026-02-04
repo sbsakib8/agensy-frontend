@@ -50,6 +50,11 @@ const Header = () => {
   const aboutUsItems = [
     { name: "Team", desc: "Meet our talented team", href: "/team" },
     { name: "Career", desc: "Join our growing team", href: "/career" },
+    { name: "Blog", desc: "Latest news & insights", href: "/blog" },
+    { name: "Documentation", desc: "Technical guides & docs", href: "/docs" },
+    { name: "Tutorials", desc: "Step-by-step learning", href: "/tutorial" },
+    { name: "Help Center", desc: "Support & assistance", href: "/help-center" },
+    { name: "Contact Us", desc: "Get in touch with us", href: "/contact" },
   ];
 
   return (
@@ -144,7 +149,7 @@ const Header = () => {
                               ? "/web-development"
                               : service.name === "AI Agents"
                                 ? "/ai-agents"
-                                : service.name === "Mobile Apps"
+                                : service.name === "App Development"
                                   ? "/app-development"
                                   : service.name === "UI/UX Design"
                                     ? "/ui-ux-design"

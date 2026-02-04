@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { updateProduct, deleteProduct } from '@/controllers/productController'
+import { updateProduct, deleteProduct } from '@/controllers/productsController'
 
 // PUT /api/products/[id] - Update a product (admin only)
 export async function PUT(request, { params }) {

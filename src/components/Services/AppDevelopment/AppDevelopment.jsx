@@ -1,7 +1,9 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import Lottie from "lottie-react";
 import mobileAppShowcase from "../../../../public/Mobile App Showcase.json";
+import { useRestartAnimations } from "@/hooks/useRestartAnimations";
 import {
   Rocket,
   Code2,
@@ -23,6 +25,19 @@ import {
 } from "lucide-react";
 
 const AppDevelopment = () => {
+  // Restart animations when component mounts
+  useRestartAnimations();
+
+  // Generate stable random values for particles
+  const [particles] = useState(() => {
+    return [...Array(15)].map(() => ({
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+      delay: Math.random() * 5,
+      duration: 10 + Math.random() * 20
+    }));
+  });
+
   useEffect(() => {
     const observerOptions = { threshold: 0.12, rootMargin: "0px 0px -40px 0px" };
     const observer = new IntersectionObserver((entries) => {
@@ -145,35 +160,33 @@ const AppDevelopment = () => {
   ];
 
   return (
-    <section className="relative overflow-hidden py-24 px-4 sm:px-6 lg:px-8 bg-[#050b1a]">
-      {/* ===== Blue Neon Animated Background (NO Framer) ===== */}
-      <div className="absolute inset-0 pointer-events-none">
-        {/* base linear */}
-        <div className="absolute inset-0 bg-[radial-linear(1100px_520px_at_15%_10%,rgba(34,211,238,0.18),transparent_60%),radial-linear(900px_520px_at_85%_80%,rgba(59,130,246,0.18),transparent_60%),linear-linear(135deg,#061a3a_0%,#041a33_45%,#03224a_100%)]" />
-
-        {/* aurora blobs */}
-        <div className="absolute -top-56 -left-56 h-175 w-175 rounded-full bg-cyan-500/10 blur-3xl animate-appFloat1" />
-        <div className="absolute -bottom-56 -right-56 h-195 w-195 rounded-full bg-blue-500/10 blur-3xl animate-appFloat2" />
-
-        {/* neon sweep */}
-        <div className="absolute left-1/2 -top-35 h-115 w-220 -translate-x-1/2 rotate-12 bg-linear-to-r from-transparent via-cyan-500/12 to-transparent blur-2xl animate-appSweep1" />
-        <div className="absolute left-1/2 -bottom-45 h-140 w-245 -translate-x-1/2 -rotate-12 bg-linear-to-r from-transparent via-blue-500/12 to-transparent blur-2xl animate-appSweep2" />
-
-        {/* grid */}
-        <div className="absolute inset-0 opacity-[0.10] bg-[linear-linear(to_right,rgba(56,189,248,0.18)_1px,transparent_1px),linear-linear(to_bottom,rgba(56,189,248,0.18)_1px,transparent_1px)] bg-size-[46px_46px]" />
-
-        {/* stars/particles */}
-        <div className="absolute inset-0 opacity-90">
-          <div className="app-particles app-p1" />
-          <div className="app-particles app-p2" />
-          <div className="app-particles app-p3" />
-        </div>
-
-        {/* vignette */}
-        <div className="absolute inset-0 bg-[radial-linear(circle_at_center,transparent_35%,rgba(0,0,0,0.62)_78%)]" />
+    <section className="relative overflow-hidden py-24 px-4 sm:px-6 lg:px-8 bg-linear-to-b from-slate-950 via-slate-900 to-slate-950">
+      {/* Background Animations */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Gradient Orbs */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-500/40 rounded-full blur-3xl animate-float-slow"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/35 rounded-full blur-3xl animate-float-slower"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-500/30 rounded-full blur-3xl animate-float-reverse"></div>
+        
+        {/* Grid Pattern */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+        
+        {/* Floating Elements */}
+        {particles.map((particle, i) => (
+          <div
+            key={i}
+            className="absolute w-2 h-2 bg-cyan-400/30 rounded-full animate-float-random"
+            style={{
+              top: `${particle.top}%`,
+              left: `${particle.left}%`,
+              animationDelay: `${particle.delay}s`,
+              animationDuration: `${particle.duration}s`
+            }}
+          ></div>
+        ))}
       </div>
 
-      <div className="relative max-w-7xl mx-auto route-container">
+      <div className="relative max-w-7xl mx-auto route-container z-10">
         {/* SECTION 1: HERO (mb-32) */}
         <div className="flex flex-col lg:flex-row items-center justify-between gap-12 mb-32">
           <div className="flex-1 space-y-8 text-left scroll-anim order-2 lg:order-1">
@@ -258,9 +271,11 @@ const AppDevelopment = () => {
           </div>
 
           <div className="flex justify-center scroll-anim">
-            <button className="px-8 py-3 bg-cyan-700 text-white rounded-lg text-sm font-bold hover:bg-cyan-400 hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all active:scale-95">
-              Explore All Features
-            </button>
+            <Link href="/pricing">
+              <button className="px-8 py-3 bg-cyan-700 text-white rounded-lg text-sm font-bold hover:bg-cyan-400 hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all active:scale-95">
+                Explore All Features
+              </button>
+            </Link>
           </div>
         </div>
 
@@ -276,10 +291,12 @@ const AppDevelopment = () => {
             </p>
           </div>
 
-          <button className="px-8 py-4 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-xl transition-all duration-300 flex items-center group shadow-md hover:shadow-lg active:scale-95 whitespace-nowrap">
-            Schedule a Consultation{" "}
-            <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-          </button>
+          <Link href="/contact">
+            <button className="px-8 py-4 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-xl transition-all duration-300 flex items-center group shadow-md hover:shadow-lg active:scale-95 whitespace-nowrap">
+              Schedule a Consultation{" "}
+              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+            </button>
+          </Link>
         </div>
 
         {/* SECTION 5: PILLARS */}

@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { Linkedin, Twitter, Github, Mail, MapPin, Calendar, Search } from "lucide-react";
 import { teamController } from '@/controllers';
+import { useRestartAnimations } from "@/hooks/useRestartAnimations";
 
 
 const safeText = (v, fallback = "-") => (typeof v === "string" && v.trim() ? v.trim() : fallback);
@@ -53,10 +54,23 @@ const formatDate = (v) => {
 };
 
 export default function TeamSection() {
+  // Restart animations when component mounts
+  useRestartAnimations();
+
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  // particles
+  // Generate stable random values for particles
   const [particles] = useState(() => {
+    return [...Array(15)].map(() => ({
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+      delay: Math.random() * 5,
+      duration: 10 + Math.random() * 20
+    }));
+  });
+
+  // old particles for backward compat
+  const [oldParticles] = useState(() => {
     return [...Array(10)].map(() => ({
       top: Math.random() * 100,
       left: Math.random() * 100,
@@ -259,12 +273,34 @@ export default function TeamSection() {
   }, [totalPages, currentPage]);
 
   return (
-    <section className="relative min-h-screen overflow-hidden bg-neon-blue">
-      {/* Background */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-grid-pattern opacity-[0.08]" />
-        <div className="absolute inset-0 bg-neon-vignette opacity-90" />
+    <section className="relative min-h-screen overflow-hidden bg-linear-to-b from-slate-950 via-slate-900 to-slate-950">
+      {/* Background Animations */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Gradient Orbs */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-500/40 rounded-full blur-3xl animate-float-slow"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/35 rounded-full blur-3xl animate-float-slower"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-500/30 rounded-full blur-3xl animate-float-reverse"></div>
+        
+        {/* Grid Pattern */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+        
+        {/* Floating Elements */}
+        {particles.map((particle, i) => (
+          <div
+            key={i}
+            className="absolute w-2 h-2 bg-cyan-400/30 rounded-full animate-float-random"
+            style={{
+              top: `${particle.top}%`,
+              left: `${particle.left}%`,
+              animationDelay: `${particle.delay}s`,
+              animationDuration: `${particle.duration}s`
+            }}
+          ></div>
+        ))}
+      </div>
 
+      {/* Old Background for compatibility */}
+      <div className="pointer-events-none absolute inset-0">
         <div
           className="absolute -top-24 -left-24 h-105 w-105 rounded-full bg-cyan-500/10 blur-3xl"
           style={{

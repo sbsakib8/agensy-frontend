@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { createProduct, getAllProducts } from '@/controllers/productController'
+import { createProduct, getAllProducts } from '@/controllers/productsController'
 
 // GET /api/products - Get all products (public with optional token)
 export async function GET(request) {

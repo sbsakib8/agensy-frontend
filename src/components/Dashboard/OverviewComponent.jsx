@@ -9,6 +9,7 @@ import {
   ShoppingCart,
   Package,
   Activity,
+  Loader2,
 } from "lucide-react";
 import {
   AreaChart,
@@ -24,45 +25,63 @@ import {
   Pie,
   Cell,
 } from "recharts";
-
-// Sample data for charts
-const revenueData = [
-  { name: "Jan", revenue: 4000 },
-  { name: "Feb", revenue: 3000 },
-  { name: "Mar", revenue: 5000 },
-  { name: "Apr", revenue: 4500 },
-  { name: "May", revenue: 6000 },
-  { name: "Jun", revenue: 5500 },
-];
-
-const ordersData = [
-  { name: "Jan", orders: 20 },
-  { name: "Feb", orders: 25 },
-  { name: "Mar", orders: 18 },
-  { name: "Apr", orders: 30 },
-  { name: "May", orders: 35 },
-  { name: "Jun", orders: 40 },
-];
-
-const productDistribution = [
-  { name: "UI/UX", value: 35, fill: "#3b82f6" },
-  { name: "Web Dev", value: 40, fill: "#8b5cf6" },
-  { name: "App Dev", value: 25, fill: "#10b981" },
-];
+import { dashboardApi } from "@/lib/api";
 
 export default function OverviewComponent() {
   const [isVisible, setIsVisible] = useState(false);
+  const [dashboardData, setDashboardData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, 0);
 
+    fetchDashboardData();
+
     return () => clearTimeout(timer);
   }, []);
 
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true);
+      const response = await dashboardApi.getDashboardStats();
+      console.log('📊 Dashboard Data:', response);
+      if (response.success) {
+        setDashboardData(response);
+      }
+      setError(null);
+    } catch (err) {
+      console.error('❌ Error fetching dashboard data:', err);
+      setError(err.message || 'Failed to fetch dashboard data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const cardStyle =
     "bg-[#0a0f23]/60 backdrop-blur-xl border border-blue-500/30 rounded-2xl p-6 text-white shadow-[0_0_20px_rgba(59,130,246,0.1)] hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] transition-all duration-500";
+
+  // Prepare chart data
+  const revenueData = dashboardData?.revenueOverview ? 
+    dashboardData.revenueOverview.months.map((month, index) => ({
+      name: month,
+      revenue: dashboardData.revenueOverview.values[index]
+    })) : [];
+
+  const ordersData = dashboardData?.ordersOverview ?
+    dashboardData.ordersOverview.months.map((month, index) => ({
+      name: month,
+      orders: dashboardData.ordersOverview.orders[index]
+    })) : [];
+
+  const productDistribution = dashboardData?.productDistribution ?
+    dashboardData.productDistribution.map((item, index) => ({
+      name: item.category,
+      value: item.percentage,
+      fill: index === 0 ? "#3b82f6" : index === 1 ? "#8b5cf6" : "#10b981"
+    })) : [];
 
   return (
     <div className="relative min-h-screen p-6 overflow-auto text-slate-200">
@@ -80,23 +99,23 @@ export default function OverviewComponent() {
           <StatCard
             icon={<DollarSign className="text-green-400" size={24} />}
             title="Total Revenue"
-            value="$45,231"
-            change="+20.1%"
+            value={`$${dashboardData?.stats?.totalRevenue?.toLocaleString() || 0}`}
+            change={dashboardData?.stats?.growth || "+0%"}
             changeType="positive"
             bgGradient="from-green-500/20 to-emerald-500/10"
           />
           <StatCard
             icon={<ShoppingCart className="text-blue-400" size={24} />}
             title="Total Orders"
-            value="168"
-            change="+12.5%"
+            value={dashboardData?.stats?.totalOrders?.toString() || "0"}
+            change={dashboardData?.paidOrders ? `${dashboardData.paidOrders.count} paid` : "0 paid"}
             changeType="positive"
             bgGradient="from-blue-500/20 to-cyan-500/10"
           />
           <StatCard
             icon={<Users className="text-purple-400" size={24} />}
             title="Total Users"
-            value="2,543"
+            value={dashboardData?.stats?.totalUsers?.toLocaleString() || "0"}
             change="+8.3%"
             changeType="positive"
             bgGradient="from-purple-500/20 to-pink-500/10"
@@ -104,7 +123,7 @@ export default function OverviewComponent() {
           <StatCard
             icon={<Package className="text-orange-400" size={24} />}
             title="Active Products"
-            value="42"
+            value={dashboardData?.stats?.activeProducts?.toString() || "0"}
             change="+4.2%"
             changeType="positive"
             bgGradient="from-orange-500/20 to-yellow-500/10"
@@ -166,7 +185,10 @@ export default function OverviewComponent() {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  label={({ name, percent }) => {
+                    const percentage = (percent * 100).toFixed(0);
+                    return percentage > 0 ? `${percentage}%` : '';
+                  }}
                   outerRadius={80}
                   fill="#8884d8"
                   dataKey="value"
@@ -187,11 +209,11 @@ export default function OverviewComponent() {
             <div className="mt-4 space-y-2">
               {productDistribution.map((item, index) => (
                 <div key={index} className="flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-2">
-                    <div className={`w-3 h-3 rounded-full`} style={{ backgroundColor: item.fill }}></div>
-                    <span className="text-gray-300">{item.name}</span>
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <div className={`w-3 h-3 rounded-full flex-shrink-0`} style={{ backgroundColor: item.fill }}></div>
+                    <span className="text-gray-300 truncate">{item.name}</span>
                   </div>
-                  <span className="text-gray-400">{item.value}%</span>
+                  <span className="text-gray-400 ml-2 flex-shrink-0">{item.value}%</span>
                 </div>
               ))}
             </div>
@@ -223,30 +245,6 @@ export default function OverviewComponent() {
               </BarChart>
             </ResponsiveContainer>
           </div>
-        </div>
-
-        {/* Quick Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
-          <QuickStatCard
-            title="Pending Orders"
-            value="23"
-            icon={<ClipboardList className="text-yellow-400" size={20} />}
-          />
-          <QuickStatCard
-            title="Active Projects"
-            value="14"
-            icon={<Folder className="text-blue-400" size={20} />}
-          />
-          <QuickStatCard
-            title="New Users Today"
-            value="8"
-            icon={<Users className="text-purple-400" size={20} />}
-          />
-          <QuickStatCard
-            title="Conversion Rate"
-            value="3.2%"
-            icon={<Activity className="text-green-400" size={20} />}
-          />
         </div>
       </div>
     </div>

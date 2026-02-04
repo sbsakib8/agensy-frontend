@@ -265,8 +265,8 @@ export default function OrdersComponent() {
                 <th className="px-4 py-3 text-left text-gray-400 font-medium">Customer</th>
                 <th className="px-4 py-3 text-left text-gray-400 font-medium">Items</th>
                 <th className="px-4 py-3 text-left text-gray-400 font-medium">Amount</th>
-                <th className="px-4 py-3 text-left text-gray-400 font-medium">Payment</th>
-                <th className="px-4 py-3 text-left text-gray-400 font-medium">Status</th>
+                <th className="px-4 py-3 text-left text-gray-400 font-medium">Receiver Number</th>
+                <th className="px-4 py-3 text-left text-gray-400 font-medium">Payment Status</th>
                 <th className="px-4 py-3 text-left text-gray-400 font-medium">Date</th>
                 <th className="px-4 py-3 text-left text-gray-400 font-medium">Actions</th>
               </tr>
@@ -300,6 +300,13 @@ export default function OrdersComponent() {
                     </div>
                   </td>
                   <td className="px-4 py-3">
+                    <div className="text-white font-medium">{order.payment?.receiverNumber || "N/A"}</div>
+                    <div className="text-xs text-gray-500 capitalize mt-1">{order.payment?.method || "N/A"}</div>
+                    {order.payment?.transactionId && (
+                      <div className="text-xs text-cyan-400 mt-1">TXN: {order.payment.transactionId}</div>
+                    )}
+                  </td>
+                  <td className="px-4 py-3">
                     <select
                       value={order.payment?.status || "pending"}
                       onChange={(e) => handlePaymentUpdate(order._id, e.target.value)}
@@ -309,23 +316,6 @@ export default function OrdersComponent() {
                       <option value="paid">Paid</option>
                       <option value="failed">Failed</option>
                       <option value="refunded">Refunded</option>
-                    </select>
-                    <div className="text-xs text-gray-500 capitalize mt-1">{order.payment?.method || "N/A"}</div>
-                    {order.payment?.transactionId && (
-                      <div className="text-xs text-cyan-400 mt-1">TXN: {order.payment.transactionId}</div>
-                    )}
-                  </td>
-                  <td className="px-4 py-3">
-                    <select
-                      value={order.orderStatus || "pending"}
-                      onChange={(e) => handleStatusUpdate(order._id, e.target.value)}
-                      className={`px-2 py-1 rounded text-xs font-medium ${statusColor(order.orderStatus)} border-none cursor-pointer`}
-                    >
-                      <option value="pending">Pending</option>
-                      <option value="processing">Processing</option>
-                      <option value="completed">Completed</option>
-                      <option value="cancelled">Cancelled</option>
-                      <option value="on-hold">On Hold</option>
                     </select>
                   </td>
                   <td className="px-4 py-3 text-gray-400 text-xs">

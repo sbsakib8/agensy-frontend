@@ -479,12 +479,90 @@ export const orderApi = {
     console.log('📦 Order stats:', response.data);
     return response.data;
   },
+
+  // Track orders by email
+  trackOrderByEmail: async (email) => {
+    console.log('📍 Tracking orders for email:', email);
+    const response = await api.get(`orders/track/${email}`);
+    console.log('📦 Track order response:', response.data);
+    return response.data;
+  },
 };
 
 export const adminApi = {
   createUser: async (data, adminSecret) => {
     const headers = adminSecret ? { 'x-admin-secret': adminSecret } : {};
     const response = await api.post('create-user', data, { headers });
+    return response.data;
+  },
+};
+
+// ==================== CONTACT API ====================
+export const contactApi = {
+  // Public - Submit contact form
+  submitContact: async (data) => {
+    console.log('📧 Submitting contact form:', data);
+    const response = await api.post('contact', data);
+    console.log('✅ Contact form submitted:', response.data);
+    return response.data;
+  },
+
+  // Admin - Get all contacts
+  getAllContacts: async (params = {}) => {
+    console.log('📡 Fetching contacts with params:', params);
+    const response = await api.get('contact', { params });
+    console.log('📦 Contacts response:', response.data);
+    return response.data;
+  },
+
+  // Admin - Get contact stats
+  getContactStats: async () => {
+    console.log('📊 Fetching contact stats');
+    const response = await api.get('contact/stats');
+    console.log('📦 Contact stats:', response.data);
+    return response.data;
+  },
+
+  // Admin - Get contact by ID
+  getContactById: async (id) => {
+    console.log('🔍 Fetching contact by ID:', id);
+    const response = await api.get(`contact/${id}`);
+    console.log('📦 Contact details:', response.data);
+    return response.data;
+  },
+
+  // Admin - Update contact status
+  updateContactStatus: async (id, status) => {
+    console.log('🔄 Updating contact status:', id, status);
+    const response = await api.patch(`contact/${id}/status`, { status });
+    console.log('✅ Contact status updated:', response.data);
+    return response.data;
+  },
+
+  // Admin - Delete contact
+  deleteContact: async (id) => {
+    console.log('🗑️ Deleting contact:', id);
+    const response = await api.delete(`contact/${id}`);
+    console.log('✅ Contact deleted:', response.data);
+    return response.data;
+  },
+
+  // Admin - Delete multiple contacts
+  deleteMultipleContacts: async (ids) => {
+    console.log('🗑️ Deleting multiple contacts:', ids);
+    const response = await api.post('contact/delete-multiple', { ids });
+    console.log('✅ Contacts deleted:', response.data);
+    return response.data;
+  },
+};
+
+// ==================== DASHBOARD API ====================
+export const dashboardApi = {
+  // Get dashboard statistics
+  getDashboardStats: async () => {
+    console.log('📊 Fetching dashboard stats');
+    const response = await api.get('dashboard');
+    console.log('📦 Dashboard stats:', response.data);
     return response.data;
   },
 };

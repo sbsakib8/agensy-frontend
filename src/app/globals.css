@@ -102,7 +102,7 @@ body {
   animation-delay: 0.2s;
 }
 
-/* Float (generic) */
+/* Float (generic) - ALWAYS MOVING */
 @keyframes float {
   0% {
     transform: translateY(0) translateX(0);
@@ -115,10 +115,12 @@ body {
   }
 }
 .animate-float {
-  animation: float 7s ease-in-out infinite;
+  animation: float 7s ease-in-out infinite both;
+  will-change: transform;
+  animation-play-state: running !important;
 }
 
-/* Float Simple */
+/* Float Simple - ALWAYS MOVING */
 @keyframes float-simple {
   0% {
     transform: translateY(0);
@@ -131,10 +133,12 @@ body {
   }
 }
 .animate-float-simple {
-  animation: float-simple 4s ease-in-out infinite;
+  animation: float-simple 4s ease-in-out infinite both;
+  will-change: transform;
+  animation-play-state: running !important;
 }
 
-/* Float Delayed */
+/* Float Delayed - ALWAYS MOVING */
 @keyframes float-delayed {
   0% {
     transform: translateY(0) translateX(0);
@@ -147,11 +151,12 @@ body {
   }
 }
 .animate-float-delayed {
-  animation: float-delayed 6s ease-in-out infinite;
-  animation-delay: 1s;
+  animation: float-delayed 6s ease-in-out infinite both;
+  will-change: transform;
+  animation-play-state: running !important;
 }
 
-/* Float Slow (your class used in particles) */
+/* Float Slow - ALWAYS MOVING */
 @keyframes float-slow {
   0% {
     transform: translateY(0) translateX(0);
@@ -164,11 +169,54 @@ body {
   }
 }
 .animate-float-slow {
-  animation: float-slow 8s ease-in-out infinite;
-  animation-delay: 0.2s;
+  animation: float-slow 8s ease-in-out infinite both;
+  will-change: transform;
+  animation-play-state: running !important;
 }
 
-/* Gradient slow rotate */
+/* Float Slower - ALWAYS MOVING */
+@keyframes float-slower {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+  }
+  33% {
+    transform: translateY(-20px) translateX(15px) scale(1.05);
+  }
+  66% {
+    transform: translateY(10px) translateX(-10px) scale(0.95);
+  }
+  100% {
+    transform: translateY(0) translateX(0) scale(1);
+  }
+}
+.animate-float-slower {
+  animation: float-slower 15s ease-in-out infinite both;
+  will-change: transform;
+  animation-play-state: running !important;
+}
+
+/* Float Reverse - ALWAYS MOVING */
+@keyframes float-reverse {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+  }
+  33% {
+    transform: translateY(15px) translateX(-20px) scale(1.03);
+  }
+  66% {
+    transform: translateY(-12px) translateX(18px) scale(0.97);
+  }
+  100% {
+    transform: translateY(0) translateX(0) scale(1);
+  }
+}
+.animate-float-reverse {
+  animation: float-reverse 12s ease-in-out infinite both;
+  will-change: transform;
+  animation-play-state: running !important;
+}
+
+/* Gradient slow rotate - ALWAYS MOVING */
 @keyframes gradient-slow {
   0% {
     transform: rotate(0deg);
@@ -182,9 +230,11 @@ body {
 }
 .animate-gradient-slow {
   animation: gradient-slow 20s linear infinite;
+  will-change: transform;
+  animation-play-state: running;
 }
 
-/* Gradient move */
+/* Gradient move - ALWAYS MOVING */
 @keyframes gradient {
   0% {
     background-position: 0% 50%;
@@ -199,9 +249,11 @@ body {
 .animate-gradient {
   background-size: 200% 200%;
   animation: gradient 3s ease infinite;
+  will-change: background-position;
+  animation-play-state: running;
 }
 
-/* Pulse slow */
+/* Pulse slow - ALWAYS MOVING */
 @keyframes pulse-slow {
   0%,
   100% {
@@ -213,9 +265,11 @@ body {
 }
 .animate-pulse-slow {
   animation: pulse-slow 2s ease-in-out infinite;
+  will-change: transform;
+  animation-play-state: running;
 }
 
-/* Spin variants */
+/* Spin variants - ALWAYS MOVING */
 @keyframes spin-slow {
   from {
     transform: rotate(0deg);
@@ -226,6 +280,8 @@ body {
 }
 .animate-spin-slow {
   animation: spin-slow 20s linear infinite;
+  will-change: transform;
+  animation-play-state: running;
 }
 
 @keyframes spin-slower {
@@ -238,6 +294,8 @@ body {
 }
 .animate-spin-slower {
   animation: spin-slower 30s linear infinite;
+  will-change: transform;
+  animation-play-state: running;
 }
 
 @keyframes spin-reverse {
@@ -250,9 +308,11 @@ body {
 }
 .animate-spin-reverse {
   animation: spin-reverse 25s linear infinite;
+  will-change: transform;
+  animation-play-state: running;
 }
 
-/* Particle rise */
+/* Particle rise - ALWAYS MOVING */
 @keyframes particle {
   0% {
     transform: translateY(0) translateX(0) scale(1);
@@ -271,6 +331,8 @@ body {
 }
 .animate-particle {
   animation: particle linear infinite;
+  will-change: transform, opacity;
+  animation-play-state: running;
 }
 
 /* Progress bar */
@@ -402,8 +464,11 @@ body {
 
 /* =========================
    Accessibility: Reduce motion
+   NOTE: If your balls aren't moving, check if 
+   you have "Reduce motion" enabled in your OS
 ========================= */
 @media (prefers-reduced-motion: reduce) {
+  /* Comment out these lines to force animations even with reduced motion preference */
   * {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;

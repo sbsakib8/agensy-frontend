@@ -98,9 +98,9 @@ export default function PricingSection() {
 
       {/* ================= SOFT GLOW FILTERS ================= */}
       <div className="pointer-events-none absolute inset-0 z-1">
-        <div className="absolute -left-48 top-1/4 w-130 h-130 bg-cyan-500/10 rounded-full blur-[160px] mix-blend-screen" />
-        <div className="absolute -right-48 top-1/3 w-130 h-130 bg-purple-500/10 rounded-full blur-[160px] mix-blend-screen" />
-        <div className="absolute -bottom-64 left-1/2 -translate-x-1/2 w-180 h-105 bg-blue-500/10 rounded-full blur-[180px] mix-blend-screen" />
+        <div className="absolute -left-48 top-1/4 w-130 h-130 bg-cyan-500/25 rounded-full blur-[160px] mix-blend-screen animate-float-slow" />
+        <div className="absolute -right-48 top-1/3 w-130 h-130 bg-purple-500/25 rounded-full blur-[160px] mix-blend-screen animate-float-slower" />
+        <div className="absolute -bottom-64 left-1/2 -translate-x-1/2 w-180 h-105 bg-blue-500/25 rounded-full blur-[180px] mix-blend-screen animate-float-reverse" />
       </div>
 
       {/* ================= CONTENT ================= */}
@@ -190,6 +190,7 @@ export default function PricingSection() {
                   highlight={isHighlighted}
                   features={plan.features || []}
                   cta={plan.cta}
+                  currency={currency}
                   onOrderClick={() => handleOrderClick(plan)}
                 />
               );
@@ -217,7 +218,7 @@ export default function PricingSection() {
 }
 
 /* ================= PRICING CARD COMPONENT ================= */
-function PricingCard({ title, subtitle, price, features, color, highlight, cta, onOrderClick }) {
+function PricingCard({ title, subtitle, price, features, color, highlight, cta, onOrderClick, currency }) {
   return (
     <div
       className={`relative rounded-2xl border border-white/10 bg-linear-to-b from-white/5 to-white/0 p-8 backdrop-blur-md shadow-xl
@@ -225,7 +226,7 @@ function PricingCard({ title, subtitle, price, features, color, highlight, cta, 
     >
       {highlight && (
         <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-linear-to-r from-cyan-500 to-blue-500 px-4 py-1 rounded-full text-xs font-semibold">
-          Popular
+          {currency === "BDT" ? "জনপ্রিয়" : "Popular"}
         </div>
       )}
       

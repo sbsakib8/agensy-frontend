@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, Zap, Palette, Rocket, ShieldCheck, Link } from "lucide-react";
+import { ArrowRight, Sparkles, Zap, Palette, Rocket, ShieldCheck, Link as LinkIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { bannerApi } from "@/lib/api";
 
 export default function HeroSection() {
@@ -55,7 +56,7 @@ export default function HeroSection() {
       </div>
 
       {/* ================= CONTENT ================= */}
-      <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 items-center gap-14 px-6 py-28 md:grid-cols-2">
+      <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 items-center gap-14 px-6 py-40 pb-40 md:grid-cols-2">
         {/* LEFT SIDE */}
         <div>
           <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-500/10 px-4 py-1 text-sm text-blue-400">
@@ -95,21 +96,25 @@ export default function HeroSection() {
           </p>
 
           <div className="mt-10 flex flex-wrap items-center gap-4">
-            <button className="group inline-flex items-center gap-2 rounded-full bg-linear-to-r from-blue-500 to-cyan-400 px-8 py-4 text-sm font-semibold text-black transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]">
-              {loading 
-                ? "Get Started" 
-                : bannerData?.ctaButtons?.[0]?.text || "Get Started"}
-              <ArrowRight
-                size={18}
-                className="transition-transform group-hover:translate-x-1"
-              />
-            </button>
+            <Link href="/pricing">
+              <button className="group inline-flex items-center gap-2 rounded-full bg-linear-to-r from-blue-500 to-cyan-400 px-8 py-4 text-sm font-semibold text-black transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]">
+                {loading 
+                  ? "Get Started" 
+                  : bannerData?.ctaButtons?.[0]?.text || "Get Started"}
+                <ArrowRight
+                  size={18}
+                  className="transition-transform group-hover:translate-x-1"
+                />
+              </button>
+            </Link>
 
-            <button className="rounded-full border border-white/10 px-8 py-4 text-sm text-gray-300 transition-all hover:border-blue-400/40 hover:text-white">
-              {loading 
-                ? "View Our Work" 
-                : bannerData?.ctaButtons?.[1]?.text || "View Our Work"}
-            </button>
+            <Link href="/product">
+              <button className="rounded-full border border-white/10 px-8 py-4 text-sm text-gray-300 transition-all hover:border-blue-400/40 hover:text-white">
+                {loading 
+                  ? "View Our Work" 
+                  : bannerData?.ctaButtons?.[1]?.text || "View Our Work"}
+              </button>
+            </Link>
           </div>
         </div>
 
@@ -136,14 +141,16 @@ export default function HeroSection() {
     border border-white/10
   "
 >
-  <Image
-    src={bannerData?.images?.[0]?.imageUrl || "https://i.ibb.co.com/wNDjjXSZ/istockphoto-1189378904-612x612.jpg"}
-    alt={bannerData?.images?.[0]?.title || "UI UX"}
-    fill
-    className="object-cover"
-    sizes="(max-width: 768px) 100vw, 50vw"
-    priority
-  />
+  {(bannerData?.images?.[0]?.imageUrl && bannerData.images[0].imageUrl.trim() !== "") && (
+    <Image
+      src={bannerData.images[0].imageUrl}
+      alt={bannerData.images[0].title || "UI UX"}
+      fill
+      className="object-cover"
+      sizes="(max-width: 768px) 100vw, 50vw"
+      priority
+    />
+  )}
 </motion.div>
 
 {/* ===== IMAGE 2 ===== */}
@@ -153,13 +160,15 @@ export default function HeroSection() {
   whileHover={{ y: -6 }}
   className="relative rounded-xl overflow-hidden border border-white/10"
 >
-  <Image
-    src={bannerData?.images?.[1]?.imageUrl || "https://i.ibb.co.com/Ng3c9LgV/download-3.jpg"}
-    alt={bannerData?.images?.[1]?.title || "Visual"}
-    fill
-    className="object-cover"
-    sizes="(max-width: 768px) 100vw, 33vw"
-  />
+  {(bannerData?.images?.[1]?.imageUrl && bannerData.images[1].imageUrl.trim() !== "") && (
+    <Image
+      src={bannerData.images[1].imageUrl}
+      alt={bannerData.images[1].title || "Visual"}
+      fill
+      className="object-cover"
+      sizes="(max-width: 768px) 100vw, 33vw"
+    />
+  )}
 </motion.div>
 
 {/* ===== IMAGE 3 ===== */}
@@ -169,13 +178,15 @@ export default function HeroSection() {
   whileHover={{ y: -6 }}
   className="relative rounded-xl overflow-hidden border border-white/10"
 >
-  <Image
-    src={bannerData?.images?.[2]?.imageUrl || "https://i.ibb.co.com/rKZwj131/images-1.jpg"}
-    alt={bannerData?.images?.[2]?.title || "WordPress"}
-    fill
-    className="object-cover"
-    sizes="(max-width: 768px) 100vw, 33vw"
-  />
+  {(bannerData?.images?.[2]?.imageUrl && bannerData.images[2].imageUrl.trim() !== "") && (
+    <Image
+      src={bannerData.images[2].imageUrl}
+      alt={bannerData.images[2].title || "WordPress"}
+      fill
+      className="object-cover"
+      sizes="(max-width: 768px) 100vw, 33vw"
+    />
+  )}
 </motion.div>
 
 {/* ===== IMAGE 4 ===== */}
@@ -185,13 +196,15 @@ export default function HeroSection() {
   whileHover={{ y: -6 }}
   className="relative rounded-xl overflow-hidden border border-white/10"
 >
-  <Image
-    src={bannerData?.images?.[3]?.imageUrl || "https://i.ibb.co.com/Sw1TXJDc/web-development-coding-programming-internet-technology-business-concept-web-development-coding-progr.jpg"}
-    alt={bannerData?.images?.[3]?.title || "App"}
-    fill
-    className="object-cover"
-    sizes="(max-width: 768px) 100vw, 33vw"
-  />
+  {(bannerData?.images?.[3]?.imageUrl && bannerData.images[3].imageUrl.trim() !== "") && (
+    <Image
+      src={bannerData.images[3].imageUrl}
+      alt={bannerData.images[3].title || "App"}
+      fill
+      className="object-cover"
+      sizes="(max-width: 768px) 100vw, 33vw"
+    />
+  )}
 </motion.div>
 
 {/* ===== IMAGE 5 : WIDE ===== */}
@@ -206,13 +219,15 @@ export default function HeroSection() {
     border border-white/10
   "
 >
-  <Image
-    src={bannerData?.images?.[4]?.imageUrl || "https://i.ibb.co.com/rGtVP9TH/download-2.jpg"}
-    alt={bannerData?.images?.[4]?.title || "E-commerce"}
-    fill
-    className="object-cover"
-    sizes="(max-width: 768px) 100vw, 50vw"
-  />
+  {(bannerData?.images?.[4]?.imageUrl && bannerData.images[4].imageUrl.trim() !== "") && (
+    <Image
+      src={bannerData.images[4].imageUrl}
+      alt={bannerData.images[4].title || "E-commerce"}
+      fill
+      className="object-cover"
+      sizes="(max-width: 768px) 100vw, 50vw"
+    />
+  )}
 </motion.div>
 
   {/* ===== IMAGE 5 : WIDE ===== */}

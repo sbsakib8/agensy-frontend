@@ -1,14 +1,21 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
+import { useRestartAnimations } from "@/hooks/useRestartAnimations";
 
 export default function CustomersPage() {
-  const particles = Array.from({ length: 30 }).map(() => ({
-    left: Math.random() * 100,
-    top: Math.random() * 100,
-    duration: 5 + Math.random() * 5,
-    delay: Math.random() * 5,
-  }));
+  // Restart animations when component mounts
+  useRestartAnimations();
+
+  const [particles] = useState(() => {
+    return Array.from({ length: 15 }).map(() => ({
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      delay: Math.random() * 5,
+      duration: 10 + Math.random() * 20,
+    }));
+  });
 
   const customers = [
     { name: "Acme Corp", logo: "https://i.ibb.co.com/Q3frLsdm/download-14.jpg", bg: "bg-blue-500/20" },
@@ -20,9 +27,34 @@ export default function CustomersPage() {
   ];
 
   return (
-    <main className="relative min-h-screen flex flex-col items-center justify-start px-6 py-24 text-white overflow-hidden">
+    <main className="relative min-h-screen flex flex-col items-center justify-start px-6 py-24 text-white overflow-hidden bg-linear-to-b from-slate-950 via-slate-900 to-slate-950">
 
-      {/* ================= BACKGROUND ================= */}
+      {/* ================= Background Animations ================= */}
+      <div className="fixed inset-0 -z-10">
+        {/* Gradient Orbs */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-500/40 rounded-full blur-3xl animate-float-slow"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/35 rounded-full blur-3xl animate-float-slower"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-500/30 rounded-full blur-3xl animate-float-reverse"></div>
+        
+        {/* Grid Pattern */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+        
+        {/* Floating Elements */}
+        {particles.map((particle, i) => (
+          <div
+            key={i}
+            className="absolute w-2 h-2 bg-cyan-400/30 rounded-full animate-float-random"
+            style={{
+              left: `${particle.left}%`,
+              top: `${particle.top}%`,
+              animationDelay: `${particle.delay}s`,
+              animationDuration: `${particle.duration}s`
+            }}
+          ></div>
+        ))}
+      </div>
+
+      {/* ================= Old BACKGROUND ================= */}
       <div className="fixed inset-0 -z-10">
         {/* Grid */}
         <div

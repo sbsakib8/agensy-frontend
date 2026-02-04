@@ -2,6 +2,8 @@
 
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { useRestartAnimations } from "@/hooks/useRestartAnimations";
 import {
   FaRobot,
   FaCogs,
@@ -28,6 +30,16 @@ const LottiePlayer = dynamic(
 );
 
 const AiAgent = () => {
+  // Generate stable random values for particles
+  const particles = React.useMemo(() => {
+    return [...Array(15)].map(() => ({
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+      delay: Math.random() * 5,
+      duration: 10 + Math.random() * 20
+    }));
+  }, []);
+
   const features = [
     {
       icon: <FaCloud className="text-4xl mb-4 text-blue-400" />,
@@ -74,16 +86,37 @@ const AiAgent = () => {
     },
   ];
 
+  // Restart animations when component mounts
+  useRestartAnimations();
+
   return (
-    <div className="bg-gray-900 text-gray-100 font-sans">
+    <div className="relative bg-linear-to-b from-slate-950 via-slate-900 to-slate-950 text-gray-100 font-sans overflow-hidden">
+      {/* Background Animations */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Gradient Orbs */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-500/40 rounded-full blur-3xl animate-float-slow"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/35 rounded-full blur-3xl animate-float-slower"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-500/30 rounded-full blur-3xl animate-float-reverse"></div>
+        
+        {/* Grid Pattern */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+        
+        {/* Floating Elements */}
+        {particles.map((particle, i) => (
+          <div
+            key={i}
+            className="absolute w-2 h-2 bg-cyan-400/30 rounded-full animate-float-random"
+            style={{
+              top: `${particle.top}%`,
+              left: `${particle.left}%`,
+              animationDelay: `${particle.delay}s`,
+              animationDuration: `${particle.duration}s`
+            }}
+          ></div>
+        ))}
+      </div>
 
- <section className="relative max-w-7xl mx-auto px-6 py-32">
-  {/* Background Gradients & Blurs */}
-  <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 -z-10" />
-  <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-blue-500/30 rounded-full blur-3xl -z-10" />
-  <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-purple-500/30 rounded-full blur-3xl -z-10" />
-  <div className="absolute top-20 right-1/3 w-[700px] h-[300px] bg-pink-500/20 rounded-full blur-2xl -z-10" />
-
+ <section className="relative max-w-7xl mx-auto px-6 py-32 z-10">
   <div className="flex flex-col-reverse md:flex-row items-center gap-12">
     {/* Text Content */}
     <div className="md:w-1/2">
@@ -156,7 +189,7 @@ const AiAgent = () => {
       </section>
 
       {/* ================= CTA (NOW BEFORE PILLARS) ================= */}
-      <section className="py-20 text-center bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900">
+      <section className="relative py-20 text-center bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 z-10">
         <h2 className="text-4xl font-bold mb-4">
           Partner for Intelligent Automation
         </h2>
@@ -164,9 +197,11 @@ const AiAgent = () => {
           Automate repetitive work and let your team focus on high-impact strategy.
         </p>
 
-        <button className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 px-6 py-3 rounded-lg shadow">
-          Schedule a Call <FaArrowRight />
-        </button>
+        <Link href="/contact" className="inline-block relative z-20">
+          <button className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 px-6 py-3 rounded-lg shadow transition-all hover:scale-105">
+            Schedule a Call <FaArrowRight />
+          </button>
+        </Link>
       </section>
 
       {/* ================= PILLARS ================= */}

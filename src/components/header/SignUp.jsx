@@ -10,7 +10,7 @@ import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "@/lib/firebase";
 import { authApi } from "@/lib/api";
 import { formatErrorMessage } from "@/lib/error-handler";
-import { uploadToImgBB } from "@/lib/imgbb-upload";
+import { uploadImageToImgBB } from "@/lib/imgbb-upload";
 
 // Lottie animation
 import signup from "../../../public/Sign up.json";
@@ -246,7 +246,7 @@ export default function SignUpPage() {
 
         {/* LEFT SIDE */}
         <div className="hidden md:flex w-1/2 relative p-6 lg:p-8 flex-col bg-[#0f172a] overflow-hidden min-h-0">
-          <div className="absolute -top-32 -left-32 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute -top-32 -left-32 w-96 h-96 bg-cyan-500/35 rounded-full blur-3xl animate-float-slow" />
           <div className="absolute bottom-0 right-0 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl animate-pulse delay-700" />
 
           {/* TOP */}

@@ -2,6 +2,10 @@
 
 import React, { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import dynamic from "next/dynamic";
+import { useRestartAnimations } from "@/hooks/useRestartAnimations";
+import demoController from "@/controllers/demoController";
 import {
   ArrowRight,
   Code2,
@@ -14,7 +18,19 @@ import {
   User,
   MessageSquare,
   Sparkles,
+  X,
 } from "lucide-react";
+
+// ================== LOTTIE (SSR SAFE) ==================
+const Player = dynamic(
+  () =>
+    import("@lottiefiles/react-lottie-player").then(
+      (mod) => mod.Player
+    ),
+  { ssr: false }
+);
+
+import careerAnimation from "../../../public/businessman path.json";
 
 
 /* ================= Data ================= */
@@ -24,50 +40,120 @@ const services = [
     desc: "Next.js, MERN, high-performance sites.",
     icon: Code2,
     cta: "Learn More",
+    details: {
+      fullDescription: "We create cutting-edge web applications using the latest technologies including Next.js, React, Node.js, and MongoDB. Our focus is on building fast, scalable, and SEO-friendly websites that drive business growth.",
+      features: [
+        "Next.js & React Development",
+        "Full-stack MERN Solutions",
+        "Performance Optimization",
+        "SEO-friendly Architecture",
+        "Responsive Design",
+        "API Integration",
+        "Database Design & Management",
+        "Server-side Rendering (SSR)"
+      ],
+      benefits: [
+        "Lightning-fast load times (< 1s)",
+        "95+ Lighthouse scores",
+        "Scalable architecture for growth",
+        "Mobile-first responsive design",
+        "Secure and maintainable code"
+      ],
+      technologies: ["Next.js", "React", "Node.js", "MongoDB", "Express", "Tailwind CSS", "TypeScript"],
+      pricing: "Starting from $2,500",
+      timeline: "4-8 weeks"
+    }
   },
   {
     title: "UI/UX Design",
     desc: "Modern UI, conversion-focused layouts.",
     icon: PenTool,
     cta: "Learn More",
+    details: {
+      fullDescription: "Our design team creates beautiful, intuitive interfaces that not only look amazing but also convert visitors into customers. We focus on user-centered design principles to deliver exceptional digital experiences.",
+      features: [
+        "User Research & Analysis",
+        "Wireframing & Prototyping",
+        "Visual Design & Branding",
+        "Interactive Prototypes",
+        "Usability Testing",
+        "Design Systems",
+        "Mobile App Design",
+        "Conversion Optimization"
+      ],
+      benefits: [
+        "Increased user engagement",
+        "Higher conversion rates",
+        "Improved user satisfaction",
+        "Brand consistency",
+        "Reduced development time"
+      ],
+      technologies: ["Figma", "Adobe XD", "Sketch", "InVision", "Principle", "Framer"],
+      pricing: "Starting from $1,800",
+      timeline: "2-4 weeks"
+    }
   },
   {
     title: "Branding",
     desc: "Logo, brand kit, social templates.",
     icon: BadgeCheck,
     cta: "Learn More",
+    details: {
+      fullDescription: "We help businesses establish a strong brand identity through comprehensive branding solutions including logo design, brand guidelines, and complete visual identity systems that resonate with your target audience.",
+      features: [
+        "Logo Design & Variations",
+        "Brand Identity Guidelines",
+        "Color Palette & Typography",
+        "Business Card Design",
+        "Social Media Templates",
+        "Marketing Collateral",
+        "Brand Strategy",
+        "Style Guide Creation"
+      ],
+      benefits: [
+        "Professional brand presence",
+        "Stand out from competitors",
+        "Consistent brand messaging",
+        "Ready-to-use templates",
+        "Increased brand recognition"
+      ],
+      technologies: ["Adobe Illustrator", "Photoshop", "InDesign", "Canva Pro"],
+      pricing: "Starting from $1,200",
+      timeline: "2-3 weeks"
+    }
   },
   {
     title: "SEO & Marketing",
     desc: "On-page SEO, performance growth.",
     icon: TrendingUp,
     cta: "Learn More",
+    details: {
+      fullDescription: "Drive organic traffic and improve your search engine rankings with our comprehensive SEO and digital marketing services. We use data-driven strategies to boost your online visibility and generate quality leads.",
+      features: [
+        "Technical SEO Audit",
+        "On-page Optimization",
+        "Keyword Research & Strategy",
+        "Content Optimization",
+        "Link Building",
+        "Performance Tracking",
+        "Local SEO",
+        "Analytics & Reporting"
+      ],
+      benefits: [
+        "Higher search rankings",
+        "Increased organic traffic",
+        "Better conversion rates",
+        "Data-driven insights",
+        "Long-term sustainable growth"
+      ],
+      technologies: ["Google Analytics", "Search Console", "SEMrush", "Ahrefs", "Moz"],
+      pricing: "Starting from $800/month",
+      timeline: "Ongoing (3-6 months for results)"
+    }
   },
 ];
 
-const caseStudies = [
-  {
-    title: "Roquet",
-    subtitle: "SaaS Dashboard",
-    metric: "Load time ↑ 40%",
-    img: "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=1200&auto=format&fit=crop",
-    cta: "Learn More",
-  },
-  {
-    title: "GolfHub",
-    subtitle: "Tour Booking Website",
-    metric: "Leads ↑ 2.1x",
-    img: "https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1200&auto=format&fit=crop",
-    cta: "View Case Study",
-  },
-  {
-    title: "RSFinance",
-    subtitle: "Fintech Platform",
-    metric: "Growth ↑ 260%",
-    img: "https://images.unsplash.com/photo-1556761175-4b46a572b786?q=80&w=1200&auto=format&fit=crop",
-    cta: "View Case Study",
-  },
-];
+// Projects will be fetched from API
 
 const testimonials = [
   {
@@ -146,6 +232,123 @@ function GlowCard({ children, className = "" }) {
   );
 }
 
+/* ================= Service Modal ================= */
+function ServiceModal({ service, isOpen, onClose }) {
+  if (!isOpen || !service) return null;
+
+  const Icon = service.icon;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-fade-in" onClick={onClose}>
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
+      
+      {/* Modal */}
+      <div 
+        className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute top-6 right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors z-10"
+        >
+          <X className="w-5 h-5 text-white" />
+        </button>
+
+        {/* Header */}
+        <div className="relative p-8 pb-6 border-b border-white/10">
+          <div className="flex items-start gap-6">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/5 border border-white/10 shrink-0">
+              <Icon className="h-8 w-8 text-cyan-200" />
+            </div>
+            <div className="flex-1">
+              <h2 className="text-3xl font-bold text-white mb-2">{service.title}</h2>
+              <p className="text-slate-300 text-lg">{service.details.fullDescription}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="p-8 space-y-8">
+          {/* Features */}
+          <div>
+            <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+              <span className="w-1 h-6 bg-gradient-to-b from-cyan-400 to-blue-500 rounded-full" />
+              What is Included
+            </h3>
+            <div className="grid md:grid-cols-2 gap-3">
+              {service.details.features.map((feature, idx) => (
+                <div key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-white/5 border border-white/10">
+                  <div className="w-2 h-2 rounded-full bg-cyan-400 shrink-0" />
+                  <span className="text-slate-300 text-sm">{feature}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Benefits */}
+          <div>
+            <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+              <span className="w-1 h-6 bg-gradient-to-b from-purple-400 to-blue-500 rounded-full" />
+              Key Benefits
+            </h3>
+            <div className="space-y-3">
+              {service.details.benefits.map((benefit, idx) => (
+                <div key={idx} className="flex items-start gap-3 p-4 rounded-lg bg-white/5 border border-white/10">
+                  <BadgeCheck className="w-5 h-5 text-green-400 shrink-0 mt-0.5" />
+                  <span className="text-slate-300">{benefit}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Technologies */}
+          <div>
+            <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+              <span className="w-1 h-6 bg-gradient-to-b from-blue-400 to-cyan-500 rounded-full" />
+              Technologies We Use
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {service.details.technologies.map((tech, idx) => (
+                <span
+                  key={idx}
+                  className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-slate-300 font-medium"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Pricing & Timeline */}
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/20">
+              <p className="text-sm text-cyan-300 mb-2 font-semibold">Pricing</p>
+              <p className="text-2xl font-bold text-white">{service.details.pricing}</p>
+            </div>
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-500/20">
+              <p className="text-sm text-purple-300 mb-2 font-semibold">Timeline</p>
+              <p className="text-2xl font-bold text-white">{service.details.timeline}</p>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div className="pt-4">
+            <Link 
+              href="/contact"
+              className="w-full inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-cyan-500/50"
+            >
+              Get Started
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ================= Section Header ================= */
 function SectionHeader({ label, title, desc }) {
   return (
@@ -196,15 +399,97 @@ function Stat({ value, label }) {
 export default function NeonAgencyLanding() {
   const mouse = useMouseParallax();
   const particles = useMemo(() => makeParticles(12, 20260201), []);
+  const [selectedService, setSelectedService] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [recentProjects, setRecentProjects] = useState([]);
+  const [projectsLoading, setProjectsLoading] = useState(true);
+
+  const openServiceModal = (service) => {
+    setSelectedService(service);
+    setIsModalOpen(true);
+  };
+
+  const closeServiceModal = () => {
+    setIsModalOpen(false);
+    setTimeout(() => setSelectedService(null), 300);
+  };
+
+  // Restart animations when component mounts
+  useRestartAnimations();
+
+  // Fetch latest 3 projects
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        setProjectsLoading(true);
+        const res = await demoController.getProjects();
+        
+        const raw = Array.isArray(res?.data)
+          ? res.data
+          : Array.isArray(res?.data?.categories)
+          ? res.data.categories
+          : [];
+
+        // Flatten all projects from all categories
+        const allProjects = raw.flatMap((cat) =>
+          Array.isArray(cat?.projects) ? cat.projects.map((p) => ({
+            id: p?.id || p?._id,
+            title: p?.title || p?.name || "Untitled Project",
+            image: p?.image || p?.thumbnail || "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop",
+            slug: p?.slug || p?.id || p?._id,
+            previewUrl: p?.previewUrl || p?.liveUrl || "",
+            categoryName: cat?.name || "Project"
+          })) : []
+        );
+
+        // Get latest 3 projects
+        setRecentProjects(allProjects.slice(0, 3));
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      } finally {
+        setProjectsLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-neon-blue text-slate-100">
-      {/* ================= Background FX ================= */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-grid-pattern opacity-[0.085]" />
-        <div className="absolute inset-0 bg-grid-shimmer opacity-[0.11]" />
-        <div className="absolute inset-0 bg-neon-vignette opacity-90" />
+    <div className="relative min-h-screen overflow-hidden bg-linear-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
+      {/* Service Modal */}
+      <ServiceModal 
+        service={selectedService} 
+        isOpen={isModalOpen} 
+        onClose={closeServiceModal} 
+      />
 
+      {/* ================= Background Animations ================= */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Gradient Orbs */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-500/40 rounded-full blur-3xl animate-float-slow"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/35 rounded-full blur-3xl animate-float-slower"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-500/30 rounded-full blur-3xl animate-float-reverse"></div>
+        
+        {/* Grid Pattern */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+        
+        {/* Floating Elements */}
+        {particles.map((p, i) => (
+          <div
+            key={i}
+            className="absolute w-2 h-2 bg-cyan-400/30 rounded-full animate-float-random"
+            style={{
+              top: `${p.top}%`,
+              left: `${p.left}%`,
+              animationDelay: `${p.delay || 0}s`,
+              animationDuration: `${p.duration || 15}s`
+            }}
+          ></div>
+        ))}
+      </div>
+
+      {/* Old Background for compatibility */}
+      <div className="pointer-events-none absolute inset-0">
         {/* aurora blobs */}
         <div
           className="absolute -top-40 -left-40 h-130 w-130 rounded-full bg-cyan-500/12 blur-3xl animate-aurora-slow"
@@ -214,24 +499,6 @@ export default function NeonAgencyLanding() {
           className="absolute -bottom-44 -right-44 h-155 w-155 rounded-full bg-blue-500/12 blur-3xl animate-aurora-slower"
           style={{ transform: `translate(${mouse.x * -0.01}px, ${mouse.y * -0.01}px)` }}
         />
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 h-105 w-105 rounded-full bg-indigo-500/8 blur-3xl animate-aurora-mid" />
-
-        {/* seeded particles */}
-        {particles.map((p, i) => (
-          <span
-            key={i}
-            className="absolute rounded-full bg-cyan-300/40 animate-float-slow"
-            style={{
-              top: `${p.top}%`,
-              left: `${p.left}%`,
-              width: `${p.size}px`,
-              height: `${p.size}px`,
-              opacity: p.opacity,
-              animationDelay: `${p.delay}s`,
-              animationDuration: `${p.duration}s`,
-            }}
-          />
-        ))}
       </div>
 
       {/* ================= Content ================= */}
@@ -259,14 +526,14 @@ export default function NeonAgencyLanding() {
             </p>
 
             <div className="flex flex-wrap items-center gap-3 pt-1">
-              <button className="btn-shine group inline-flex items-center gap-2 rounded-xl px-7 py-4 bg-blue-600/90 hover:bg-blue-500 transition-all font-semibold shadow-lg shadow-blue-900/30">
+              <Link href="/blog" className="btn-shine group inline-flex items-center gap-2 rounded-xl px-7 py-4 bg-linear-to-r from-blue-500 to-cyan-400 text-black transition-all font-semibold shadow-lg hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]">
                 Get a Free Quote
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
-              </button>
+              </Link>
 
-              <button className="inline-flex items-center gap-2 rounded-xl px-7 py-4 bg-white/5 border border-white/10 hover:bg-white/10 transition-all font-semibold text-slate-200">
+              <Link href="/product" className="inline-flex items-center gap-2 rounded-xl px-7 py-4 bg-white/5 border border-white/10 hover:bg-white/10 transition-all font-semibold text-slate-200">
                 View Work
-              </button>
+              </Link>
             </div>
 
             {/* social proof */}
@@ -290,88 +557,19 @@ export default function NeonAgencyLanding() {
 
           {/* Right */}
           <div className="lg:col-span-6 reveal">
-            <div className="relative">
+            <div className="relative flex items-center justify-center">
               {/* glow */}
               <div className="absolute -inset-10 rounded-[3rem] bg-[radial-linear(closest-side,rgba(34,211,238,.14),transparent_70%)] blur-2xl" />
               <div className="absolute -inset-14 rounded-[3rem] bg-[radial-linear(closest-side,rgba(59,130,246,.10),transparent_70%)] blur-3xl" />
 
-              <div className="grid gap-4">
-                {/* main showcase card */}
-                <div className="relative rounded-[2.2rem] border border-white/10 bg-white/5 backdrop-blur-2xl overflow-hidden shadow-[0_30px_90px_rgba(0,0,0,0.55)]">
-                  <div className="absolute inset-0 bg-[linear-linear(120deg,rgba(34,211,238,0.10),transparent_40%,rgba(59,130,246,0.10))]" />
-                  <div className="absolute -top-20 -left-16 h-64 w-64 rounded-full bg-cyan-400/10 blur-3xl" />
-                  <div className="absolute -bottom-20 -right-16 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
-
-                  {/* top bar */}
-                  <div className="relative flex items-center justify-between px-6 py-4 border-b border-white/10">
-                    <div className="flex items-center gap-2">
-                      <span className="h-2 w-2 rounded-full bg-red-400/70" />
-                      <span className="h-2 w-2 rounded-full bg-yellow-300/70" />
-                      <span className="h-2 w-2 rounded-full bg-green-400/70" />
-                    </div>
-                    <p className="text-xs font-semibold tracking-widest text-slate-300/80 uppercase">
-                      Featured Project
-                    </p>
-                    <span className="h-8 w-16 rounded-full bg-white/5 border border-white/10" />
-                  </div>
-
-                  {/* image */}
-                  <div className="relative h-90 md:h-90 p-5">
-                    <div className="relative h-full w-full rounded-2xl overflow-hidden border border-white/10">
-                      <Image
-                        src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1600&auto=format&fit=crop"
-                        alt="Project Preview"
-                        fill
-                        className="object-cover"
-                        priority
-                      />
-                      <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/10 to-transparent" />
-                    </div>
-
-                    {/* overlay chips */}
-                    <div className="absolute bottom-8 left-8 right-8 flex flex-wrap items-center gap-2">
-                      <span className="rounded-full border border-white/10 bg-black/35 px-3 py-1.5 text-xs font-semibold text-slate-100">
-                        Next.js + Tailwind
-                      </span>
-                      <span className="rounded-full border border-white/10 bg-black/35 px-3 py-1.5 text-xs font-semibold text-slate-100">
-                        Lighthouse 95+
-                      </span>
-                      <span className="rounded-full border border-white/10 bg-black/35 px-3 py-1.5 text-xs font-semibold text-slate-100">
-                        SEO Ready
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* mini KPI cards */}
-                <div className="grid grid-cols-3 gap-4">
-                  <GlowCard>
-                    <div className="p-5">
-                      <p className="text-[11px] uppercase tracking-[0.18em] text-slate-300/80">
-                        conversion
-                      </p>
-                      <p className="mt-1 text-lg font-semibold text-slate-50">+38%</p>
-                    </div>
-                  </GlowCard>
-
-                  <GlowCard>
-                    <div className="p-5">
-                      <p className="text-[11px] uppercase tracking-[0.18em] text-slate-300/80">
-                        speed
-                      </p>
-                      <p className="mt-1 text-lg font-semibold text-slate-50">0.9s</p>
-                    </div>
-                  </GlowCard>
-
-                  <GlowCard>
-                    <div className="p-5">
-                      <p className="text-[11px] uppercase tracking-[0.18em] text-slate-300/80">
-                        leads
-                      </p>
-                      <p className="mt-1 text-lg font-semibold text-slate-50">2.1x</p>
-                    </div>
-                  </GlowCard>
-                </div>
+              {/* Lottie Animation - Smaller Size */}
+              <div className="relative w-full max-w-md h-80 md:h-96">
+                <Player
+                  autoplay
+                  loop
+                  src={careerAnimation}
+                  style={{ height: '100%', width: '100%' }}
+                />
               </div>
             </div>
           </div>
@@ -403,7 +601,10 @@ export default function NeonAgencyLanding() {
                       <p className="mt-3 text-sm leading-relaxed text-slate-300/90">{s.desc}</p>
                     </div>
 
-                    <button className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-cyan-200 hover:text-cyan-100 transition">
+                    <button 
+                      onClick={() => openServiceModal(s)}
+                      className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-cyan-200 hover:text-cyan-100 transition"
+                    >
                       {s.cta}
                       <ArrowRight className="h-4 w-4" />
                     </button>
@@ -422,38 +623,59 @@ export default function NeonAgencyLanding() {
             desc="Real outcomes for real growing businesses."
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {caseStudies.map((c, i) => (
-              <GlowCard key={i} className="reveal">
-                <div className="p-5 space-y-5">
-                  <div className="relative h-48 rounded-2xl overflow-hidden border border-white/10">
-                    <Image src={c.img} alt={c.title} fill className="object-cover" />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/65 via-black/15 to-transparent" />
-                    <span className="absolute top-4 left-4 text-xs font-semibold text-cyan-100 bg-cyan-500/10 px-2 py-1 rounded border border-white/10">
-                      {c.metric}
-                    </span>
-                  </div>
+          {projectsLoading ? (
+            <div className="text-center py-12">
+              <p className="text-slate-300">Loading projects...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {recentProjects.length > 0 ? (
+                recentProjects.map((project, i) => (
+                  <GlowCard key={project.id || i} className="reveal">
+                    <div className="p-5 space-y-5">
+                      <div className="relative h-48 rounded-2xl overflow-hidden border border-white/10">
+                        <Image 
+                          src={project.image} 
+                          alt={project.title} 
+                          fill 
+                          className="object-cover" 
+                        />
+                        <div className="absolute inset-0 bg-linear-to-t from-black/65 via-black/15 to-transparent" />
+                        <span className="absolute top-4 left-4 text-xs font-semibold text-cyan-100 bg-cyan-500/10 px-2 py-1 rounded border border-white/10">
+                          {project.categoryName}
+                        </span>
+                      </div>
 
-                  <div className="px-1">
-                    <h3 className="text-lg font-semibold tracking-tight text-slate-50">
-                      {c.title}
-                    </h3>
-                    <p className="text-sm text-slate-300/90 leading-relaxed">{c.subtitle}</p>
+                      <div className="px-1">
+                        <h3 className="text-lg font-semibold tracking-tight text-slate-50">
+                          {project.title}
+                        </h3>
+                        <p className="text-sm text-slate-300/90 leading-relaxed">Slug: {project.slug}</p>
 
-                    <div className="mt-4 flex items-center justify-between">
-                      <button className="text-sm font-semibold text-slate-300 hover:text-slate-100 transition inline-flex items-center gap-2">
-                        {c.cta} <ArrowRight className="w-4 h-4" />
-                      </button>
-
-                      <div className="h-9 w-9 rounded-xl border border-white/10 bg-white/5 grid place-items-center text-cyan-200">
-                        <ArrowRight className="w-4 h-4" />
+                        <div className="mt-4">
+                          <button 
+                            onClick={() => project.previewUrl ? window.open(project.previewUrl, "_blank") : null}
+                            disabled={!project.previewUrl}
+                            className={`w-full py-2.5 rounded-xl font-semibold transition-all inline-flex items-center justify-center gap-2 ${
+                              project.previewUrl 
+                                ? "bg-linear-to-r from-cyan-400 to-blue-500 text-white hover:shadow-lg hover:shadow-cyan-500/30" 
+                                : "bg-gray-600/50 text-gray-400 cursor-not-allowed"
+                            }`}
+                          >
+                            Go Live <ArrowRight className="w-4 h-4" />
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </GlowCard>
+                ))
+              ) : (
+                <div className="col-span-3 text-center py-12">
+                  <p className="text-slate-300">No projects available</p>
                 </div>
-              </GlowCard>
-            ))}
-          </div>
+              )}
+            </div>
+          )}
         </section>
 
         {/* TESTIMONIALS */}
@@ -486,125 +708,140 @@ export default function NeonAgencyLanding() {
           </div>
         </section>
 
-        {/* CONTACT */}
+        {/* COMPANY INFO SECTION */}
         <section className="space-y-10 md:space-y-12">
-          <SectionHeader label="Contact" title="Start a Project" desc="Response within 24 hours." />
+          <SectionHeader 
+            label="About Us" 
+            title="Why Choose BD Stack Solutions" 
+            desc="Leading the way in innovative digital solutions with expertise and dedication." 
+          />
 
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Company Stats */}
+            <GlowCard className="reveal">
+              <div className="p-8 space-y-6">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-500/10 border border-cyan-500/20">
+                  <TrendingUp className="h-7 w-7 text-cyan-400" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-white mb-2">500+</h3>
+                  <p className="text-sm text-slate-300 mb-1 font-semibold">Projects Completed</p>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Successfully delivered projects across web development, design, and digital marketing
+                  </p>
+                </div>
+              </div>
+            </GlowCard>
+
+            <GlowCard className="reveal">
+              <div className="p-8 space-y-6">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-500/10 border border-blue-500/20">
+                  <BadgeCheck className="h-7 w-7 text-blue-400" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-white mb-2">98%</h3>
+                  <p className="text-sm text-slate-300 mb-1 font-semibold">Client Satisfaction</p>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Our clients trust us for quality work, timely delivery, and exceptional support
+                  </p>
+                </div>
+              </div>
+            </GlowCard>
+
+            <GlowCard className="reveal">
+              <div className="p-8 space-y-6">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-500/10 border border-purple-500/20">
+                  <Code2 className="h-7 w-7 text-purple-400" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-white mb-2">5+</h3>
+                  <p className="text-sm text-slate-300 mb-1 font-semibold">Years Experience</p>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Industry veterans with deep expertise in modern web technologies and frameworks
+                  </p>
+                </div>
+              </div>
+            </GlowCard>
+          </div>
+
+          {/* Company Values */}
           <GlowCard className="reveal">
             <div className="p-8 md:p-12">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                {/* form */}
-                <div className="lg:col-span-7 space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Field icon={User} placeholder="Full Name" />
-                    <Field icon={Mail} placeholder="Email Address" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-6">
+                  <div>
+                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 mb-4">
+                      <Sparkles className="w-6 h-6 text-cyan-400" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-white mb-3">Our Mission</h3>
+                    <p className="text-slate-300 leading-relaxed">
+                      To empower businesses with cutting-edge digital solutions that drive growth, enhance user experiences, and deliver measurable results. We believe in creating technology that makes a difference.
+                    </p>
                   </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <SelectField
-                      placeholder="Service Interested"
-                      options={["Web Development", "UI/UX Design", "Branding", "SEO"]}
-                    />
-                    <SelectField
-                      placeholder="Budget Range"
-                      options={["$500 - $1000", "$1k - $3k", "$3k - $10k"]}
-                    />
-                  </div>
-
-                  <TextareaField icon={MessageSquare} placeholder="Project Details" />
-
-                  <button className="btn-shine w-full md:w-auto px-10 py-4 bg-blue-600/90 hover:bg-blue-500 rounded-xl font-semibold transition-all shadow-lg shadow-blue-900/30">
-                    Send Message
-                  </button>
                 </div>
 
-                {/* side card */}
-                <div className="lg:col-span-5">
-                  <div className="rounded-3xl border border-white/10 bg-white/5 p-8 space-y-8">
-                    <div>
-                      <h4 className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-300 mb-4">
-                        Contact Info
-                      </h4>
-                      <div className="space-y-4 text-slate-200/90">
-                        <p className="flex items-center gap-3 text-sm hover:text-cyan-200 transition cursor-pointer">
-                          <Mail className="w-4 h-4" /> hello@youragency.com
-                        </p>
-                        <p className="flex items-center gap-3 text-sm hover:text-cyan-200 transition cursor-pointer">
-                          <Phone className="w-4 h-4" /> +880 1234-567890
-                        </p>
-                      </div>
+                <div className="space-y-6">
+                  <div>
+                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 mb-4">
+                      <BadgeCheck className="w-6 h-6 text-blue-400" />
                     </div>
-
-                    <div className="h-px bg-white/10" />
-
-                    <div>
-                      <h4 className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-300 mb-4">
-                        Process
-                      </h4>
-                      <ul className="space-y-3 text-sm text-slate-200/80 leading-relaxed">
-                        <li className="flex items-center gap-2">
-                          <span className="h-1 w-1 bg-cyan-300 rounded-full" /> Initial Consultation
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="h-1 w-1 bg-cyan-300 rounded-full" /> Strategy & Proposal
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="h-1 w-1 bg-cyan-300 rounded-full" /> Weekly Sprints
-                        </li>
-                      </ul>
-                    </div>
+                    <h3 className="text-xl font-semibold text-white mb-3">Our Approach</h3>
+                    <p className="text-slate-300 leading-relaxed">
+                      We combine technical expertise with creative innovation to deliver solutions that exceed expectations. Every project is treated with care, attention to detail, and a commitment to excellence.
+                    </p>
                   </div>
+                </div>
+              </div>
+
+              <div className="h-px bg-white/10 my-8" />
+
+              {/* Core Values */}
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-6 text-center">Our Core Values</h3>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div className="text-center p-4 rounded-xl bg-white/5 border border-white/10">
+                    <div className="text-3xl mb-2">🎯</div>
+                    <p className="text-sm font-semibold text-slate-200 mb-1">Quality First</p>
+                    <p className="text-xs text-slate-400">Excellence in every detail</p>
+                  </div>
+                  <div className="text-center p-4 rounded-xl bg-white/5 border border-white/10">
+                    <div className="text-3xl mb-2">⚡</div>
+                    <p className="text-sm font-semibold text-slate-200 mb-1">Innovation</p>
+                    <p className="text-xs text-slate-400">Pushing boundaries daily</p>
+                  </div>
+                  <div className="text-center p-4 rounded-xl bg-white/5 border border-white/10">
+                    <div className="text-3xl mb-2">🤝</div>
+                    <p className="text-sm font-semibold text-slate-200 mb-1">Partnership</p>
+                    <p className="text-xs text-slate-400">Your success is our goal</p>
+                  </div>
+                  <div className="text-center p-4 rounded-xl bg-white/5 border border-white/10">
+                    <div className="text-3xl mb-2">🚀</div>
+                    <p className="text-sm font-semibold text-slate-200 mb-1">Results</p>
+                    <p className="text-xs text-slate-400">Measurable outcomes</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="h-px bg-white/10 my-8" />
+
+              {/* Technologies & Expertise */}
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-6 text-center">Technologies We Master</h3>
+                <div className="flex flex-wrap justify-center gap-3">
+                  {['Next.js', 'React', 'Node.js', 'MongoDB', 'TypeScript', 'Tailwind CSS', 'Figma', 'AWS', 'Docker', 'Firebase', 'PostgreSQL', 'GraphQL'].map((tech, idx) => (
+                    <span
+                      key={idx}
+                      className="px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 text-sm text-slate-300 font-medium hover:border-cyan-400/40 transition-colors"
+                    >
+                      {tech}
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>
           </GlowCard>
         </section>
       </div>
-    </div>
-  );
-}
-
-/* ================= Inputs ================= */
-function Field({ icon: Icon, placeholder }) {
-  return (
-    <div className="relative">
-      <Icon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-      <input
-        type="text"
-        placeholder={placeholder}
-        className="w-full rounded-xl bg-white/5 border border-white/10 px-12 py-4 text-sm text-slate-50 placeholder:text-slate-400 outline-none focus:border-cyan-400/50 focus:ring-4 focus:ring-cyan-500/10 transition-all"
-      />
-    </div>
-  );
-}
-
-function SelectField({ placeholder, options }) {
-  return (
-    <select
-      defaultValue=""
-      className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-4 text-sm text-slate-200 outline-none focus:border-cyan-400/50 focus:ring-4 focus:ring-cyan-500/10 transition-all"
-    >
-      <option value="" disabled>
-        {placeholder}
-      </option>
-      {options.map((o, i) => (
-        <option key={i} value={o} className="bg-[#050b2e]">
-          {o}
-        </option>
-      ))}
-    </select>
-  );
-}
-
-function TextareaField({ icon: Icon, placeholder }) {
-  return (
-    <div className="relative">
-      <Icon className="absolute left-4 top-4 w-4 h-4 text-slate-400" />
-      <textarea
-        rows={4}
-        placeholder={placeholder}
-        className="w-full rounded-xl bg-white/5 border border-white/10 px-12 py-4 text-sm text-slate-50 placeholder:text-slate-400 outline-none focus:border-cyan-400/50 focus:ring-4 focus:ring-cyan-500/10 transition-all resize-none"
-      />
     </div>
   );
 }
