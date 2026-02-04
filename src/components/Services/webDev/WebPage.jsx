@@ -304,7 +304,7 @@ export default function WebPage() {
             </p>
           </div>
           <Link href="/contact">
-            <button className="whitespace-nowrap px-10 py-5 rounded-2xl bg-white text-black font-bold hover:bg-cyan-400 transition-all active:scale-95 shadow-xl">
+            <button className="group inline-flex items-center gap-2 whitespace-nowrap px-10 py-5 rounded-full bg-linear-to-r from-blue-500 to-cyan-400 text-black font-bold transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.45)] shadow-xl">
               Let&apos;s Talk Projects
             </button>
           </Link>

@@ -272,7 +272,7 @@ const AppDevelopment = () => {
 
           <div className="flex justify-center scroll-anim">
             <Link href="/pricing">
-              <button className="px-8 py-3 bg-cyan-700 text-white rounded-lg text-sm font-bold hover:bg-cyan-400 hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all active:scale-95">
+              <button className="group inline-flex items-center gap-2 px-8 py-3 rounded-full bg-linear-to-r from-blue-500 to-cyan-400 text-black text-sm font-bold transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]">
                 Explore All Features
               </button>
             </Link>
@@ -292,9 +292,9 @@ const AppDevelopment = () => {
           </div>
 
           <Link href="/contact">
-            <button className="px-8 py-4 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-xl transition-all duration-300 flex items-center group shadow-md hover:shadow-lg active:scale-95 whitespace-nowrap">
+            <button className="group inline-flex items-center gap-2 px-8 py-4 rounded-full bg-linear-to-r from-blue-500 to-cyan-400 text-black font-bold transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.45)] whitespace-nowrap">
               Schedule a Consultation{" "}
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </Link>
         </div>

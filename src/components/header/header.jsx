@@ -151,15 +151,13 @@ const Header = () => {
                                 ? "/ai-agents"
                                 : service.name === "App Development"
                                   ? "/app-development"
-                                  : service.name === "UI/UX Design"
-                                    ? "/ui-ux-design"
-                                    : service.name === "Digital Marketing"
-                                      ? "/digital-marketing"
-                                      : service.name === "Branding"
-                                        ? "/branding"
-                                        : service.name === "E-commerce"
-                                          ? "/e-commerce"
-                                          : `#${service.name.toLowerCase().replace(/\s+/g, "-")}`
+                                  : service.name === "Digital Marketing"
+                                    ? "/digital-marketing"
+                                    : service.name === "Branding"
+                                      ? "/branding"
+                                      : service.name === "E-commerce"
+                                        ? "/e-commerce"
+                                        : `#${service.name.toLowerCase().replace(/\s+/g, "-")}`
                           }
                           className="block px-4 py-3 rounded-lg hover:bg-linear-to-r hover:from-cyan-500/10 hover:to-blue-500/10 transition-all duration-300 group"
                         >
@@ -252,7 +250,7 @@ const Header = () => {
                     onMouseEnter={() => handleDropdownEnter("profile")}
                     onMouseLeave={handleDropdownLeave}
                   >
-                    <button className="w-10 h-10 rounded-full bg-linear-to-r from-cyan-500 to-blue-500 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform duration-200">
+                    <button className="w-10 h-10 rounded-full bg-linear-to-r from-blue-500 to-cyan-400 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform duration-200">
                       {user.image || user.picture ? (
                         <Image
                           src={user.image || user.picture}
@@ -563,30 +561,13 @@ const Header = () => {
             </div>
 
             {!user && !loading && (
-              <button className="w-full mt-4 px-6 py-3 cursor-pointer bg-linear-to-r from-cyan-500 to-blue-600 text-white font-semibold rounded-full hover:shadow-lg hover:shadow-cyan-500/50 transition-all duration-300">
+              <button className="w-full mt-4 px-6 py-3 cursor-pointer rounded-full bg-linear-to-r from-blue-500 to-cyan-400 text-black font-semibold hover:shadow-[0_0_40px_rgba(59,130,246,0.45)] transition-all duration-300">
                 Schedule a call
               </button>
             )}
           </div>
         </div>
       </div>
-
-      {/* Demo Content for Scrolling */}
-      <style jsx>{`
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.3s ease-out;
-        }
-      `}</style>
     </header>
   );
 };
