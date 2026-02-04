@@ -1,4 +1,4 @@
-import MessagesComponent from "@/components/Dashboard/MessagesComponent";
+import MessagesComponent from "@/components/Dashboard/DashboadMessage/MessagesComponent";
 
 export const metadata = {
   title: "Messages - Dashboard",

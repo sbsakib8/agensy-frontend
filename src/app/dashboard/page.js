@@ -1,4 +1,4 @@
-import OverviewComponent from '@/components/Dashboard/OverviewComponent'
+import OverviewComponent from '@/components/Dashboard/DashboardOverview/OverviewComponent'
 import React from 'react'
 
 export default function page() {

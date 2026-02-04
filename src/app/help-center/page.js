@@ -1,5 +1,5 @@
 
-import HelpCenterPage from '@/components/home/HelpCenterPage'
+import HelpCenterPage from '@/components/home/HomeHelpCenter/HelpCenterPage'
 import React from 'react'
 
 function page() {

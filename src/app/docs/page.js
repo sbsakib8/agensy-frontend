@@ -1,6 +1,6 @@
 
 
-import DocumentationPage from '@/components/home/DocumentationPage'
+import DocumentationPage from '@/components/home/HomeDocs/DocumentationPage'
 import React from 'react'
 
 function page() {

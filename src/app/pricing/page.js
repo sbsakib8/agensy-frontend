@@ -1,4 +1,4 @@
-import PricingSection from "@/components/home/PricingSection"
+import PricingSection from "@/components/home/HomePricing/PricingSection"
 
 import React from 'react'
 

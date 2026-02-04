@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 
-const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api'}/services`;
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api';
 
-export default function ServiceCategoryComponent() {
+export default function DemoCategoryComponent() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,42 +13,37 @@ export default function ServiceCategoryComponent() {
 
   const [formData, setFormData] = useState({
     name: "",
-    title: "",
     description: "",
-    icon: "",
-    order: 0,
   });
 
   const [isEditing, setIsEditing] = useState(false);
   const [editId, setEditId] = useState(null);
 
-  // Fetch service categories on component mount
+  // Fetch demo categories on component mount
   useEffect(() => {
-    fetchServiceCategories();
+    fetchDemoCategories();
   }, []);
 
-  const fetchServiceCategories = async () => {
+  const fetchDemoCategories = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_BASE_URL}/categories`, {
-        credentials: 'include',
+      const response = await fetch(`${API_BASE_URL}/projects`, {
+        credentials: 'include', // Include cookies for authentication
       });
-      
       if (!response.ok) {
-        throw new Error('Failed to fetch service categories');
+        throw new Error('Failed to fetch demo categories');
       }
-      
       const result = await response.json();
-      
-      if (result.success && result.data && Array.isArray(result.data)) {
-        setCategories(result.data);
+      // Handle the response structure: { success: true, data: { categories: [...] } }
+      if (result.success && result.data && Array.isArray(result.data.categories)) {
+        setCategories(result.data.categories);
       } else {
         setCategories([]);
       }
       setError(null);
     } catch (err) {
       setError(err.message);
-      setCategories([]);
+      setCategories([]); // Set empty array on error
     } finally {
       setLoading(false);
     }
@@ -66,52 +61,49 @@ export default function ServiceCategoryComponent() {
     e.preventDefault();
     
     try {
-      // Auto-generate 'name' from 'title' (e.g., "Web Development" -> "web-development")
-      const categoryName = formData.name || formData.title
-        .toLowerCase()
-        .replace(/\s+/g, '-')
-        .replace(/[^a-z0-9-]/g, '');
-      
-      const submitData = {
-        ...formData,
-        name: categoryName,
-      };
-
       if (isEditing) {
         // Update existing category
-        const response = await fetch(`${API_BASE_URL}/categories/${editId}`, {
+        const response = await fetch(`${API_BASE_URL}/projects/categories/${editId}`, {
           method: 'PUT',
-        cache: 'no-store',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify(submitData),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include', // Include cookies for authentication
+          body: JSON.stringify(formData),
         });
 
-        if (!response.ok) throw new Error('Failed to update category');
+        if (!response.ok) {
+          throw new Error('Failed to update demo category');
+        }
+
         const result = await response.json();
-        await fetchServiceCategories();
+        await fetchDemoCategories();
         setSuccessMessage("Category updated successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
         setIsEditing(false);
         setEditId(null);
       } else {
         // Create new category
-        const response = await fetch(`${API_BASE_URL}/categories`, {
+        const response = await fetch(`${API_BASE_URL}/projects/categories`, {
           method: 'POST',
-        cache: 'no-store',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify(submitData),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include', // Include cookies for authentication
+          body: JSON.stringify(formData),
         });
 
-        if (!response.ok) throw new Error('Failed to create category');
+        if (!response.ok) {
+          throw new Error('Failed to create demo category');
+        }
+
         const result = await response.json();
-        await fetchServiceCategories();
+        await fetchDemoCategories();
         setSuccessMessage("Category added successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
       }
 
-      setFormData({ name: "", title: "", description: "", icon: "", order: 0 });
+      setFormData({ name: "", description: "" });
       setError(null);
     } catch (err) {
       setError(err.message);
@@ -121,28 +113,27 @@ export default function ServiceCategoryComponent() {
   const handleEdit = (category) => {
     setFormData({
       name: category.name,
-      title: category.title || category.name,
       description: category.description,
-      icon: category.icon || "",
-      order: category.order || 0,
     });
     setIsEditing(true);
-    setEditId(category.id || category._id);
+    setEditId(category.id); // Using the id field from the category
   };
 
   const handleDelete = async (categoryId) => {
     setDeleteModal({ show: false, categoryName: "", categoryId: "" });
 
     try {
-      const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
+      const response = await fetch(`${API_BASE_URL}/projects/categories/${categoryId}`, {
         method: 'DELETE',
-        cache: 'no-store',
-        credentials: 'include',
+        credentials: 'include', // Include cookies for authentication
       });
 
-      if (!response.ok) throw new Error('Failed to delete category');
+      if (!response.ok) {
+        throw new Error('Failed to delete demo category');
+      }
+
       const result = await response.json();
-      await fetchServiceCategories();
+      await fetchDemoCategories();
       setSuccessMessage("Category deleted successfully!");
       setTimeout(() => setSuccessMessage(""), 3000);
       setError(null);
@@ -160,14 +151,14 @@ export default function ServiceCategoryComponent() {
   };
 
   const handleCancel = () => {
-    setFormData({ name: "", title: "", description: "", icon: "", order: 0 });
+    setFormData({ name: "", description: "" });
     setIsEditing(false);
     setEditId(null);
   };
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold text-white mb-6">Service Categories</h1>
+      <h1 className="text-3xl font-bold text-white mb-6">Demo Categories</h1>
 
       {/* Success Modal */}
       {successMessage && (
@@ -232,7 +223,7 @@ export default function ServiceCategoryComponent() {
 
       {/* Loading State */}
       {loading ? (
-        <div className="text-white text-center py-8">Loading service categories...</div>
+        <div className="text-white text-center py-8">Loading demo categories...</div>
       ) : (
         <>
           {/* Add/Edit Category Form */}
@@ -241,34 +232,20 @@ export default function ServiceCategoryComponent() {
               {isEditing ? "Edit Category" : "Add New Category"}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-gray-300 mb-2">Title *</label>
-                  <input
-                    type="text"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-2 bg-slate-900/50 border border-blue-500/30 rounded-lg text-white focus:outline-none focus:border-blue-500"
-                    placeholder="e.g., Web Development"
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-300 mb-2">Icon (optional)</label>
-                  <input
-                    type="text"
-                    name="icon"
-                    value={formData.icon}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 bg-slate-900/50 border border-blue-500/30 rounded-lg text-white focus:outline-none focus:border-blue-500"
-                    placeholder="🌐 or URL"
-                  />
-                </div>
-              </div>
-              
               <div>
-                <label className="block text-gray-300 mb-2">Description *</label>
+                <label className="block text-gray-300 mb-2">Category Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-4 py-2 bg-slate-900/50 border border-blue-500/30 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                  placeholder="Enter category name"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-300 mb-2">Description</label>
                 <textarea
                   name="description"
                   value={formData.description}
@@ -279,19 +256,6 @@ export default function ServiceCategoryComponent() {
                   placeholder="Enter category description"
                 />
               </div>
-
-              <div>
-                <label className="block text-gray-300 mb-2">Order</label>
-                <input
-                  type="number"
-                  name="order"
-                  value={formData.order}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 bg-slate-900/50 border border-blue-500/30 rounded-lg text-white focus:outline-none focus:border-blue-500"
-                  placeholder="0"
-                />
-              </div>
-
               <div className="flex gap-3">
                 <button
                   type="submit"
@@ -316,21 +280,17 @@ export default function ServiceCategoryComponent() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {categories.length === 0 ? (
               <div className="col-span-full text-center text-gray-400 py-8">
-                No service categories found. Add your first category above.
+                No demo categories found. Add your first category above.
               </div>
             ) : (
               categories.map((category) => (
                 <div
-                  key={category._id || category.id}
+                  key={category._id || category.name}
                   className="bg-gradient-to-br from-blue-900/20 to-purple-900/20 backdrop-blur-sm border border-blue-500/20 rounded-xl p-5 hover:border-blue-500/40 transition-all"
                 >
-                  {category.icon && (
-                    <div className="text-4xl mb-3">{category.icon}</div>
-                  )}
                   <h3 className="text-xl font-semibold text-white mb-2">
-                    {category.title || category.name}
+                    {category.name}
                   </h3>
-                  <p className="text-gray-400 mb-1 text-xs text-blue-300">ID: {category.id}</p>
                   <p className="text-gray-400 mb-4 text-sm">{category.description}</p>
                   <div className="flex gap-2">
                     <button
@@ -340,7 +300,7 @@ export default function ServiceCategoryComponent() {
                       Edit
                     </button>
                     <button
-                      onClick={() => openDeleteModal(category.title || category.name, category.id || category._id)}
+                      onClick={() => openDeleteModal(category.name, category.id)}
                       className="px-4 py-1.5 bg-red-600/80 hover:bg-red-600 text-white rounded-lg text-sm transition-colors"
                     >
                       Delete

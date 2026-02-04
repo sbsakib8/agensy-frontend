@@ -1,6 +1,6 @@
 
 
-import Ecommerce from '@/components/home/Ecommerce'
+import Ecommerce from '@/components/home/HomeEcommerce/Ecommerce'
 import React from 'react'
 
 function page() {

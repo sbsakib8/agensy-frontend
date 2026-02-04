@@ -1,5 +1,5 @@
 
-import TutorialsPage from '@/components/home/TutorialsPage'
+import TutorialsPage from '@/components/home/HomeTutorial/TutorialsPage'
 import React from 'react'
 
 function page() {
