@@ -44,7 +44,6 @@ export default function DemoProjectComponent() {
 
   const fetchCategories = async () => {
     try {
-      console.log('📡 Fetching categories');
       const response = await fetch(`${API_BASE_URL}`, {
         credentials: 'include',
       });
@@ -54,7 +53,6 @@ export default function DemoProjectComponent() {
       }
       
       const result = await response.json();
-      console.log('📦 Categories Response:', result);
       
       if (result.success && result.data && Array.isArray(result.data.categories)) {
         setCategories(result.data.categories);
@@ -72,14 +70,12 @@ export default function DemoProjectComponent() {
         }
       }
     } catch (err) {
-      console.error('❌ Error fetching categories:', err);
     }
   };
 
   const fetchProjects = async () => {
     try {
       setLoading(true);
-      console.log('📡 Fetching projects for category:', selectedCategoryId);
       
       // Fetch all categories with projects
       const response = await fetch(`${API_BASE_URL}`, {
@@ -91,7 +87,6 @@ export default function DemoProjectComponent() {
       }
       
       const result = await response.json();
-      console.log('📦 Projects Response:', result);
       
       if (result.success && result.data && Array.isArray(result.data.categories)) {
         // Find the selected category and get its projects
@@ -106,7 +101,6 @@ export default function DemoProjectComponent() {
       }
       setError(null);
     } catch (err) {
-      console.error('❌ Error fetching projects:', err);
       setError(err.message);
       setProjects([]);
     } finally {
@@ -138,7 +132,6 @@ export default function DemoProjectComponent() {
 
       if (isEditing) {
         // Update existing project
-        console.log('🔄 Updating project:', editId);
         const response = await fetch(`${API_BASE_URL}/categories/${selectedCategoryId}/projects/${editId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -148,7 +141,6 @@ export default function DemoProjectComponent() {
         
         if (!response.ok) throw new Error('Failed to update project');
         const result = await response.json();
-        console.log('✅ Update Response:', result);
         await fetchProjects();
         setSuccessMessage("Project updated successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -156,7 +148,6 @@ export default function DemoProjectComponent() {
         setEditId(null);
       } else {
         // Create new project
-        console.log('📤 Creating new project');
         const response = await fetch(`${API_BASE_URL}/categories/${selectedCategoryId}/projects`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -166,7 +157,6 @@ export default function DemoProjectComponent() {
         
         if (!response.ok) throw new Error('Failed to create project');
         const result = await response.json();
-        console.log('✅ Create Response:', result);
         await fetchProjects();
         setSuccessMessage("Project added successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -183,7 +173,6 @@ export default function DemoProjectComponent() {
       });
       setError(null);
     } catch (err) {
-      console.error('❌ Error submitting form:', err);
       setError(err.message);
     }
   };
@@ -206,7 +195,6 @@ export default function DemoProjectComponent() {
     setDeleteModal({ show: false, projectName: "", projectId: "" });
 
     try {
-      console.log('🗑️ Deleting project:', projectId);
       const response = await fetch(`${API_BASE_URL}/categories/${selectedCategoryId}/projects/${projectId}`, {
         method: 'DELETE',
         credentials: 'include',
@@ -214,13 +202,11 @@ export default function DemoProjectComponent() {
       
       if (!response.ok) throw new Error('Failed to delete project');
       const result = await response.json();
-      console.log('✅ Delete Response:', result);
       await fetchProjects();
       setSuccessMessage("Project deleted successfully!");
       setTimeout(() => setSuccessMessage(""), 3000);
       setError(null);
     } catch (err) {
-      console.error('❌ Error deleting project:', err);
       setError(err.message);
     }
   };

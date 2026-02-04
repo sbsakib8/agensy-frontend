@@ -5,7 +5,6 @@ import { verifyToken } from '@/lib/jwt-middleware'
 export async function GET(request, { params }) {
   try {
     const { id } = await params
-    console.log(`🔍 Getting user by ID: ${id}`)
 
     // Verify authentication
     const auth = verifyToken(request)
@@ -37,7 +36,6 @@ export async function GET(request, { params }) {
 
     if (!expressResponse.ok) {
       const errorText = await expressResponse.text()
-      console.error('❌ Express backend error:', errorText)
       return NextResponse.json(
         { success: false, message: `Backend error: ${expressResponse.status}` },
         { status: expressResponse.status }
@@ -45,7 +43,6 @@ export async function GET(request, { params }) {
     }
 
     const userData = await expressResponse.json()
-    console.log('✅ User data retrieved successfully')
 
     const response = NextResponse.json({
       success: true,
@@ -60,7 +57,6 @@ export async function GET(request, { params }) {
     return response
 
   } catch (error) {
-    console.error('❌ Get user error:', error)
     return NextResponse.json(
       { success: false, message: 'Failed to get user data' },
       { status: 500 }
@@ -72,7 +68,6 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
   try {
     const { id } = await params
-    console.log(`🔄 Updating user: ${id}`)
 
     // Verify authentication
     const auth = verifyToken(request)
@@ -85,7 +80,6 @@ export async function PUT(request, { params }) {
 
     // Get request body
     const updateData = await request.json()
-    console.log('📝 Update data:', updateData)
 
     // Get the auth-token cookie
     const authToken = request.cookies.get('auth-token')?.value
@@ -109,7 +103,6 @@ export async function PUT(request, { params }) {
 
     if (!expressResponse.ok) {
       const errorText = await expressResponse.text()
-      console.error('❌ Express backend error:', errorText)
       return NextResponse.json(
         { success: false, message: `Backend error: ${expressResponse.status}` },
         { status: expressResponse.status }
@@ -117,7 +110,6 @@ export async function PUT(request, { params }) {
     }
 
     const updatedUser = await expressResponse.json()
-    console.log('✅ User updated successfully')
 
     const response = NextResponse.json({
       success: true,
@@ -132,7 +124,6 @@ export async function PUT(request, { params }) {
     return response
 
   } catch (error) {
-    console.error('❌ Update user error:', error)
     return NextResponse.json(
       { success: false, message: 'Failed to update user' },
       { status: 500 }
@@ -144,7 +135,6 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
   try {
     const { id } = await params
-    console.log(`🗑️ Deleting user: ${id}`)
 
     // Verify authentication
     const auth = verifyToken(request)
@@ -184,7 +174,6 @@ export async function DELETE(request, { params }) {
 
     if (!expressResponse.ok) {
       const errorText = await expressResponse.text()
-      console.error('❌ Express backend error:', errorText)
       return NextResponse.json(
         { success: false, message: `Backend error: ${expressResponse.status}` },
         { status: expressResponse.status }
@@ -192,7 +181,6 @@ export async function DELETE(request, { params }) {
     }
 
     const result = await expressResponse.json()
-    console.log('✅ User deleted successfully')
 
     const response = NextResponse.json({
       success: true,
@@ -207,7 +195,6 @@ export async function DELETE(request, { params }) {
     return response
 
   } catch (error) {
-    console.error('❌ Delete user error:', error)
     return NextResponse.json(
       { success: false, message: 'Failed to delete user' },
       { status: 500 }

@@ -60,15 +60,10 @@ export default function SignInPage() {
       });
 
       if (response.success) {
-        console.log('✅ Backend login successful:', response);
         
-        // Sign in to Firebase with the same credentials
         try {
           await signInWithEmailAndPassword(auth, formData.email, formData.password);
-          console.log('✅ Firebase login successful');
         } catch (firebaseError) {
-          console.warn('⚠️ Firebase login failed, but backend succeeded:', firebaseError);
-          // Continue even if Firebase fails, as backend auth is primary
         }
         
         // Show success modal briefly
@@ -82,7 +77,6 @@ export default function SignInPage() {
         setError(response.message || 'Sign in failed');
       }
     } catch (err) {
-      console.error('❌ Sign in error:', err);
       setError(formatErrorMessage(err));
     } finally {
       setLoading(false);
@@ -94,41 +88,24 @@ export default function SignInPage() {
     setError('');
 
     try {
-      console.log('🔵 Starting Google sign in...');
       
-      // Firebase Google sign-in
       const result = await signInWithPopup(auth, googleProvider);
-      console.log('✅ Firebase popup successful:', result.user.email);
       
       const idToken = await result.user.getIdToken();
-      console.log('🔑 Got ID token, sending to backend...');
 
-      // Send token to backend
       const response = await authApi.loginWithGoogle(idToken);
-      console.log('📡 Backend response:', response);
 
       if (response.success) {
-        console.log('✅ Google login successful:', response);
-        console.log('🔄 Firebase user should be:', result.user.uid);
         
         setShowSuccessModal(true);
         
-        // Wait a bit for Firebase state to settle before redirect
         setTimeout(() => {
-          console.log('🏠 Redirecting to home...');
           window.location.href = '/';
         }, 2000);
       } else {
-        console.error('❌ Backend rejected login:', response.message);
         setError(response.message || 'Google sign in failed');
       }
     } catch (err) {
-      console.error('❌ Google sign in error:', err);
-      console.error('Error details:', {
-        code: err.code,
-        message: err.message,
-        response: err.response?.data
-      });
       setError(formatErrorMessage(err));
     } finally {
       setLoading(false);

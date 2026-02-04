@@ -33,7 +33,6 @@ export const uploadImageToImgBB = async (imageFile) => {
       throw new Error('Image upload failed');
     }
   } catch (error) {
-    console.error('ImgBB upload error:', error);
     return {
       success: false,
       error: error.message,

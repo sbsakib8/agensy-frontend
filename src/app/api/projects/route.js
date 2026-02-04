@@ -49,7 +49,6 @@ export async function GET(request) {
     }, { status: 200 });
 
   } catch (error) {
-    console.error('Error fetching projects:', error);
     return NextResponse.json(
       { success: false, message: 'Internal server error', error: error.message },
       { status: 500 }

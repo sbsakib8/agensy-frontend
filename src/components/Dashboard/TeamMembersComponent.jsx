@@ -54,20 +54,13 @@ export default function TeamMembersComponent() {
         throw new Error('Failed to fetch team members');
       }
       const result = await response.json();
-      console.log('Members API Response:', result);
-      console.log('Members data:', result.data);
-      console.log('Is array?', Array.isArray(result.data));
-      console.log('Members length:', result.data?.length);
       if (result.success && Array.isArray(result.data)) {
         setMembers(result.data);
-        console.log('Set members to:', result.data);
       } else {
-        console.log('API response not in expected format');
         setMembers([]);
       }
       setError(null);
     } catch (err) {
-      console.error('Error fetching members:', err);
       setError(err.message);
       setMembers([]);
     } finally {
@@ -87,7 +80,6 @@ export default function TeamMembersComponent() {
         }
       }
     } catch (err) {
-      console.error('Error fetching departments:', err);
     }
   };
 
@@ -145,7 +137,6 @@ export default function TeamMembersComponent() {
         }
 
         const result = await response.json();
-        console.log('Update Response:', result);
         await fetchMembers();
         setSuccessMessage("Team member updated successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -167,7 +158,6 @@ export default function TeamMembersComponent() {
         }
 
         const result = await response.json();
-        console.log('Create Response:', result);
         await fetchMembers();
         setSuccessMessage("Team member added successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -192,7 +182,6 @@ export default function TeamMembersComponent() {
       });
       setError(null);
     } catch (err) {
-      console.error('Error submitting form:', err);
       setError(err.message);
     }
   };
@@ -241,13 +230,11 @@ export default function TeamMembersComponent() {
       }
 
       const result = await response.json();
-      console.log('Delete Response:', result);
       await fetchMembers();
       setSuccessMessage("Team member deleted successfully!");
       setTimeout(() => setSuccessMessage(""), 3000);
       setError(null);
     } catch (err) {
-      console.error('Error deleting member:', err);
       setError(err.message);
     }
   };

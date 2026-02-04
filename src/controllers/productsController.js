@@ -7,7 +7,6 @@ const getAuthHeaders = () => {
 };
 
 const productsController = {
-  // ============ Products ============
   
   /**
    * Get all products
@@ -25,7 +24,6 @@ const productsController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching products:', error);
       throw error;
     }
   },
@@ -46,7 +44,6 @@ const productsController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching product:', error);
       throw error;
     }
   },
@@ -67,7 +64,6 @@ const productsController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching product by slug:', error);
       throw error;
     }
   },
@@ -90,7 +86,6 @@ const productsController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error creating product:', error);
       throw error;
     }
   },
@@ -113,7 +108,6 @@ const productsController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error updating product:', error);
       throw error;
     }
   },
@@ -135,7 +129,6 @@ const productsController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error deleting product:', error);
       throw error;
     }
   },
@@ -158,7 +151,6 @@ const productsController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error updating product status:', error);
       throw error;
     }
   },
@@ -181,7 +173,6 @@ const productsController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error reordering products:', error);
       throw error;
     }
   },

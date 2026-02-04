@@ -107,10 +107,8 @@ function TestimonialsSection({ cardStyle }) {
       setLoading(true);
       setError(null);
       const response = await testimonialApi.getAllTestimonials();
-      console.log("📡 Testimonials API Response:", response);
       setTestimonials(response.data || []);
     } catch (err) {
-      console.error("❌ Error fetching testimonials:", err);
       setError(err.message || "Failed to fetch testimonials");
     } finally {
       setLoading(false);
@@ -152,10 +150,8 @@ function TestimonialsSection({ cardStyle }) {
       setLoading(true);
       if (editingId) {
         const response = await testimonialApi.updateTestimonial(editingId, formData);
-        console.log("✅ Testimonial updated:", response);
       } else {
         const response = await testimonialApi.createTestimonial(formData);
-        console.log("✅ Testimonial created:", response);
       }
       await fetchTestimonials();
       setIsAdding(false);
@@ -170,7 +166,6 @@ function TestimonialsSection({ cardStyle }) {
         isFeatured: false,
       });
     } catch (err) {
-      console.error("❌ Error saving testimonial:", err);
       setError(err.message || "Failed to save testimonial");
     } finally {
       setLoading(false);
@@ -181,11 +176,9 @@ function TestimonialsSection({ cardStyle }) {
     try {
       setLoading(true);
       await testimonialApi.deleteTestimonial(deleteModal.id);
-      console.log("✅ Testimonial deleted");
       await fetchTestimonials();
       setDeleteModal({ isOpen: false, id: null });
     } catch (err) {
-      console.error("❌ Error deleting testimonial:", err);
       setError(err.message || "Failed to delete testimonial");
     } finally {
       setLoading(false);
@@ -474,14 +467,12 @@ function BannerSection({ cardStyle }) {
     try {
       setLoading(true);
       const response = await bannerApi.getAllBanners();
-      console.log('📦 Fetched banners:', response);
       
       if (response.success && Array.isArray(response.data)) {
         setBanners(response.data);
       }
       setError(null);
     } catch (err) {
-      console.error('❌ Error fetching banners:', err);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -526,10 +517,8 @@ function BannerSection({ cardStyle }) {
       
       if (isAdding) {
         await bannerApi.createBanner(formData);
-        console.log('✅ Banner created');
       } else if (isEditing && editingId) {
         await bannerApi.updateBanner(editingId, formData);
-        console.log('✅ Banner updated');
       }
       
       await fetchBanners();
@@ -537,7 +526,6 @@ function BannerSection({ cardStyle }) {
       setIsEditing(false);
       setEditingId(null);
     } catch (err) {
-      console.error('❌ Error saving banner:', err);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -548,11 +536,9 @@ function BannerSection({ cardStyle }) {
     try {
       setLoading(true);
       await bannerApi.deleteBanner(bannerId);
-      console.log('✅ Banner deleted');
       await fetchBanners();
       setDeleteModal({ show: false, bannerId: null, bannerTitle: "" });
     } catch (err) {
-      console.error('❌ Error deleting banner:', err);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -945,7 +931,6 @@ function FAQsSection({ cardStyle }) {
     try {
       setLoading(true);
       const response = await faqApi.getAllFAQs();
-      console.log('📦 Fetched FAQs:', response);
       
       if (response.success && Array.isArray(response.data)) {
         // Sort by order field
@@ -954,7 +939,6 @@ function FAQsSection({ cardStyle }) {
       }
       setError(null);
     } catch (err) {
-      console.error('❌ Error fetching FAQs:', err);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -994,10 +978,8 @@ function FAQsSection({ cardStyle }) {
       
       if (isAdding) {
         await faqApi.createFAQ(formData);
-        console.log('✅ FAQ created');
       } else if (editingId) {
         await faqApi.updateFAQ(editingId, formData);
-        console.log('✅ FAQ updated');
       }
       
       await fetchFAQs();
@@ -1005,7 +987,6 @@ function FAQsSection({ cardStyle }) {
       setEditingId(null);
       setFormData({ question: "", answer: "", isActive: true, order: 1 });
     } catch (err) {
-      console.error('❌ Error saving FAQ:', err);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -1016,11 +997,9 @@ function FAQsSection({ cardStyle }) {
     try {
       setLoading(true);
       await faqApi.deleteFAQ(faqId);
-      console.log('✅ FAQ deleted');
       await fetchFAQs();
       setDeleteModal({ show: false, faqId: null, faqQuestion: "" });
     } catch (err) {
-      console.error('❌ Error deleting FAQ:', err);
       setError(err.message);
     } finally {
       setLoading(false);

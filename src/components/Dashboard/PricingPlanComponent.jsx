@@ -96,7 +96,6 @@ export default function PricingPlanComponent() {
         setPlans(allPlans);
       }
     } catch (error) {
-      console.error("Error fetching categories:", error);
       showToast("Failed to fetch categories", "error");
     } finally {
       setLoading(false);
@@ -214,7 +213,6 @@ export default function PricingPlanComponent() {
         isActive: true,
       });
     } catch (error) {
-      console.error("Error saving plan:", error);
       showToast("Failed to save plan", "error");
     } finally {
       setLoading(false);
@@ -244,7 +242,6 @@ export default function PricingPlanComponent() {
         showToast(error.message || "Failed to delete plan", "error");
       }
     } catch (error) {
-      console.error("Error deleting plan:", error);
       showToast("Failed to delete plan", "error");
     } finally {
       setLoading(false);

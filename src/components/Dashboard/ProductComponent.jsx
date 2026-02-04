@@ -65,19 +65,14 @@ export default function ProductComponent() {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      console.log('🔍 Fetching products from products-module API...');
       
       const data = await productApi.getAllProducts();
-      console.log('📦 API Response:', data);
       
       if (data.success) {
         const productsArray = Array.isArray(data.data) ? data.data : [];
-        console.log('✅ Products array:', productsArray);
-        console.log('📊 Total products loaded:', productsArray.length);
         
         // Log each product's ID for debugging
         productsArray.forEach((product, index) => {
-          console.log(`📋 Product ${index + 1}:`, {
             id: product._id,
             idType: typeof product._id,
             idLength: product._id?.length || 'N/A',
@@ -88,12 +83,10 @@ export default function ProductComponent() {
         
         setProducts(productsArray);
       } else {
-        console.error('❌ API returned success=false:', data);
         setError(data.message || 'Failed to fetch products');
         setProducts([]);
       }
     } catch (error) {
-      console.error('💥 Fetch products error:', error);
       setError(error.message);
       setProducts([]);
     } finally {
@@ -153,14 +146,10 @@ export default function ProductComponent() {
     }
     
     try {
-      console.log('➕ Creating product with data:', editForm);
-      console.log('👤 User UID:', user.uid);
       
       const data = await productApi.createProduct(user.uid, editForm);
       
-      console.log('✅ Create response:', data);
       if (data.success) {
-        console.log('🎉 Product created successfully:', data.data);
         setProducts([...products, data.data]);
         setShowCreateModal(false);
         setSuccessMessage('Product created successfully!');
@@ -168,7 +157,6 @@ export default function ProductComponent() {
         fetchProducts(); // Refresh the list
       }
     } catch (error) {
-      console.error('💥 Create product error:', error);
       setError(error.message);
     }
   };
@@ -176,8 +164,6 @@ export default function ProductComponent() {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      console.log('🔄 Updating product:', selectedProduct._id, 'with data:', editForm);
-      console.log('🔍 Product ID details:', {
         id: selectedProduct._id,
         idType: typeof selectedProduct._id,
         idLength: selectedProduct._id?.length || 'N/A',
@@ -186,9 +172,7 @@ export default function ProductComponent() {
       
       const data = await productApi.updateProduct(selectedProduct._id, editForm);
       
-      console.log('✅ Update response:', data);
       if (data.success) {
-        console.log('🎉 Product updated successfully');
         setProducts(products.map(p => p._id === selectedProduct._id ? { ...p, ...editForm } : p));
         setShowEditModal(false);
         setSuccessMessage('Product updated successfully!');
@@ -196,25 +180,21 @@ export default function ProductComponent() {
         fetchProducts(); // Refresh the list
       }
     } catch (error) {
-      console.error('💥 Update product error:', error);
       setError(error.message);
     }
   };
 
   const handleDelete = async () => {
     try {
-      console.log('🗑️ Deleting product:', selectedProduct._id, selectedProduct.title);
       
       await productApi.deleteProduct(selectedProduct._id);
       
-      console.log('🎉 Product deleted successfully');
       setProducts(products.filter(p => p._id !== selectedProduct._id));
       setShowDeleteModal(false);
       setSelectedProduct(null);
       setSuccessMessage('Product deleted successfully!');
       setShowSuccessModal(true);
     } catch (error) {
-      console.error('💥 Delete product error:', error);
       setError(error.message);
     }
   };
@@ -239,7 +219,6 @@ export default function ProductComponent() {
   };
 
   const openEditModal = (product) => {
-    console.log('✏️ Editing product:', product);
     setSelectedProduct(product);
     setEditForm({
       slug: product.slug || '',
@@ -257,7 +236,6 @@ export default function ProductComponent() {
       status: product.status || 'active',
       order: product.order || 0
     });
-    console.log('📝 Form data loaded:', {
       slug: product.slug || '',
       title: product.title || '',
       tagline: product.tagline || '',
@@ -369,7 +347,6 @@ export default function ProductComponent() {
                       <button
                         onClick={() => {
                           setSelectedProduct(product);
-                          console.log('👀 Viewing product:', product);
                           setShowViewModal(true);
                         }}
                         className="p-1 text-gray-400 hover:text-cyan-400"

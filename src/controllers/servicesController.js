@@ -7,7 +7,6 @@ const getAuthHeaders = () => {
 };
 
 const servicesController = {
-  // ============ Service Categories ============
   
   /**
    * Get all service categories
@@ -25,7 +24,6 @@ const servicesController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching categories:', error);
       throw error;
     }
   },
@@ -48,7 +46,6 @@ const servicesController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error creating category:', error);
       throw error;
     }
   },
@@ -71,7 +68,6 @@ const servicesController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error updating category:', error);
       throw error;
     }
   },
@@ -93,12 +89,10 @@ const servicesController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error deleting category:', error);
       throw error;
     }
   },
 
-  // ============ Services ============
   
   /**
    * Get all services
@@ -116,7 +110,6 @@ const servicesController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching services:', error);
       throw error;
     }
   },
@@ -137,7 +130,6 @@ const servicesController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching service:', error);
       throw error;
     }
   },
@@ -160,7 +152,6 @@ const servicesController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error creating service:', error);
       throw error;
     }
   },
@@ -183,7 +174,6 @@ const servicesController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error updating service:', error);
       throw error;
     }
   },
@@ -205,7 +195,6 @@ const servicesController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error deleting service:', error);
       throw error;
     }
   },

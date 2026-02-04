@@ -15,16 +15,11 @@ export default function HeroSection() {
     const fetchBanner = async () => {
       try {
         const response = await bannerApi.getAllBanners();
-        console.log("📡 Banner API Response:", response);
-        console.log("📦 Banner Data Array:", response.data);
         if (response.data && response.data.length > 0) {
-          console.log("✅ Setting banner data:", response.data[0]);
           setBannerData(response.data[0]);
         } else {
-          console.log("⚠️ No banner data found in response");
         }
       } catch (err) {
-        console.error("❌ Error fetching banner:", err);
       } finally {
         setLoading(false);
       }

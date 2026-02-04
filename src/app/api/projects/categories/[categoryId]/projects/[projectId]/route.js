@@ -39,7 +39,6 @@ export async function GET(request, { params }) {
     }, { status: 200 });
 
   } catch (error) {
-    console.error('Error fetching project:', error);
     return NextResponse.json(
       { success: false, message: 'Internal server error', error: error.message },
       { status: 500 }
@@ -139,7 +138,6 @@ export async function PUT(request, { params }) {
     }, { status: 200 });
 
   } catch (error) {
-    console.error('Error updating project:', error);
     return NextResponse.json(
       { success: false, message: 'Internal server error', error: error.message },
       { status: 500 }
@@ -207,7 +205,6 @@ export async function DELETE(request, { params }) {
     }, { status: 200 });
 
   } catch (error) {
-    console.error('Error deleting project:', error);
     return NextResponse.json(
       { success: false, message: 'Internal server error', error: error.message },
       { status: 500 }

@@ -97,7 +97,6 @@ export async function POST(request, { params }) {
     }, { status: 201 });
 
   } catch (error) {
-    console.error('Error creating project:', error);
     return NextResponse.json(
       { success: false, message: 'Internal server error', error: error.message },
       { status: 500 }
@@ -130,7 +129,6 @@ export async function GET(request, { params }) {
     }, { status: 200 });
 
   } catch (error) {
-    console.error('Error fetching projects:', error);
     return NextResponse.json(
       { success: false, message: 'Internal server error', error: error.message },
       { status: 500 }

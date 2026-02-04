@@ -4,7 +4,6 @@ import { verifyToken } from '@/lib/jwt-middleware'
 // Get all users by role from Express backend
 export async function GET(request) {
   try {
-    console.log('🔍 Getting all users by role')
 
     // Verify authentication
     const auth = verifyToken(request)
@@ -44,7 +43,6 @@ export async function GET(request) {
 
     if (!expressResponse.ok) {
       const errorText = await expressResponse.text()
-      console.error('❌ Express backend error:', errorText)
       return NextResponse.json(
         { success: false, message: `Backend error: ${expressResponse.status}` },
         { status: expressResponse.status }
@@ -52,7 +50,6 @@ export async function GET(request) {
     }
 
     const usersData = await expressResponse.json()
-    console.log(`✅ Retrieved ${usersData.length || 0} users successfully`)
 
     const response = NextResponse.json({
       success: true,
@@ -68,7 +65,6 @@ export async function GET(request) {
     return response
 
   } catch (error) {
-    console.error('❌ Get users by role error:', error)
     return NextResponse.json(
       { success: false, message: 'Failed to get users data' },
       { status: 500 }

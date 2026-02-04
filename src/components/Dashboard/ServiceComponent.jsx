@@ -61,7 +61,6 @@ export default function ServiceComponent() {
 
   const fetchCategories = async () => {
     try {
-      console.log('📡 Fetching service categories');
       const response = await fetch(`${API_BASE_URL}/categories`, {
         credentials: 'include',
       });
@@ -71,7 +70,6 @@ export default function ServiceComponent() {
       }
       
       const result = await response.json();
-      console.log('📦 Categories Response:', result);
       
       if (result.success && result.data && Array.isArray(result.data)) {
         setCategories(result.data);
@@ -85,14 +83,12 @@ export default function ServiceComponent() {
         }
       }
     } catch (err) {
-      console.error('❌ Error fetching categories:', err);
     }
   };
 
   const fetchServices = async () => {
     try {
       setLoading(true);
-      console.log('📡 Fetching all services');
       
       // Fetch all services
       const response = await fetch(`${API_BASE_URL}`, {
@@ -104,7 +100,6 @@ export default function ServiceComponent() {
       }
       
       const result = await response.json();
-      console.log('📦 Services Response:', result);
       
       if (result.success && result.data && Array.isArray(result.data)) {
         // Filter services by selected category if a category is selected
@@ -121,7 +116,6 @@ export default function ServiceComponent() {
       }
       setError(null);
     } catch (err) {
-      console.error('❌ Error fetching services:', err);
       setError(err.message);
       setServices([]);
     } finally {
@@ -188,7 +182,6 @@ export default function ServiceComponent() {
 
       if (isEditing) {
         // Update existing service
-        console.log('🔄 Updating service:', editId);
         const response = await fetch(`${API_BASE_URL}/${editId}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
@@ -198,7 +191,6 @@ export default function ServiceComponent() {
         
         if (!response.ok) throw new Error('Failed to update service');
         const result = await response.json();
-        console.log('✅ Update Response:', result);
         await fetchServices();
         setSuccessMessage("Service updated successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -206,7 +198,6 @@ export default function ServiceComponent() {
         setEditId(null);
       } else {
         // Create new service
-        console.log('📤 Creating new service');
         const response = await fetch(`${API_BASE_URL}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -216,7 +207,6 @@ export default function ServiceComponent() {
         
         if (!response.ok) throw new Error('Failed to create service');
         const result = await response.json();
-        console.log('✅ Create Response:', result);
         await fetchServices();
         setSuccessMessage("Service added successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -249,7 +239,6 @@ export default function ServiceComponent() {
       });
       setError(null);
     } catch (err) {
-      console.error('❌ Error submitting form:', err);
       setError(err.message);
     }
   };
@@ -288,7 +277,6 @@ export default function ServiceComponent() {
     setDeleteModal({ show: false, serviceName: "", serviceId: "" });
 
     try {
-      console.log('🗑️ Deleting service:', serviceId);
       const response = await fetch(`${API_BASE_URL}/${serviceId}`, {
         method: 'DELETE',
         credentials: 'include',
@@ -296,13 +284,11 @@ export default function ServiceComponent() {
       
       if (!response.ok) throw new Error('Failed to delete service');
       const result = await response.json();
-      console.log('✅ Delete Response:', result);
       await fetchServices();
       setSuccessMessage("Service deleted successfully!");
       setTimeout(() => setSuccessMessage(""), 3000);
       setError(null);
     } catch (err) {
-      console.error('❌ Error deleting service:', err);
       setError(err.message);
     }
   };

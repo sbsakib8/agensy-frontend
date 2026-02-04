@@ -35,7 +35,6 @@ export default function Profile() {
   // Use authUser directly from useCustomAuth - no need to fetch again!
   useEffect(() => {
     if (authUser) {
-      console.log('✅ Using profile data from useCustomAuth:', authUser);
       setEditForm(authUser);
       setPreviewImage(authUser.photoURL || null);
     }
@@ -73,13 +72,11 @@ export default function Profile() {
       if (uploadResult.success) {
         // Update form with new image URL
         setEditForm({ ...editForm, photoURL: uploadResult.imageUrl });
-        console.log('✅ Image uploaded successfully:', uploadResult.imageUrl);
       } else {
         alert('Failed to upload image: ' + uploadResult.error);
         setPreviewImage(authUser.photoURL || null);
       }
     } catch (error) {
-      console.error('❌ Image upload error:', error);
       alert('Failed to upload image');
       setPreviewImage(authUser.photoURL || null);
     } finally {
@@ -92,8 +89,6 @@ export default function Profile() {
     try {
       setUpdating(true)
       
-      console.log('🔍 Updating profile for UID:', authUser.uid)
-      console.log('📝 Edit form data:', editForm)
       
       const result = await updateUserProfile(authUser, editForm)
       
@@ -112,7 +107,6 @@ export default function Profile() {
         setError(result.error || 'Update failed')
       }
     } catch (error) {
-      console.error('❌ Update error:', error)
       setError('Failed to update profile')
     } finally {
       setUpdating(false)

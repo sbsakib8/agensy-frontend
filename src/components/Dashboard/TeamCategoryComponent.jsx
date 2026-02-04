@@ -34,7 +34,6 @@ export default function TeamCategoryComponent() {
         throw new Error('Failed to fetch departments');
       }
       const result = await response.json();
-      console.log('API Response:', result);
       // Handle the response structure: { success: true, data: [...] }
       if (result.success && Array.isArray(result.data)) {
         setCategories(result.data);
@@ -43,7 +42,6 @@ export default function TeamCategoryComponent() {
       }
       setError(null);
     } catch (err) {
-      console.error('Error fetching departments:', err);
       setError(err.message);
       setCategories([]); // Set empty array on error
     } finally {
@@ -79,7 +77,6 @@ export default function TeamCategoryComponent() {
         }
 
         const result = await response.json();
-        console.log('Update Response:', result);
         await fetchDepartments();
         setIsEditing(false);
         setEditId(null);
@@ -99,7 +96,6 @@ export default function TeamCategoryComponent() {
         }
 
         const result = await response.json();
-        console.log('Create Response:', result);
         await fetchDepartments();
         setSuccessMessage("Category added successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -108,7 +104,6 @@ export default function TeamCategoryComponent() {
       setFormData({ name: "", description: "" });
       setError(null);
     } catch (err) {
-      console.error('Error submitting form:', err);
       setError(err.message);
     }
   };
@@ -136,13 +131,11 @@ export default function TeamCategoryComponent() {
       }
 
       const result = await response.json();
-      console.log('Delete Response:', result);
       await fetchDepartments();
       setSuccessMessage("Category deleted successfully!");
       setTimeout(() => setSuccessMessage(""), 3000);
       setError(null);
     } catch (err) {
-      console.error('Error deleting department:', err);
       setError(err.message);
     }
   };

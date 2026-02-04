@@ -36,16 +36,8 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
   // Pre-fill and log user data when modal opens or user changes
   useEffect(() => {
     if (user && isOpen) {
-      console.log('👤 User data from useCustomAuth:', user);
-      console.log('📧 Email:', user.email);
-      console.log('👤 Name:', user.displayName || user.name);
-      console.log('📱 Phone:', user.phone || user.phoneNumber);
-      console.log('📍 Address:', user.address);
-      console.log('🆔 UID:', user.uid || user.firebaseUid);
-      console.log('📦 Full user object:', JSON.stringify(user, null, 2));
       
       const phoneNumber = user.phone || user.phoneNumber || "";
-      console.log('📞 Setting receiverNumber to:', phoneNumber);
       
       setFormData(prev => {
         const updated = {
@@ -56,7 +48,6 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
           address: user.address || prev.address || "",
           receiverNumber: phoneNumber,
         };
-        console.log('✅ FormData after user update:', updated);
         return updated;
       });
     }
@@ -77,10 +68,8 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log(`🔄 Input changed - ${name}:`, value);
     setFormData(prev => {
       const updated = { ...prev, [name]: value };
-      console.log('📝 Updated formData:', updated);
       return updated;
     });
   };
@@ -122,8 +111,6 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
         notes: formData.notes || ""
       };
 
-      console.log('📤 Submitting order with receiverNumber:', orderData);
-      console.log('🔍 Form data receiverNumber:', formData.receiverNumber);
 
       // Try to use orderApi if user is authenticated, otherwise use fetch
       let result;
@@ -133,7 +120,6 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
         result = await orderApi.createOrder(orderData);
       } catch (apiError) {
         // If API call fails (not authenticated), fall back to direct fetch
-        console.log('⚠️ API call failed, using fetch:', apiError.message);
         const response = await fetch(`${API_BASE_URL}/orders`, {
           method: 'POST',
           headers: {
@@ -151,7 +137,6 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
         result = await response.json();
       }
 
-      console.log('📦 Order response:', result);
 
       if (result.success) {
         setOrderSuccess(true);
@@ -165,7 +150,6 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
         throw new Error(result.message || 'Failed to create order');
       }
     } catch (err) {
-      console.error('❌ Order submission error:', err);
       setError(err.message || 'Failed to submit order. Please try again.');
     } finally {
       setLoading(false);

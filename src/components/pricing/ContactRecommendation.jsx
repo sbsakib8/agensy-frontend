@@ -27,7 +27,6 @@ export default function ContactRecommendation() {
 
     try {
       // You can integrate with your contact/email API here
-      console.log("📤 Sending contact request:", formData);
       
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000));
@@ -44,7 +43,6 @@ export default function ContactRecommendation() {
       // Reset success message after 3 seconds
       setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
-      console.error("❌ Contact submission error:", err);
       setError("Failed to send message. Please try again.");
     } finally {
       setLoading(false);

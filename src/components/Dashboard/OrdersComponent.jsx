@@ -23,11 +23,9 @@ export default function OrdersComponent() {
     try {
       setLoading(true);
       const response = await orderApi.getAllOrders();
-      console.log("📦 Orders:", response);
       setOrders(response.data || []);
       setError(null);
     } catch (err) {
-      console.error("❌ Error fetching orders:", err);
       setError(err.message || "Failed to fetch orders");
     } finally {
       setLoading(false);
@@ -37,10 +35,8 @@ export default function OrdersComponent() {
   const fetchStats = async () => {
     try {
       const response = await orderApi.getOrderStats();
-      console.log("📊 Order Stats:", response);
       setStats(response.data || null);
     } catch (err) {
-      console.error("❌ Error fetching stats:", err);
     }
   };
 
@@ -50,7 +46,6 @@ export default function OrdersComponent() {
       await fetchOrders();
       await fetchStats();
     } catch (err) {
-      console.error("❌ Error updating status:", err);
       alert("Failed to update order status");
     }
   };
@@ -61,7 +56,6 @@ export default function OrdersComponent() {
       await fetchOrders();
       await fetchStats();
     } catch (err) {
-      console.error("❌ Error updating payment:", err);
       alert("Failed to update payment status");
     }
   };
@@ -74,7 +68,6 @@ export default function OrdersComponent() {
       await fetchOrders();
       await fetchStats();
     } catch (err) {
-      console.error("❌ Error deleting order:", err);
       alert("Failed to delete order");
     } finally {
       setLoading(false);

@@ -48,7 +48,6 @@ export async function POST(request) {
       query: query
     })
   } catch (error) {
-    console.error('Error searching users:', error)
     return NextResponse.json(
       { success: false, message: 'Failed to search users' },
       { status: 500 }

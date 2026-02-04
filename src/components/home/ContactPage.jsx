@@ -40,7 +40,6 @@ export default function ContactPage() {
         setIsSuccess(false);
       }, 3000);
     } catch (err) {
-      console.error("Failed to submit contact form:", err);
       setError(err.response?.data?.message || "Failed to send message. Please try again.");
     } finally {
       setIsSubmitting(false);

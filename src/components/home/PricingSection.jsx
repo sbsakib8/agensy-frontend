@@ -25,7 +25,6 @@ export default function PricingSection() {
   const fetchPricingData = async () => {
     try {
       setLoading(true);
-      console.log('📡 Fetching pricing data from:', API_BASE_URL);
       
       const response = await fetch(API_BASE_URL);
       
@@ -34,7 +33,6 @@ export default function PricingSection() {
       }
       
       const data = await response.json();
-      console.log('📦 Pricing API Response:', data);
       
       if (data.success && data.data.categories) {
         const activeCategories = data.data.categories.filter(cat => cat.isActive);
@@ -50,14 +48,11 @@ export default function PricingSection() {
           const activePlans = firstCategoryPlans.filter(plan => plan.isActive !== false);
           setPlans(activePlans);
           
-          console.log('✅ Loaded categories:', activeCategories.length);
-          console.log('✅ First category plans:', activePlans);
         }
       }
       
       setError(null);
     } catch (err) {
-      console.error('❌ Error fetching pricing:', err);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -72,7 +67,6 @@ export default function PricingSection() {
       const categoryPlans = category.plans || [];
       const activePlans = categoryPlans.filter(plan => plan.isActive !== false);
       setPlans(activePlans);
-      console.log('📦 Loaded plans for category:', category.name, activePlans.length, activePlans);
     }
   };
 

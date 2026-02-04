@@ -31,7 +31,6 @@ export default function Testimonial() {
           )
         }
       } catch (err) {
-        console.error("Failed to load testimonials", err)
       } finally {
         setLoading(false)
       }

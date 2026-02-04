@@ -7,7 +7,6 @@ const getAuthHeaders = () => {
 };
 
 const demoController = {
-  // ============ Demo Categories ============
   
   /**
    * Get all demo categories
@@ -25,7 +24,6 @@ const demoController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching categories:', error);
       throw error;
     }
   },
@@ -46,7 +44,6 @@ const demoController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching category:', error);
       throw error;
     }
   },
@@ -69,7 +66,6 @@ const demoController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error creating category:', error);
       throw error;
     }
   },
@@ -92,7 +88,6 @@ const demoController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error updating category:', error);
       throw error;
     }
   },
@@ -114,12 +109,10 @@ const demoController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error deleting category:', error);
       throw error;
     }
   },
 
-  // ============ Demo Projects ============
   
   /**
    * Get all projects in a category
@@ -148,7 +141,6 @@ const demoController = {
       
       return result;
     } catch (error) {
-      console.error('Error fetching projects:', error);
       throw error;
     }
   },
@@ -169,7 +161,6 @@ const demoController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching project:', error);
       throw error;
     }
   },
@@ -192,7 +183,6 @@ const demoController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error creating project:', error);
       throw error;
     }
   },
@@ -215,7 +205,6 @@ const demoController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error updating project:', error);
       throw error;
     }
   },
@@ -237,7 +226,6 @@ const demoController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error deleting project:', error);
       throw error;
     }
   },

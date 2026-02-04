@@ -30,7 +30,6 @@ export default function ServiceCategoryComponent() {
   const fetchServiceCategories = async () => {
     try {
       setLoading(true);
-      console.log('📡 Fetching service categories');
       const response = await fetch(`${API_BASE_URL}/categories`, {
         credentials: 'include',
       });
@@ -40,7 +39,6 @@ export default function ServiceCategoryComponent() {
       }
       
       const result = await response.json();
-      console.log('📦 API Response:', result);
       
       if (result.success && result.data && Array.isArray(result.data)) {
         setCategories(result.data);
@@ -49,7 +47,6 @@ export default function ServiceCategoryComponent() {
       }
       setError(null);
     } catch (err) {
-      console.error('❌ Error fetching service categories:', err);
       setError(err.message);
       setCategories([]);
     } finally {
@@ -82,7 +79,6 @@ export default function ServiceCategoryComponent() {
 
       if (isEditing) {
         // Update existing category
-        console.log('🔄 Updating category:', editId);
         const response = await fetch(`${API_BASE_URL}/categories/${editId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -92,7 +88,6 @@ export default function ServiceCategoryComponent() {
 
         if (!response.ok) throw new Error('Failed to update category');
         const result = await response.json();
-        console.log('✅ Update Response:', result);
         await fetchServiceCategories();
         setSuccessMessage("Category updated successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -100,7 +95,6 @@ export default function ServiceCategoryComponent() {
         setEditId(null);
       } else {
         // Create new category
-        console.log('📤 Creating new category');
         const response = await fetch(`${API_BASE_URL}/categories`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -110,7 +104,6 @@ export default function ServiceCategoryComponent() {
 
         if (!response.ok) throw new Error('Failed to create category');
         const result = await response.json();
-        console.log('✅ Create Response:', result);
         await fetchServiceCategories();
         setSuccessMessage("Category added successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -119,7 +112,6 @@ export default function ServiceCategoryComponent() {
       setFormData({ name: "", title: "", description: "", icon: "", order: 0 });
       setError(null);
     } catch (err) {
-      console.error('❌ Error submitting form:', err);
       setError(err.message);
     }
   };
@@ -140,7 +132,6 @@ export default function ServiceCategoryComponent() {
     setDeleteModal({ show: false, categoryName: "", categoryId: "" });
 
     try {
-      console.log('🗑️ Deleting category:', categoryId);
       const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
         method: 'DELETE',
         credentials: 'include',
@@ -148,13 +139,11 @@ export default function ServiceCategoryComponent() {
 
       if (!response.ok) throw new Error('Failed to delete category');
       const result = await response.json();
-      console.log('✅ Delete Response:', result);
       await fetchServiceCategories();
       setSuccessMessage("Category deleted successfully!");
       setTimeout(() => setSuccessMessage(""), 3000);
       setError(null);
     } catch (err) {
-      console.error('❌ Error deleting category:', err);
       setError(err.message);
     }
   };

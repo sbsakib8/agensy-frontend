@@ -12,7 +12,6 @@ export const ErrorTypes = {
 };
 
 export const handleApiError = (error, context = '') => {
-  console.error(`🔴 Error in ${context}:`, {
     message: error.message,
     code: error.code,
     status: error.response?.status,
@@ -129,7 +128,6 @@ export const checkBackendHealth = async () => {
     });
     return response.ok;
   } catch (error) {
-    console.error('❌ Backend health check failed:', error);
     return false;
   }
 };
@@ -138,11 +136,4 @@ export const checkBackendHealth = async () => {
  * Log error to console with context
  */
 export const logError = (context, error, additionalInfo = {}) => {
-  console.group(`🔴 Error: ${context}`);
-  console.error('Message:', error.message);
-  console.error('Code:', error.code);
-  console.error('Status:', error.response?.status);
-  console.error('Response:', error.response?.data);
-  console.error('Additional Info:', additionalInfo);
-  console.groupEnd();
 };

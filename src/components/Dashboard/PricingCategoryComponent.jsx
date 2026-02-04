@@ -69,7 +69,6 @@ export default function PricingCategoryComponent() {
         setCategories(data.data.categories);
       }
     } catch (error) {
-      console.error("Error fetching categories:", error);
       showToast("Failed to fetch categories", "error");
     } finally {
       setLoading(false);
@@ -143,7 +142,6 @@ export default function PricingCategoryComponent() {
       }
       setFormData({ name: "", isActive: true });
     } catch (error) {
-      console.error("Error saving category:", error);
       showToast("Failed to save category", "error");
     } finally {
       setLoading(false);
@@ -177,7 +175,6 @@ export default function PricingCategoryComponent() {
         showToast(error.message || "Failed to delete category", "error");
       }
     } catch (error) {
-      console.error("Error deleting category:", error);
       showToast("Failed to delete category", "error");
     } finally {
       setLoading(false);

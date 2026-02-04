@@ -99,7 +99,6 @@ export async function POST(request) {
     }
     
   } catch (error) {
-    console.error('Forgot password error:', error)
     return NextResponse.json(
       { success: false, message: 'An error occurred while processing your request' },
       { status: 500 }

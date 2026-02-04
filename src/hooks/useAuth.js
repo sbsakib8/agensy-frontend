@@ -48,7 +48,6 @@ export const AuthProvider = ({ children }) => {
         return { success: false, message: data.message }
       }
     } catch (error) {
-      console.error('Login error:', error)
       return { success: false, message: 'Login failed' }
     }
   }
@@ -59,7 +58,6 @@ export const AuthProvider = ({ children }) => {
         method: 'POST'
       })
     } catch (error) {
-      console.error('Logout error:', error)
     } finally {
       // Clear state regardless of API call success
       setUser(null)

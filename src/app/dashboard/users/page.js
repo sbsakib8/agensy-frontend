@@ -28,17 +28,13 @@ export default function UsersPage() {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      console.log('📡 Fetching users using userApi...');
       
       const data = await userApi.getAllUsers();
-      console.log('✅ Users fetched:', data);
       
       // userApi.getAllUsers already returns normalized array
       const usersArray = Array.isArray(data) ? data : [];
-      console.log('📊 Users array:', usersArray);
       setUsers(usersArray);
     } catch (error) {
-      console.error('💥 Error fetching users:', error);
       setError(error.message || 'Failed to load users. Please try again.');
       setUsers([]);
     } finally {
@@ -87,7 +83,6 @@ export default function UsersPage() {
   const confirmDelete = async () => {
     if (!selectedUser) return;
     try {
-      console.log('🗑️ Deleting user:', selectedUser._id || selectedUser.id);
       await userApi.deleteUser(selectedUser._id || selectedUser.id);
       
       setUsers(users.filter(u => u._id !== selectedUser._id && u.id !== selectedUser.id));
@@ -102,7 +97,6 @@ export default function UsersPage() {
         fetchUsers(); // Refresh the user list
       }, 1500);
     } catch (error) {
-      console.error('💥 Delete error:', error);
       setError('Error deleting user: ' + error.message);
     }
   };
@@ -110,7 +104,6 @@ export default function UsersPage() {
   const handleSaveEdit = async () => {
     if (!selectedUser) return;
     try {
-      console.log('🔄 Updating user:', selectedUser._id || selectedUser.id);
       await userApi.updateUser(selectedUser._id || selectedUser.id, editForm);
       
       setUsers(users.map(u => 
@@ -124,7 +117,6 @@ export default function UsersPage() {
       setShowSuccessModal(true);
       setTimeout(() => setShowSuccessModal(false), 3000);
     } catch (error) {
-      console.error('💥 Update error:', error);
       setError('Error updating user: ' + error.message);
     }
   };
@@ -132,7 +124,6 @@ export default function UsersPage() {
   const handleSaveRole = async () => {
     if (!selectedUser) return;
     try {
-      console.log('🔄 Updating user role:', selectedUser._id || selectedUser.id);
       await userApi.updateUserRole(selectedUser._id || selectedUser.id, newRole);
       
       setUsers(users.map(u => 
@@ -146,7 +137,6 @@ export default function UsersPage() {
       setShowSuccessModal(true);
       setTimeout(() => setShowSuccessModal(false), 3000);
     } catch (error) {
-      console.error('💥 Role update error:', error);
       setError('Error updating role: ' + error.message);
     }
   };
@@ -154,7 +144,6 @@ export default function UsersPage() {
   const handleSaveStatus = async () => {
     if (!selectedUser) return;
     try {
-      console.log('🔄 Updating user status:', selectedUser._id || selectedUser.id);
       await userApi.updateUserStatus(selectedUser._id || selectedUser.id, newStatus);
       
       setUsers(users.map(u => 
@@ -168,7 +157,6 @@ export default function UsersPage() {
       setShowSuccessModal(true);
       setTimeout(() => setShowSuccessModal(false), 3000);
     } catch (error) {
-      console.error('💥 Status update error:', error);
       setError('Error updating status: ' + error.message);
     }
   };

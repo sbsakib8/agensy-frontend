@@ -7,7 +7,6 @@ const getAuthHeaders = () => {
 };
 
 const pricingController = {
-  // ============ Pricing Categories ============
   
   /**
    * Get all pricing categories
@@ -25,7 +24,6 @@ const pricingController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching categories:', error);
       throw error;
     }
   },
@@ -46,7 +44,6 @@ const pricingController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching category:', error);
       throw error;
     }
   },
@@ -69,7 +66,6 @@ const pricingController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error creating category:', error);
       throw error;
     }
   },
@@ -92,7 +88,6 @@ const pricingController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error updating category:', error);
       throw error;
     }
   },
@@ -114,12 +109,10 @@ const pricingController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error deleting category:', error);
       throw error;
     }
   },
 
-  // ============ Pricing Plans ============
   
   /**
    * Get all pricing plans
@@ -137,7 +130,6 @@ const pricingController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching plans:', error);
       throw error;
     }
   },
@@ -158,7 +150,6 @@ const pricingController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching plans by category:', error);
       throw error;
     }
   },
@@ -179,7 +170,6 @@ const pricingController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error fetching plan:', error);
       throw error;
     }
   },
@@ -202,7 +192,6 @@ const pricingController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error creating plan:', error);
       throw error;
     }
   },
@@ -225,7 +214,6 @@ const pricingController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error updating plan:', error);
       throw error;
     }
   },
@@ -247,7 +235,6 @@ const pricingController = {
       
       return await response.json();
     } catch (error) {
-      console.error('Error deleting plan:', error);
       throw error;
     }
   },
