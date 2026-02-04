@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Image from "next/image"
 import { Star, Quote } from "lucide-react"
 import { FaChevronUp, FaChevronDown } from "react-icons/fa"
 import { testimonialApi } from "@/lib/api"
@@ -12,17 +11,8 @@ export default function Testimonial() {
   const [data, setData] = useState([])
   const [active, setActive] = useState(0)
   const [loading, setLoading] = useState(true)
-  const [imageErrors, setImageErrors] = useState({})
 
   const total = data.length
-
-  const handleImageError = (itemId) => {
-    setImageErrors(prev => ({ ...prev, [itemId]: true }));
-  };
-
-  const getImageSrc = (item) => {
-    return imageErrors[item.id] ? FALLBACK_AVATAR : item.image;
-  };
 
   /* ---------------- FETCH ---------------- */
   useEffect(() => {
@@ -117,14 +107,11 @@ export default function Testimonial() {
                     : "border-gray-600 opacity-60 hover:opacity-100"
                 }`}
             >
-              <Image
-                src={getImageSrc(item)}
+              <img
+                src={item.image}
                 alt={item.name}
-                fill
-                sizes="80px"
-                className="object-cover"
+                className="w-full h-full object-cover"
                 draggable={false}
-                onError={() => handleImageError(item.id)}
               />
             </button>
           ))}
@@ -153,13 +140,10 @@ export default function Testimonial() {
             </p>
 
             <div className="flex items-center gap-4 pt-4 border-t border-white/10">
-              <Image
-                src={getImageSrc(activeItem)}
+              <img
+                src={activeItem.image}
                 alt={activeItem.name}
-                width={64}
-                height={64}
-                className="rounded-xl"
-                onError={() => handleImageError(activeItem.id)}
+                className="w-16 h-16 rounded-xl object-cover"
               />
 
               <div>
@@ -172,6 +156,7 @@ export default function Testimonial() {
                       key={i}
                       size={14}
                       fill={i < activeItem.rating ? "currentColor" : "none"}
+                      strokeWidth={0}
                     />
                   ))}
                 </div>

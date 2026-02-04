@@ -12,8 +12,10 @@ import {
   Save,
   X,
   Loader2,
+  Upload,
 } from "lucide-react";
 import { bannerApi, faqApi, testimonialApi } from "@/lib/api";
+import { uploadImageToImgBB } from "@/lib/imgbb-upload";
 
 export default function HomeManagementComponent() {
   const [activeTab, setActiveTab] = useState("testimonials");
@@ -91,6 +93,7 @@ function TestimonialsSection({ cardStyle }) {
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
+  const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     designation: "",
@@ -143,6 +146,39 @@ function TestimonialsSection({ cardStyle }) {
       avatar: testimonial.avatar || "",
       isFeatured: testimonial.isFeatured || false,
     });
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setError('Please select a valid image file');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Image size should be less than 5MB');
+      return;
+    }
+
+    try {
+      setUploading(true);
+      setError(null);
+      const result = await uploadImageToImgBB(file);
+      
+      if (result.success) {
+        setFormData({ ...formData, avatar: result.imageUrl });
+      } else {
+        setError(result.error || 'Failed to upload image');
+      }
+    } catch (err) {
+      setError('Failed to upload image');
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleSave = async () => {
@@ -288,14 +324,44 @@ function TestimonialsSection({ cardStyle }) {
               </div>
             </div>
             <div>
-              <label className="block text-sm text-gray-400 mb-2">Avatar URL</label>
-              <input
-                type="text"
-                value={formData.avatar}
-                onChange={(e) => setFormData({ ...formData, avatar: e.target.value })}
-                className="w-full px-4 py-2 bg-[#05060a] border border-blue-500/30 rounded-lg focus:outline-none focus:border-blue-500"
-                placeholder="Enter avatar image URL"
-              />
+              <label className="block text-sm text-gray-400 mb-2">Avatar Image</label>
+              <div className="flex flex-col gap-3">
+                <div className="flex gap-3 items-start">
+                  <input
+                    type="text"
+                    value={formData.avatar}
+                    onChange={(e) => setFormData({ ...formData, avatar: e.target.value })}
+                    className="flex-1 px-4 py-2 bg-[#05060a] border border-blue-500/30 rounded-lg focus:outline-none focus:border-blue-500"
+                    placeholder="Enter avatar image URL or upload"
+                  />
+                  <label className="relative cursor-pointer">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      disabled={uploading}
+                      className="hidden"
+                    />
+                    <div className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg transition-colors disabled:opacity-50">
+                      {uploading ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : (
+                        <Upload size={20} />
+                      )}
+                      {uploading ? 'Uploading...' : 'Upload'}
+                    </div>
+                  </label>
+                </div>
+                {formData.avatar && (
+                  <div className="relative w-20 h-20 rounded-lg overflow-hidden border border-blue-500/30">
+                    <img
+                      src={formData.avatar}
+                      alt="Avatar preview"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+              </div>
             </div>
             <div>
               <label className="block text-sm text-gray-400 mb-2">Message *</label>
@@ -306,18 +372,6 @@ function TestimonialsSection({ cardStyle }) {
                 placeholder="Enter testimonial message"
                 required
               />
-            </div>
-            <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                id="isFeatured"
-                checked={formData.isFeatured}
-                onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
-                className="w-4 h-4"
-              />
-              <label htmlFor="isFeatured" className="text-sm text-gray-400">
-                Mark as Featured
-              </label>
             </div>
             <div className="flex gap-3">
               <button
@@ -440,6 +494,7 @@ function BannerSection({ cardStyle }) {
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [deleteModal, setDeleteModal] = useState({ show: false, bannerId: null, bannerTitle: "" });
+  const [uploadingIndex, setUploadingIndex] = useState(null);
   
   const [formData, setFormData] = useState({
     badge: "",
@@ -603,6 +658,38 @@ function BannerSection({ cardStyle }) {
     setFormData({ ...formData, ctaButtons: updatedButtons });
   };
 
+  const handleImageUpload = async (index, file) => {
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setError('Please select a valid image file');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Image size should be less than 5MB');
+      return;
+    }
+
+    try {
+      setUploadingIndex(index);
+      setError(null);
+      const result = await uploadImageToImgBB(file);
+      
+      if (result.success) {
+        updateImage(index, 'imageUrl', result.imageUrl);
+      } else {
+        setError(result.error || 'Failed to upload image');
+      }
+    } catch (err) {
+      setError('Failed to upload image');
+    } finally {
+      setUploadingIndex(null);
+    }
+  };
+
   if (loading && banners.length === 0) {
     return (
       <div className="flex justify-center items-center py-20">
@@ -741,27 +828,57 @@ function BannerSection({ cardStyle }) {
                 </button>
               </div>
               {formData.images.map((img, index) => (
-                <div key={index} className="flex gap-2 mb-2">
-                  <input
-                    type="text"
-                    value={img.title}
-                    onChange={(e) => updateImage(index, 'title', e.target.value)}
-                    className="flex-1 px-3 py-2 bg-[#05060a] border border-blue-500/30 rounded-lg text-sm"
-                    placeholder="Image Title"
-                  />
-                  <input
-                    type="text"
-                    value={img.imageUrl}
-                    onChange={(e) => updateImage(index, 'imageUrl', e.target.value)}
-                    className="flex-[2] px-3 py-2 bg-[#05060a] border border-blue-500/30 rounded-lg text-sm"
-                    placeholder="Image URL"
-                  />
-                  <button
-                    onClick={() => removeImage(index)}
-                    className="px-3 py-2 bg-red-500/20 hover:bg-red-500/30 rounded-lg text-red-400"
-                  >
-                    <Trash2 size={16} />
-                  </button>
+                <div key={index} className="space-y-2 mb-4 p-3 bg-[#05060a]/50 rounded-lg border border-blue-500/20">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={img.title}
+                      onChange={(e) => updateImage(index, 'title', e.target.value)}
+                      className="flex-1 px-3 py-2 bg-[#05060a] border border-blue-500/30 rounded-lg text-sm"
+                      placeholder="Image Title"
+                    />
+                    <button
+                      onClick={() => removeImage(index)}
+                      className="px-3 py-2 bg-red-500/20 hover:bg-red-500/30 rounded-lg text-red-400"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                  <div className="flex gap-2 items-start">
+                    <input
+                      type="text"
+                      value={img.imageUrl}
+                      onChange={(e) => updateImage(index, 'imageUrl', e.target.value)}
+                      className="flex-1 px-3 py-2 bg-[#05060a] border border-blue-500/30 rounded-lg text-sm"
+                      placeholder="Image URL or upload"
+                    />
+                    <label className="relative cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleImageUpload(index, e.target.files?.[0])}
+                        disabled={uploadingIndex === index}
+                        className="hidden"
+                      />
+                      <div className="flex items-center gap-2 px-3 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg transition-colors text-sm">
+                        {uploadingIndex === index ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <Upload size={16} />
+                        )}
+                        {uploadingIndex === index ? 'Uploading...' : 'Upload'}
+                      </div>
+                    </label>
+                  </div>
+                  {img.imageUrl && (
+                    <div className="relative w-full h-32 rounded-lg overflow-hidden border border-blue-500/30">
+                      <img
+                        src={img.imageUrl}
+                        alt={img.title || 'Banner preview'}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
