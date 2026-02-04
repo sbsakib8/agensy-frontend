@@ -184,6 +184,7 @@ export default function ServiceComponent() {
         // Update existing service
         const response = await fetch(`${API_BASE_URL}/${editId}`, {
           method: 'PATCH',
+        cache: 'no-store',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           body: JSON.stringify(serviceData),
@@ -200,6 +201,7 @@ export default function ServiceComponent() {
         // Create new service
         const response = await fetch(`${API_BASE_URL}`, {
           method: 'POST',
+        cache: 'no-store',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           body: JSON.stringify(serviceData),
@@ -279,6 +281,7 @@ export default function ServiceComponent() {
     try {
       const response = await fetch(`${API_BASE_URL}/${serviceId}`, {
         method: 'DELETE',
+        cache: 'no-store',
         credentials: 'include',
       });
       

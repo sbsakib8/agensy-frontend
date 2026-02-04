@@ -6,12 +6,23 @@ import { Star, Quote } from "lucide-react"
 import { FaChevronUp, FaChevronDown } from "react-icons/fa"
 import { testimonialApi } from "@/lib/api"
 
+const FALLBACK_AVATAR = "https://i.pravatar.cc/150";
+
 export default function Testimonial() {
   const [data, setData] = useState([])
   const [active, setActive] = useState(0)
   const [loading, setLoading] = useState(true)
+  const [imageErrors, setImageErrors] = useState({})
 
   const total = data.length
+
+  const handleImageError = (itemId) => {
+    setImageErrors(prev => ({ ...prev, [itemId]: true }));
+  };
+
+  const getImageSrc = (item) => {
+    return imageErrors[item.id] ? FALLBACK_AVATAR : item.image;
+  };
 
   /* ---------------- FETCH ---------------- */
   useEffect(() => {
@@ -20,14 +31,24 @@ export default function Testimonial() {
         const res = await testimonialApi.getAllTestimonials()
         if (res?.data?.length) {
           setData(
-            res.data.map((i) => ({
-              id: i._id,
-              name: i.name || "Anonymous",
-              role: i.designation || "Client",
-              image: i.avatar || "https://i.pravatar.cc/150",
-              text: i.message || "Great service!",
-              rating: i.rating || 5,
-            }))
+            res.data.map((i) => {
+              // Filter out invalid URLs and use fallback
+              let avatarUrl = i.avatar || "https://i.pravatar.cc/150";
+              
+              // Check if URL is from invalid domains
+              if (avatarUrl.includes('example.com') || avatarUrl.includes('yourdomain.com')) {
+                avatarUrl = "https://i.pravatar.cc/150";
+              }
+              
+              return {
+                id: i._id,
+                name: i.name || "Anonymous",
+                role: i.designation || "Client",
+                image: avatarUrl,
+                text: i.message || "Great service!",
+                rating: i.rating || 5,
+              };
+            })
           )
         }
       } catch (err) {
@@ -97,12 +118,13 @@ export default function Testimonial() {
                 }`}
             >
               <Image
-                src={item.image}
+                src={getImageSrc(item)}
                 alt={item.name}
                 fill
                 sizes="80px"
                 className="object-cover"
                 draggable={false}
+                onError={() => handleImageError(item.id)}
               />
             </button>
           ))}
@@ -132,11 +154,12 @@ export default function Testimonial() {
 
             <div className="flex items-center gap-4 pt-4 border-t border-white/10">
               <Image
-                src={activeItem.image}
+                src={getImageSrc(activeItem)}
                 alt={activeItem.name}
                 width={64}
                 height={64}
                 className="rounded-xl"
+                onError={() => handleImageError(activeItem.id)}
               />
 
               <div>

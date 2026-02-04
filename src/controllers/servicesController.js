@@ -35,7 +35,9 @@ const servicesController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories`, {
         method: 'POST',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(categoryData),
       });
@@ -57,7 +59,9 @@ const servicesController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
         method: 'PUT',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(categoryData),
       });
@@ -79,7 +83,9 @@ const servicesController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
         method: 'DELETE',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
       });
       
@@ -141,7 +147,9 @@ const servicesController = {
     try {
       const response = await fetch(`${API_BASE_URL}`, {
         method: 'POST',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(serviceData),
       });
@@ -163,7 +171,9 @@ const servicesController = {
     try {
       const response = await fetch(`${API_BASE_URL}/${serviceId}`, {
         method: 'PUT',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(serviceData),
       });
@@ -185,7 +195,9 @@ const servicesController = {
     try {
       const response = await fetch(`${API_BASE_URL}/${serviceId}`, {
         method: 'DELETE',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
       });
       

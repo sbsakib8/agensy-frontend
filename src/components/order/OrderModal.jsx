@@ -122,6 +122,7 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
         // If API call fails (not authenticated), fall back to direct fetch
         const response = await fetch(`${API_BASE_URL}/orders`, {
           method: 'POST',
+        cache: 'no-store',
           headers: {
             'Content-Type': 'application/json',
           },

@@ -65,6 +65,7 @@ export default function TeamCategoryComponent() {
         // Update existing department
         const response = await fetch(`${API_BASE_URL}/team/departments/${editId}`, {
           method: 'PUT',
+        cache: 'no-store',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -84,6 +85,7 @@ export default function TeamCategoryComponent() {
         // Create new department
         const response = await fetch(`${API_BASE_URL}/team/departments`, {
           method: 'POST',
+        cache: 'no-store',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -123,6 +125,7 @@ export default function TeamCategoryComponent() {
     try {
       const response = await fetch(`${API_BASE_URL}/team/departments/${categoryName}`, {
         method: 'DELETE',
+        cache: 'no-store',
         credentials: 'include', // Include cookies for authentication
       });
 

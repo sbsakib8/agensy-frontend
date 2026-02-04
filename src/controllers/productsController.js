@@ -14,6 +14,7 @@ const productsController = {
   getProducts: async () => {
     try {
       const response = await fetch(`${API_BASE_URL}`, {
+        cache: 'no-store',
         credentials: 'include',
         headers: getAuthHeaders(),
       });
@@ -34,6 +35,7 @@ const productsController = {
   getProductById: async (productId) => {
     try {
       const response = await fetch(`${API_BASE_URL}/${productId}`, {
+        cache: 'no-store',
         credentials: 'include',
         headers: getAuthHeaders(),
       });
@@ -54,6 +56,7 @@ const productsController = {
   getProductBySlug: async (slug) => {
     try {
       const response = await fetch(`${API_BASE_URL}/slug/${slug}`, {
+        cache: 'no-store',
         credentials: 'include',
         headers: getAuthHeaders(),
       });
@@ -75,6 +78,7 @@ const productsController = {
     try {
       const response = await fetch(`${API_BASE_URL}`, {
         method: 'POST',
+        cache: 'no-store',
         credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(productData),
@@ -97,6 +101,7 @@ const productsController = {
     try {
       const response = await fetch(`${API_BASE_URL}/${productId}`, {
         method: 'PUT',
+        cache: 'no-store',
         credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(productData),
@@ -119,6 +124,7 @@ const productsController = {
     try {
       const response = await fetch(`${API_BASE_URL}/${productId}`, {
         method: 'DELETE',
+        cache: 'no-store',
         credentials: 'include',
         headers: getAuthHeaders(),
       });
@@ -140,6 +146,7 @@ const productsController = {
     try {
       const response = await fetch(`${API_BASE_URL}/${productId}/status`, {
         method: 'PATCH',
+        cache: 'no-store',
         credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify({ status }),
@@ -162,6 +169,7 @@ const productsController = {
     try {
       const response = await fetch(`${API_BASE_URL}/reorder`, {
         method: 'PUT',
+        cache: 'no-store',
         credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify({ productIds }),
@@ -177,5 +185,11 @@ const productsController = {
     }
   },
 };
+
+// Named exports for backward compatibility
+export const createProduct = productsController.createProduct;
+export const getAllProducts = productsController.getProducts;
+export const updateProduct = productsController.updateProduct;
+export const deleteProduct = productsController.deleteProduct;
 
 export default productsController;

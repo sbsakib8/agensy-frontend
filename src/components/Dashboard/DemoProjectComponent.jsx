@@ -134,6 +134,7 @@ export default function DemoProjectComponent() {
         // Update existing project
         const response = await fetch(`${API_BASE_URL}/categories/${selectedCategoryId}/projects/${editId}`, {
           method: 'PUT',
+        cache: 'no-store',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           body: JSON.stringify(submitData),
@@ -150,6 +151,7 @@ export default function DemoProjectComponent() {
         // Create new project
         const response = await fetch(`${API_BASE_URL}/categories/${selectedCategoryId}/projects`, {
           method: 'POST',
+        cache: 'no-store',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           body: JSON.stringify(submitData),
@@ -197,6 +199,7 @@ export default function DemoProjectComponent() {
     try {
       const response = await fetch(`${API_BASE_URL}/categories/${selectedCategoryId}/projects/${projectId}`, {
         method: 'DELETE',
+        cache: 'no-store',
         credentials: 'include',
       });
       

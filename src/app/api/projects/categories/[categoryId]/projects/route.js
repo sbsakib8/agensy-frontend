@@ -1,9 +1,15 @@
 import { NextResponse } from 'next/server';
-import clientPromise from '@/lib/mongodb';
+// import clientPromise from '@/lib/mongodb';
 import { verifyToken } from '@/lib/jwt-middleware';
 
 // POST /api/projects/categories/:categoryId/projects - Create a new project under a category
 export async function POST(request, { params }) {
+  // This route should be handled by your backend server
+  return NextResponse.json(
+    { success: false, message: 'This endpoint is not implemented in the frontend. Please use the backend API.' },
+    { status: 501 }
+  );
+  /* Original implementation - should be in backend
   try {
     // Verify authentication
     const token = request.cookies.get('token')?.value;
@@ -102,10 +108,18 @@ export async function POST(request, { params }) {
       { status: 500 }
     );
   }
+  */
 }
 
 // GET /api/projects/categories/:categoryId/projects - Get all projects for a category
 export async function GET(request, { params }) {
+  // This route should be handled by your backend server
+  return NextResponse.json(
+    { success: false, message: 'This endpoint is not implemented in the frontend. Please use the backend API.' },
+    { status: 501 }
+  );
+  
+  /* Original implementation - should be in backend
   try {
     const { categoryId } = await params;
 
@@ -134,4 +148,5 @@ export async function GET(request, { params }) {
       { status: 500 }
     );
   }
+  */
 }

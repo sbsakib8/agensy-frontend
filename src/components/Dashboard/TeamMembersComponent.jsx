@@ -125,6 +125,7 @@ export default function TeamMembersComponent() {
         // Update existing member
         const response = await fetch(`${API_BASE_URL}/team/${editId}`, {
           method: 'PUT',
+        cache: 'no-store',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -146,6 +147,7 @@ export default function TeamMembersComponent() {
         // Create new member
         const response = await fetch(`${API_BASE_URL}/team`, {
           method: 'POST',
+        cache: 'no-store',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -222,6 +224,7 @@ export default function TeamMembersComponent() {
     try {
       const response = await fetch(`${API_BASE_URL}/team/${memberId}`, {
         method: 'DELETE',
+        cache: 'no-store',
         credentials: 'include',
       });
 

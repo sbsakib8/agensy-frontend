@@ -65,6 +65,7 @@ export default function DemoCategoryComponent() {
         // Update existing category
         const response = await fetch(`${API_BASE_URL}/projects/categories/${editId}`, {
           method: 'PUT',
+        cache: 'no-store',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -86,6 +87,7 @@ export default function DemoCategoryComponent() {
         // Create new category
         const response = await fetch(`${API_BASE_URL}/projects/categories`, {
           method: 'POST',
+        cache: 'no-store',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -125,6 +127,7 @@ export default function DemoCategoryComponent() {
     try {
       const response = await fetch(`${API_BASE_URL}/projects/categories/${categoryId}`, {
         method: 'DELETE',
+        cache: 'no-store',
         credentials: 'include', // Include cookies for authentication
       });
 

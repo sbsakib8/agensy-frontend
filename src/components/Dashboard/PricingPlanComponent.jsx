@@ -73,6 +73,7 @@ export default function PricingPlanComponent() {
       if (!idToken) return;
 
       const response = await fetch(API_BASE_URL, {
+        cache: 'no-store',
         headers: {
           "Authorization": `Bearer ${idToken}`,
         },
@@ -154,6 +155,7 @@ export default function PricingPlanComponent() {
         // Update existing plan using PATCH
         const response = await fetch(`${API_BASE_URL}/categories/${formData.categoryId}/plans/${editingId}`, {
           method: "PATCH",
+        cache: 'no-store',
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${idToken}`,
@@ -180,6 +182,7 @@ export default function PricingPlanComponent() {
         // Create new plan
         const response = await fetch(`${API_BASE_URL}/categories/${formData.categoryId}/plans`, {
           method: "POST",
+        cache: 'no-store',
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${idToken}`,
@@ -229,6 +232,7 @@ export default function PricingPlanComponent() {
 
       const response = await fetch(`${API_BASE_URL}/categories/${categoryId}/plans/${planId}`, {
         method: "DELETE",
+        cache: 'no-store',
         headers: {
           "Authorization": `Bearer ${idToken}`,
         },

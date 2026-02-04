@@ -81,6 +81,7 @@ export default function ServiceCategoryComponent() {
         // Update existing category
         const response = await fetch(`${API_BASE_URL}/categories/${editId}`, {
           method: 'PUT',
+        cache: 'no-store',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           body: JSON.stringify(submitData),
@@ -97,6 +98,7 @@ export default function ServiceCategoryComponent() {
         // Create new category
         const response = await fetch(`${API_BASE_URL}/categories`, {
           method: 'POST',
+        cache: 'no-store',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           body: JSON.stringify(submitData),
@@ -134,6 +136,7 @@ export default function ServiceCategoryComponent() {
     try {
       const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
         method: 'DELETE',
+        cache: 'no-store',
         credentials: 'include',
       });
 

@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await fetch('/api/auth/signin', {
         method: 'POST',
+        cache: 'no-store',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -56,6 +57,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await fetch('/api/auth/logout', {
         method: 'POST'
+        cache: 'no-store',
       })
     } catch (error) {
     } finally {

@@ -12,6 +12,7 @@ export const ErrorTypes = {
 };
 
 export const handleApiError = (error, context = '') => {
+  console.error(`[${context}] API Error:`, {
     message: error.message,
     code: error.code,
     status: error.response?.status,
@@ -124,6 +125,7 @@ export const checkBackendHealth = async () => {
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api';
     const response = await fetch(`${apiBaseUrl}/health`, {
       method: 'GET',
+        cache: 'no-store',
       signal: AbortSignal.timeout(5000), // 5 second timeout
     });
     return response.ok;

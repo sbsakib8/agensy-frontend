@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { verifyToken } from '@/lib/jwt-middleware'
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api';
+
 // GET all users from Express backend
 export async function GET(request) {
   try {
@@ -25,8 +27,9 @@ export async function GET(request) {
     }
 
     // Forward request to Express backend
-    const expressResponse = await fetch('http://localhost:5001/api/users', {
+    const expressResponse = await fetch(`${API_BASE_URL}/users`, {
       method: 'GET',
+        cache: 'no-store',
       headers: {
         'Content-Type': 'application/json',
         'Cookie': `auth-token=${authToken}`
@@ -51,7 +54,7 @@ export async function GET(request) {
     })
 
     // Add CORS headers
-    response.headers.set('Access-Control-Allow-Origin', 'http://localhost:5001')
+    response.headers.set('Access-Control-Allow-Origin', API_BASE_URL.replace('/api', ''))
     response.headers.set('Access-Control-Allow-Credentials', 'true')
 
     return response
@@ -68,7 +71,7 @@ export async function GET(request) {
 export async function OPTIONS(request) {
   const response = new NextResponse(null, { status: 200 })
   
-  response.headers.set('Access-Control-Allow-Origin', 'http://localhost:5001')
+  response.headers.set('Access-Control-Allow-Origin', API_BASE_URL.replace('/api', ''))
   response.headers.set('Access-Control-Allow-Credentials', 'true')
   response.headers.set('Access-Control-Allow-Methods', 'GET, OPTIONS')
   response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, Cookie')

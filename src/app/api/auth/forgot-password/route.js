@@ -1,9 +1,16 @@
 import { NextResponse } from 'next/server'
-import clientPromise from '@/lib/mongodb'
+// import clientPromise from '@/lib/mongodb'
 import { sendVerificationEmail } from '@/lib/mailer'
 import crypto from 'crypto'
 
 export async function POST(request) {
+  // This route should be handled by your backend server
+  return NextResponse.json(
+    { success: false, message: 'This endpoint is not implemented in the frontend. Please use the backend API.' },
+    { status: 501 }
+  )
+  
+  /* Original implementation - should be in backend
   try {
     const { email } = await request.json()
     
@@ -104,4 +111,5 @@ export async function POST(request) {
       { status: 500 }
     )
   }
+  */
 }

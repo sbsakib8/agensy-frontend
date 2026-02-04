@@ -55,7 +55,9 @@ const pricingController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories`, {
         method: 'POST',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(categoryData),
       });
@@ -77,7 +79,9 @@ const pricingController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
         method: 'PUT',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(categoryData),
       });
@@ -99,7 +103,9 @@ const pricingController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
         method: 'DELETE',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
       });
       
@@ -181,7 +187,9 @@ const pricingController = {
     try {
       const response = await fetch(`${API_BASE_URL}/plans`, {
         method: 'POST',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(planData),
       });
@@ -203,7 +211,9 @@ const pricingController = {
     try {
       const response = await fetch(`${API_BASE_URL}/plans/${planId}`, {
         method: 'PUT',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(planData),
       });
@@ -225,7 +235,9 @@ const pricingController = {
     try {
       const response = await fetch(`${API_BASE_URL}/plans/${planId}`, {
         method: 'DELETE',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
       });
       

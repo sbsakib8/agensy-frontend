@@ -18,6 +18,7 @@ export default function UsersPage() {
       setLoading(true);
       const response = await fetch('/api/users', {
         method: 'GET',
+        cache: 'no-store',
         credentials: 'include',
       });
 

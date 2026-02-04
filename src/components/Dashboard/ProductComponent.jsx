@@ -73,6 +73,7 @@ export default function ProductComponent() {
         
         // Log each product's ID for debugging
         productsArray.forEach((product, index) => {
+          console.log(`Product ${index}:`, {
             id: product._id,
             idType: typeof product._id,
             idLength: product._id?.length || 'N/A',
@@ -164,6 +165,7 @@ export default function ProductComponent() {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
+      console.log('Updating product:', {
         id: selectedProduct._id,
         idType: typeof selectedProduct._id,
         idLength: selectedProduct._id?.length || 'N/A',
@@ -221,21 +223,6 @@ export default function ProductComponent() {
   const openEditModal = (product) => {
     setSelectedProduct(product);
     setEditForm({
-      slug: product.slug || '',
-      title: product.title || '',
-      tagline: product.tagline || '',
-      description: product.description || '',
-      coverImage: product.coverImage || { url: '', alt: '' },
-      badge: product.badge || { label: '', color: '' },
-      liveLink: product.liveLink || '',
-      repoLink: product.repoLink || '',
-      highlights: product.highlights || [{ label: '', value: '' }],
-      features: product.features || [''],
-      cta: product.cta || { text: '', url: '' },
-      theme: product.theme || { gradientFrom: '', gradientTo: '' },
-      status: product.status || 'active',
-      order: product.order || 0
-    });
       slug: product.slug || '',
       title: product.title || '',
       tagline: product.tagline || '',

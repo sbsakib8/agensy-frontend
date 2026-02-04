@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api';
 
 const getAuthHeaders = () => {
   return {
@@ -63,7 +63,9 @@ const teamController = {
     try {
       const response = await fetch(`${API_BASE_URL}/team/departments`, {
         method: 'POST',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(categoryData),
       });
@@ -86,7 +88,9 @@ const teamController = {
     try {
       const response = await fetch(`${API_BASE_URL}/team/departments/${categoryId}`, {
         method: 'PUT',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(categoryData),
       });
@@ -109,7 +113,9 @@ const teamController = {
     try {
       const response = await fetch(`${API_BASE_URL}/team/departments/${categoryId}`, {
         method: 'DELETE',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
       });
       
@@ -206,7 +212,9 @@ const teamController = {
     try {
       const response = await fetch(`${API_BASE_URL}/team`, {
         method: 'POST',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(memberData),
       });
@@ -229,7 +237,9 @@ const teamController = {
     try {
       const response = await fetch(`${API_BASE_URL}/team/${memberId}`, {
         method: 'PUT',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(memberData),
       });
@@ -252,7 +262,9 @@ const teamController = {
     try {
       const response = await fetch(`${API_BASE_URL}/team/${memberId}`, {
         method: 'DELETE',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
       });
       

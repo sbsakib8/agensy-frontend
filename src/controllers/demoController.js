@@ -55,7 +55,9 @@ const demoController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories`, {
         method: 'POST',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(categoryData),
       });
@@ -77,7 +79,9 @@ const demoController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
         method: 'PUT',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(categoryData),
       });
@@ -99,7 +103,9 @@ const demoController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories/${categoryId}`, {
         method: 'DELETE',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
       });
       
@@ -172,7 +178,9 @@ const demoController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories/${categoryId}/projects`, {
         method: 'POST',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(projectData),
       });
@@ -194,7 +202,9 @@ const demoController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories/${categoryId}/projects/${projectId}`, {
         method: 'PUT',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
         body: JSON.stringify(projectData),
       });
@@ -216,7 +226,9 @@ const demoController = {
     try {
       const response = await fetch(`${API_BASE_URL}/categories/${categoryId}/projects/${projectId}`, {
         method: 'DELETE',
-        credentials: 'include',
+        cache: 'no-store',
+
+        cache: 'no-store',        credentials: 'include',
         headers: getAuthHeaders(),
       });
       

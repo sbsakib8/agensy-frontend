@@ -131,7 +131,7 @@ export default function TrackOrder() {
       
       const response = await fetch(`${API_BASE_URL}/orders/user`, {
         credentials: 'include',
-      });
+      }, { cache: 'no-store' });
 
       if (!response.ok) {
         // If API fails, keep static orders
