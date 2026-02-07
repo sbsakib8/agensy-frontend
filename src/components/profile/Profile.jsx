@@ -66,7 +66,7 @@ export default function Profile() {
       };
       reader.readAsDataURL(file);
 
-      // Upload to ImgBB
+      // Upload to Cloudinary
       const uploadResult = await uploadImageToImgBB(file);
 
       if (uploadResult.success) {
@@ -391,7 +391,7 @@ export default function Profile() {
                     {uploadingImage && (
                       <div className="flex items-center gap-3 p-4 rounded-xl bg-blue-500/10 border border-blue-500/30">
                         <div className="w-5 h-5 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
-                        <p className="text-sm text-blue-300">Uploading image to ImgBB...</p>
+                        <p className="text-sm text-blue-300">Uploading image to Cloudinary...</p>
                       </div>
                     )}
 

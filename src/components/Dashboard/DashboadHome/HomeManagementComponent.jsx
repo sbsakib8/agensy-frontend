@@ -14,6 +14,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { bannerApi, faqApi, testimonialApi } from "@/lib/api";
+import { uploadImageToImgBB } from "@/lib/imgbb-upload";
 
 export default function HomeManagementComponent() {
   const [activeTab, setActiveTab] = useState("testimonials");
@@ -91,6 +92,7 @@ function TestimonialsSection({ cardStyle }) {
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     designation: "",
@@ -199,6 +201,42 @@ function TestimonialsSection({ cardStyle }) {
     });
   };
 
+  const handleImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setError('Please select an image file');
+      setTimeout(() => setError(null), 3000);
+      return;
+    }
+
+    // Validate file size (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Image size should be less than 5MB');
+      setTimeout(() => setError(null), 3000);
+      return;
+    }
+
+    try {
+      setUploadingImage(true);
+      const result = await uploadImageToImgBB(file);
+
+      if (result.success) {
+        setFormData({ ...formData, avatar: result.imageUrl });
+      } else {
+        setError(result.error || 'Failed to upload image');
+        setTimeout(() => setError(null), 3000);
+      }
+    } catch (err) {
+      setError('Error uploading image');
+      setTimeout(() => setError(null), 3000);
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
   if (loading && testimonials.length === 0) {
     return (
       <div className="flex justify-center items-center py-12">
@@ -288,14 +326,47 @@ function TestimonialsSection({ cardStyle }) {
               </div>
             </div>
             <div>
-              <label className="block text-sm text-gray-400 mb-2">Avatar URL</label>
-              <input
-                type="text"
-                value={formData.avatar}
-                onChange={(e) => setFormData({ ...formData, avatar: e.target.value })}
-                className="w-full px-4 py-2 bg-[#05060a] border border-blue-500/30 rounded-lg focus:outline-none focus:border-blue-500"
-                placeholder="Enter avatar image URL"
-              />
+              <label className="block text-sm text-gray-400 mb-2">Avatar Image</label>
+              <div className="space-y-3">
+                {/* File Upload Button */}
+                <div className="flex items-center gap-3">
+                  <label className="flex items-center gap-2 px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-lg cursor-pointer transition-colors border border-blue-500/30">
+                    <ImageIcon size={20} />
+                    {uploadingImage ? 'Uploading...' : 'Upload Image'}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                      disabled={uploadingImage}
+                    />
+                  </label>
+                  {uploadingImage && (
+                    <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
+                  )}
+                </div>
+                {/* Manual URL Input */}
+                <input
+                  type="text"
+                  value={formData.avatar}
+                  onChange={(e) => setFormData({ ...formData, avatar: e.target.value })}
+                  className="w-full px-4 py-2 bg-[#05060a] border border-blue-500/30 rounded-lg focus:outline-none focus:border-blue-500"
+                  placeholder="Or enter avatar image URL"
+                />
+                {/* Image Preview */}
+                {formData.avatar && (
+                  <div className="flex items-center gap-3 p-3 bg-green-500/10 border border-green-500/30 rounded-lg">
+                    <Image
+                      src={formData.avatar}
+                      alt="Preview"
+                      width={48}
+                      height={48}
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
+                    <span className="text-sm text-green-400">Image uploaded successfully</span>
+                  </div>
+                )}
+              </div>
             </div>
             <div>
               <label className="block text-sm text-gray-400 mb-2">Message *</label>

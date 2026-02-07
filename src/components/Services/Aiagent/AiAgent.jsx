@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Lottie from "lottie-react";
 import { useRestartAnimations } from "@/hooks/useRestartAnimations";
 import {
   FaRobot,
@@ -20,15 +20,6 @@ import {
 } from "react-icons/fa";
 
 import animationData from "../../../../public/Assistant-Bot.json";
-
-// ✅ SSR-safe Lottie Player
-const LottiePlayer = dynamic(
-  () =>
-    import("@lottiefiles/react-lottie-player").then(
-      (mod) => mod.Player
-    ),
-  { ssr: false }
-);
 
 const AiAgent = () => {
   // Generate stable random values for particles
@@ -57,16 +48,7 @@ const AiAgent = () => {
       title: "Support & Maintenance Bots",
       desc: "Automated monitoring, maintenance handling, and smart ticket triaging systems.",
     },
-    {
-      icon: <FaChartLine className="text-4xl mb-4 text-blue-400" />,
-      title: "Advanced AI Orchestration",
-      desc: "Multi-agent systems that solve complex cross-functional business workflows.",
-    },
-    {
-      icon: <FaShieldAlt className="text-4xl mb-4 text-blue-400" />,
-      title: "Integration & API Connectors",
-      desc: "Secure, fault-tolerant connectors for internal and third-party systems.",
-    },
+  
   ];
 
   const pillars = [
@@ -157,10 +139,10 @@ const AiAgent = () => {
 
     {/* Animation Strictly Right */}
     <div className="md:w-1/2 flex justify-end md:pr-0 pr-6">
-      <LottiePlayer
-        autoplay
-        loop
-        src={animationData}
+      <Lottie
+        animationData={animationData}
+        loop={true}
+        autoplay={true}
         style={{ width: 520, height: 520 }}
       />
     </div>
