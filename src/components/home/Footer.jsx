@@ -6,15 +6,15 @@ import { FaXTwitter, FaLinkedinIn, FaGithub, FaEnvelope } from "react-icons/fa6"
 export default function Footer() {
   return (
     <footer className="bg-linear-to-b from-[#0b1220] to-[#050914] text-gray-300 relative">
-      <div className="max-w-7xl mx-auto px-6 py-16 flex flex-col md:flex-row justify-center md:justify-between items-center md:items-start gap-10 text-center md:text-left">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-14 md:py-16 flex flex-col md:flex-row justify-center md:justify-between items-center md:items-start gap-8 sm:gap-10 text-center md:text-left">
 
         {/* Logo & Brand */}
-        <div className="flex flex-col gap-4 items-center md:items-start">
-          <Link href="/" className="flex items-center gap-3 group cursor-pointer">
+        <div className="flex flex-col gap-3 sm:gap-4 items-center md:items-start">
+          <Link href="/" className="flex items-center gap-2 sm:gap-3 group cursor-pointer">
             <div className="relative">
               <div className="absolute inset-0 bg-linear-to-r from-cyan-500 to-blue-500 rounded-lg blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
-              <div className="relative bg-linear-to-br from-cyan-400 to-blue-600 p-2 rounded-lg transform group-hover:scale-110 transition-transform duration-300">
-                <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none">
+              <div className="relative bg-linear-to-br from-cyan-400 to-blue-600 p-1.5 sm:p-2 rounded-lg transform group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" viewBox="0 0 24 24" fill="none">
                   <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -23,13 +23,13 @@ export default function Footer() {
             </div>
 
             <div className="text-2xl font-bold flex items-center gap-1">
-              <span className="text-white">BD Stack</span>
-              <span className="bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">-Solutions</span>
+              <span className="text-white">SoftStack</span>
+              <span className="bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent"> Agency</span>
             </div>
           </Link>
 
           <p className="text-sm leading-relaxed text-gray-400 max-w-xs">
-            BD Stack Solutions delivers cutting-edge technology solutions and innovative products for businesses worldwide.
+            SoftStack Agency delivers cutting-edge technology solutions and innovative products for businesses worldwide.
           </p>
 
           <div className="flex items-center gap-4 mt-2">
@@ -66,9 +66,9 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-white/10 mt-10">
-        <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-center md:justify-between text-sm text-gray-400 gap-4 md:gap-0 text-center">
-          <p>© {new Date().getFullYear()} BD Stack Solutions. All Rights Reserved.</p>
+      <div className="border-t border-white/10 mt-8 sm:mt-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-5 md:py-6 flex flex-col md:flex-row items-center justify-center md:justify-between text-xs sm:text-sm text-gray-400 gap-3 sm:gap-4 md:gap-0 text-center">
+          <p>© {new Date().getFullYear()} SoftStack Agency. All Rights Reserved.</p>
 
           <div className="flex gap-6 flex-wrap justify-center">
             <Link href="/privacy-policy" className="hover:text-white transition">Privacy Policy</Link>

@@ -33,10 +33,11 @@ export default function DashboardSidebar() {
     <aside
       className={`min-h-screen bg-[#050b1d] border-r border-white/10 flex flex-col transition-all duration-300
         ${open ? "w-64" : "w-20"}
+        fixed md:relative z-50 md:z-auto
       `}
     >
       {/* Logo + Toggle */}
-      <div className="flex items-center justify-between mt-4 px-4">
+      <div className="flex items-center justify-between mt-3 sm:mt-4 px-3 sm:px-4">
         <Link href="/" className="flex items-center gap-3 overflow-hidden">
           <div className="relative">
             <div className="relative bg-linear-to-br from-cyan-400 to-blue-600 p-2 rounded-lg">
@@ -50,9 +51,9 @@ export default function DashboardSidebar() {
 
           {open && (
             <div className="text-md font-bold whitespace-nowrap">
-              <span className="text-white">BD Stack </span>
+              <span className="text-white">SoftStack </span>
               <span className="bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-                -Solutions
+                Agency
               </span>
             </div>
           )}
@@ -68,7 +69,7 @@ export default function DashboardSidebar() {
       </div>
 
       {/* Menu */}
-      <nav className="flex-1 px-3 py-6 space-y-2 text-sm">
+      <nav className="flex-1 px-2 sm:px-3 py-4 sm:py-6 space-y-1.5 sm:space-y-2 text-xs sm:text-sm overflow-y-auto">
         <SidebarItem icon={<LayoutDashboard />} label="Overview" open={open} href="/dashboard" active={pathname === '/dashboard'} />
         <SidebarItem icon={<House />} label="Home Page" open={open} href="/dashboard/home" active={pathname === '/dashboard/home'} />
         <SidebarItem icon={<UserCheck />} label="Users" open={open} href="/dashboard/users" active={pathname === '/dashboard/users'} />

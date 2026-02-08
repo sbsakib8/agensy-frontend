@@ -69,7 +69,7 @@ export default function TermsOfService() {
           <Section
             icon={<CheckCircle className="w-6 h-6" />}
             title="Acceptance of Terms"
-            content="By accessing and using BD Stack Solutions services, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to these terms, please do not use our services."
+            content="By accessing and using SoftStack Agency services, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to these terms, please do not use our services."
           />
 
           <Section
@@ -81,7 +81,7 @@ export default function TermsOfService() {
           <Section
             icon={<Scale className="w-6 h-6" />}
             title="Intellectual Property"
-            content="All content, features, and functionality of our services, including but not limited to text, graphics, logos, and software, are owned by BD Stack Solutions and are protected by international copyright, trademark, and other intellectual property laws."
+            content="All content, features, and functionality of our services, including but not limited to text, graphics, logos, and software, are owned by SoftStack Agency and are protected by international copyright, trademark, and other intellectual property laws."
           />
 
           <Section
@@ -93,7 +93,7 @@ export default function TermsOfService() {
           <Section
             icon={<XCircle className="w-6 h-6" />}
             title="Limitation of Liability"
-            content="In no event shall BD Stack Solutions, its directors, employees, or agents be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or relating to your use of our services."
+            content="In no event shall SoftStack Agency, its directors, employees, or agents be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or relating to your use of our services."
           />
 
           <Section
@@ -116,7 +116,7 @@ export default function TermsOfService() {
             If you have any questions about these Terms of Service, please contact us:
           </p>
           <div className="space-y-2 text-gray-300">
-            <p>Email: legal@bdstack.com</p>
+            <p>Email: legal@softstackagency.com</p>
             <p>Address: Dhaka, Bangladesh</p>
           </div>
         </div>

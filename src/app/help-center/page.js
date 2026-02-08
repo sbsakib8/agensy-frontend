@@ -2,9 +2,9 @@ import HelpCenterPage from '@/components/home/HomeHelpCenter/HelpCenterPage'
 
 export const metadata = {
   title: "Help Center & Support",
-  description: "Find answers to your questions about our services, products, and solutions. Access FAQs, guides, and support resources at BD Stack Solutions Help Center.",
+  description: "Find answers to your questions about our services, products, and solutions. Access FAQs, guides, and support resources at SoftStack Agency Help Center.",
   openGraph: {
-    title: "Help Center & Support | BD Stack Solutions",
+    title: "Help Center & Support | SoftStack Agency",
     description: "Find answers to your questions about our services, products, and solutions."
   }
 };

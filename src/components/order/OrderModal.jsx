@@ -190,21 +190,21 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
           <motion.div
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-slate-900 to-slate-950 rounded-2xl border border-white/10 shadow-2xl"
+            className="relative w-full max-w-2xl max-h-[95vh] sm:max-h-[90vh] my-auto overflow-y-auto bg-gradient-to-br from-slate-900 to-slate-950 rounded-2xl border border-white/10 shadow-2xl"
           >
             {/* Close Button */}
             <button
               onClick={handleClose}
               disabled={loading}
-              className="absolute top-4 right-4 z-20 p-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors disabled:opacity-50 shadow-lg"
+              className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 p-1.5 sm:p-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors disabled:opacity-50 shadow-lg"
               aria-label="Close modal"
             >
-              <X size={24} />
+              <X size={20} className="sm:w-6 sm:h-6" />
             </button>
 
             {/* Success State */}
@@ -224,9 +224,9 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
             ) : (
               <>
                 {/* Header */}
-                <div className="sticky top-0 bg-slate-900/95 backdrop-blur-sm border-b border-white/10 p-6 z-10">
-                  <h2 className="text-2xl font-bold text-white mb-2">Complete Your Order</h2>
-                  <p className="text-gray-400 text-sm">
+                <div className="sticky top-0 bg-slate-900/95 backdrop-blur-sm border-b border-white/10 p-4 sm:p-5 md:p-6 z-10">
+                  <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">Complete Your Order</h2>
+                  <p className="text-gray-400 text-xs sm:text-sm">
                     {plan?.name} - {currency === "USD" ? "$" : "৳"}{plan?.price?.[currency]?.toLocaleString()}
                   </p>
                   
@@ -246,7 +246,7 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
                 </div>
 
                 {/* Form */}
-                <form onSubmit={handleSubmit} className="p-6 space-y-6">
+                <form onSubmit={handleSubmit} className="p-4 sm:p-5 md:p-6 space-y-5 sm:space-y-6">
                   {/* Error Message */}
                   {error && (
                     <div className="flex items-center gap-3 p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400">
@@ -267,7 +267,7 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
                         Contact Information
                       </h3>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                         <div>
                           <label className="block text-sm text-gray-400 mb-2">
                             Full Name * <span className="text-xs text-cyan-400">(Cannot be changed)</span>
@@ -354,13 +354,13 @@ export default function OrderModal({ isOpen, onClose, plan, currency }) {
                         Payment Method
                       </h3>
 
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3">
                         {['bkash', 'nagad', 'rocket', 'card'].map((method) => (
                           <button
                             key={method}
                             type="button"
                             onClick={() => setFormData(prev => ({ ...prev, paymentMethod: method }))}
-                            className={`p-4 border rounded-lg text-center font-medium capitalize transition ${
+                            className={`p-3 sm:p-4 border rounded-lg text-center font-medium capitalize transition text-sm sm:text-base ${
                               formData.paymentMethod === method
                                 ? 'border-cyan-400 bg-cyan-400/10 text-cyan-400'
                                 : 'border-white/10 bg-white/5 text-gray-400 hover:border-white/30'

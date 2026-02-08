@@ -711,7 +711,7 @@ export default function NeonAgencyLanding() {
         <section className="space-y-10 md:space-y-12">
           <SectionHeader 
             label="About Us" 
-            title="Why Choose BD Stack Solutions" 
+            title="Why Choose SoftStack Agency" 
             desc="Leading the way in innovative digital solutions with expertise and dedication." 
           />
 

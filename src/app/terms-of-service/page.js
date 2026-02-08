@@ -2,10 +2,10 @@ import TermsOfService from '@/components/home/HomePolicies/TermsOfService'
 
 export const metadata = {
   title: "Terms of Service",
-  description: "Read BD Stack Solutions terms of service. Understand the rules and guidelines for using our services and platform.",
+  description: "Read SoftStack Agency terms of service. Understand the rules and guidelines for using our services and platform.",
   openGraph: {
-    title: "Terms of Service | BD Stack Solutions",
-    description: "Read BD Stack Solutions terms of service. Understand the rules and guidelines for using our services and platform."
+    title: "Terms of Service | SoftStack Agency",
+    description: "Read SoftStack Agency terms of service. Understand the rules and guidelines for using our services and platform."
   }
 };
 

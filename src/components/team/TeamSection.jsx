@@ -334,7 +334,7 @@ export default function TeamSection() {
         ))}
       </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
         {/* Header */}
         <div className="mx-auto max-w-3xl text-center animate-fade-in-up">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/3 px-4 py-2 text-xs font-medium text-cyan-300">
@@ -342,11 +342,11 @@ export default function TeamSection() {
             Our People
           </div>
 
-          <h1 className="mt-6 text-2xl font-semibold tracking-tight text-white sm:text-5xl">
+          <h1 className="mt-6 text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-white">
             Meet the team at
             <br className="mb-2" />
-            <span className="bg-linear-to-r from-cyan-300 via-sky-400 to-blue-400 bg-clip-text text-transparent">
-              BD Stack Solutions
+            <span className="bg-linear-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+              SoftStack Agency
             </span>
           </h1>
 
@@ -356,8 +356,8 @@ export default function TeamSection() {
           </p>
 
           {/* Search */}
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center">
-            <div className="relative w-full sm:w-105">
+          <div className="mt-6 sm:mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center">
+            <div className="relative w-full sm:w-80 md:w-96 lg:w-105">
               <div className="pointer-events-none absolute -inset-1 rounded-2xl bg-linear-to-r from-cyan-500/20 via-sky-500/10 to-blue-500/20 blur-xl" />
               <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-cyan-200/80" />
               <input
@@ -371,7 +371,7 @@ export default function TeamSection() {
                   "relative w-full rounded-2xl",
                   "border border-white/10",
                   "bg-slate-950/40 backdrop-blur-xl",
-                  "px-11 py-3.5 text-sm text-white",
+                  "px-10 sm:px-11 py-3 sm:py-3.5 text-sm text-white",
                   "placeholder:text-white/45",
                   "shadow-[0_0_0_1px_rgba(255,255,255,0.03),0_18px_50px_rgba(0,0,0,0.35)]",
                   "transition-all duration-300",
@@ -390,7 +390,7 @@ export default function TeamSection() {
         </div>
 
         {/* Tabs */}
-        <div className="mt-10 flex flex-wrap justify-center gap-2 animate-fade-in-up-delayed">
+        <div className="mt-6 sm:mt-8 md:mt-10 flex flex-wrap justify-center gap-2 animate-fade-in-up-delayed">
           {departments.map((dept) => {
             const active = selectedDepartment === dept.id;
             return (
@@ -422,13 +422,13 @@ export default function TeamSection() {
         )}
 
         {/* Grid */}
-        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 animate-fade-in-up-more-delayed">
+        <div className="mt-8 sm:mt-10 md:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 animate-fade-in-up-more-delayed">
           {currentMembers.map((member) => (
             <article
               key={member._id}
               className={[
                 "group relative overflow-hidden rounded-2xl border border-cyan-500/20",
-                "bg-gradient-to-br from-slate-800/60 via-slate-900/70 to-slate-950/80 p-6",
+                "bg-gradient-to-br from-slate-800/60 via-slate-900/70 to-slate-950/80 p-4 sm:p-5 md:p-6",
                 "shadow-[0_0_0_1px_rgba(6,182,212,0.05),0_20px_40px_rgba(0,0,0,0.4)]",
                 "transition-all duration-500 ease-out",
                 "hover:-translate-y-3 hover:scale-[1.02]",
@@ -444,8 +444,8 @@ export default function TeamSection() {
 
               <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-cyan-400/20 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
-              <div className="relative flex items-start gap-4">
-                <div className="relative h-14 w-14 overflow-hidden rounded-xl border border-cyan-500/30 bg-gradient-to-br from-cyan-900/40 to-blue-900/30 shadow-lg shadow-cyan-500/10">
+              <div className="relative flex items-start gap-3 sm:gap-4">
+                <div className="relative h-12 w-12 sm:h-14 sm:w-14 overflow-hidden rounded-xl border border-cyan-500/30 bg-gradient-to-br from-cyan-900/40 to-blue-900/30 shadow-lg shadow-cyan-500/10">
                   <Image
                     src={member.profileImage}
                     alt={member.name}
@@ -456,8 +456,8 @@ export default function TeamSection() {
                 </div>
 
                 <div className="min-w-0 flex-1">
-                  <h3 className="truncate text-base font-semibold text-white group-hover:text-cyan-100 transition-colors duration-300">{member.name}</h3>
-                  <p className="mt-0.5 text-sm text-white/70 group-hover:text-cyan-200/80 transition-colors duration-300">{member.role}</p>
+                  <h3 className="truncate text-sm sm:text-base font-semibold text-white group-hover:text-cyan-100 transition-colors duration-300">{member.name}</h3>
+                  <p className="mt-0.5 text-xs sm:text-sm text-white/70 group-hover:text-cyan-200/80 transition-colors duration-300">{member.role}</p>
 
                   <div className="mt-2 inline-flex items-center rounded-full border border-cyan-500/30 bg-gradient-to-r from-cyan-900/30 to-blue-900/20 px-3 py-1 text-xs text-cyan-200/90 shadow-sm">
                     {member.__deptName || "—"}
@@ -557,12 +557,12 @@ export default function TeamSection() {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="mt-12 flex items-center justify-center gap-2 animate-fade-in-up">
+          <div className="mt-8 sm:mt-10 md:mt-12 flex items-center justify-center gap-2 animate-fade-in-up">
             <button
               onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
               disabled={currentPage === 1}
               className={[
-                "rounded-xl border px-4 py-2 text-sm font-medium transition",
+                "rounded-xl border px-3 sm:px-4 py-2 text-sm font-medium transition",
                 currentPage === 1
                   ? "border-white/10 bg-white/2 text-white/30 cursor-not-allowed"
                   : "border-white/10 bg-white/3 text-white/70 hover:bg-white/5 hover:text-white",
@@ -578,7 +578,7 @@ export default function TeamSection() {
                   key={page}
                   onClick={() => setCurrentPage(page)}
                   className={[
-                    "h-10 w-10 rounded-xl border text-sm font-semibold transition",
+                    "h-9 w-9 sm:h-10 sm:w-10 rounded-xl border text-xs sm:text-sm font-semibold transition",
                     active
                       ? "border-cyan-400/40 bg-cyan-400/10 text-cyan-200"
                       : "border-white/10 bg-white/3 text-white/65 hover:bg-white/5 hover:text-white",
@@ -593,7 +593,7 @@ export default function TeamSection() {
               onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
               disabled={currentPage === totalPages}
               className={[
-                "rounded-xl border px-4 py-2 text-sm font-medium transition",
+                "rounded-xl border px-3 sm:px-4 py-2 text-sm font-medium transition",
                 currentPage === totalPages
                   ? "border-white/10 bg-white/2 text-white/30 cursor-not-allowed"
                   : "border-white/10 bg-white/3 text-white/70 hover:bg-white/5 hover:text-white",

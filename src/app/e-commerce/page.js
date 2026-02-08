@@ -2,10 +2,10 @@ import Ecommerce from '@/components/home/HomeEcommerce/Ecommerce'
 
 export const metadata = {
   title: "E-commerce Solutions",
-  description: "Build powerful online stores with BD Stack Solutions e-commerce development services. Custom shopping platforms, payment integration, and scalable solutions for your business.",
+  description: "Build powerful online stores with SoftStack Agency e-commerce development services. Custom shopping platforms, payment integration, and scalable solutions for your business.",
   openGraph: {
-    title: "E-commerce Solutions | BD Stack Solutions",
-    description: "Build powerful online stores with BD Stack Solutions e-commerce development services."
+    title: "E-commerce Solutions | SoftStack Agency",
+    description: "Build powerful online stores with SoftStack Agency e-commerce development services."
   }
 };
 

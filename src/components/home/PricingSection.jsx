@@ -101,22 +101,22 @@ export default function PricingSection() {
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">
 
         {/* ===== HEADER ===== */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold">
+        <div className="text-center mb-12 md:mb-16 px-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold">
             Simple <span className="text-cyan-400">Pricing</span>
           </h2>
-          <p className="mt-4 text-gray-400 max-w-2xl mx-auto">
+          <p className="mt-4 text-sm sm:text-base md:text-lg text-gray-400 max-w-2xl mx-auto px-4">
             Flexible plans for startups, growing teams, and enterprises. Choose a billing cycle and currency that works best for you.
           </p>
 
           {/* ===== Currency Toggle ===== */}
-          <div className="flex justify-center mt-8">
+          <div className="flex justify-center mt-6 sm:mt-8 px-4">
             <div className="flex bg-white/5 backdrop-blur-md rounded-full p-1 border border-white/10">
               {["USD", "BDT"].map((c) => (
                 <button
                   key={c}
                   onClick={() => setCurrency(c)}
-                  className={`px-6 py-2 rounded-full text-sm font-medium transition
+                  className={`px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-medium transition
                     ${currency === c ? "bg-cyan-500 text-black" : "text-gray-300 hover:text-white"}`}
                 >
                   {c}
@@ -127,13 +127,13 @@ export default function PricingSection() {
 
           {/* ===== Category/Billing Toggle ===== */}
           {!loading && categories.length > 0 && (
-            <div className="flex justify-center mt-6">
-              <div className="flex flex-wrap justify-center gap-2 bg-white/5 rounded-full p-1 border border-white/10 max-w-4xl">
+            <div className="flex justify-center mt-4 sm:mt-6 px-4">
+              <div className="flex flex-wrap justify-center gap-2 bg-white/5 rounded-full p-1 border border-white/10 w-full max-w-4xl">
                 {categories.map((category) => (
                   <button
                     key={category._id}
                     onClick={() => handleCategoryChange(category._id)}
-                    className={`px-6 py-2 rounded-full text-sm transition
+                    className={`px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm transition
                       ${selectedCategory === category._id ? "bg-white/10 text-white" : "text-gray-400 hover:text-white"}`}
                   >
                     {category.name}
@@ -167,7 +167,7 @@ export default function PricingSection() {
 
         {/* ===== PRICING CARDS ===== */}
         {!loading && !error && plans.length > 0 && (
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-4">
             {plans.map((plan, index) => {
               // Handle both billingCycle and duration fields
               const cycle = plan.billingCycle || plan.duration || 'month';
@@ -215,34 +215,34 @@ export default function PricingSection() {
 function PricingCard({ title, subtitle, price, features, color, highlight, cta, onOrderClick, currency }) {
   return (
     <div
-      className={`relative rounded-2xl border border-white/10 bg-linear-to-b from-white/5 to-white/0 p-8 backdrop-blur-md shadow-xl
+      className={`relative rounded-2xl border border-white/10 bg-linear-to-b from-white/5 to-white/0 p-6 sm:p-8 backdrop-blur-md shadow-xl
         ${highlight ? "ring-2 ring-cyan-400/50 shadow-cyan-400/20" : ""}`}
     >
       {highlight && (
-        <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-linear-to-r from-cyan-500 to-blue-500 px-4 py-1 rounded-full text-xs font-semibold">
+        <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-linear-to-r from-cyan-500 to-blue-500 px-3 sm:px-4 py-1 rounded-full text-xs font-semibold whitespace-nowrap">
           {currency === "BDT" ? "জনপ্রিয়" : "Popular"}
         </div>
       )}
       
-      <h3 className={`text-2xl font-bold ${color}`}>{title}</h3>
-      <p className="text-gray-400 mt-1 text-sm">{subtitle}</p>
+      <h3 className={`text-xl sm:text-2xl font-bold ${color}`}>{title}</h3>
+      <p className="text-gray-400 mt-1 text-xs sm:text-sm">{subtitle}</p>
 
-      <div className="mt-6">
-        <span className="text-4xl font-extrabold">{price}</span>
+      <div className="mt-4 sm:mt-6">
+        <span className="text-3xl sm:text-4xl font-extrabold break-words">{price}</span>
       </div>
 
-      <ul className="mt-8 space-y-3">
+      <ul className="mt-6 sm:mt-8 space-y-2 sm:space-y-3">
         {features.map((item, i) => (
-          <li key={i} className="flex gap-3 text-gray-300">
-            <Check className="w-5 h-5 text-green-400 mt-0.5 shrink-0" />
-            <span className="text-sm">{item}</span>
+          <li key={i} className="flex gap-2 sm:gap-3 text-gray-300">
+            <Check className="w-4 h-4 sm:w-5 sm:h-5 text-green-400 mt-0.5 shrink-0" />
+            <span className="text-xs sm:text-sm break-words">{item}</span>
           </li>
         ))}
       </ul>
 
       <button 
         onClick={onOrderClick}
-        className="mt-8 w-full rounded-xl bg-white/10 hover:bg-white/20 transition py-3 font-medium"
+        className="mt-6 sm:mt-8 w-full rounded-xl bg-white/10 hover:bg-white/20 transition py-2.5 sm:py-3 font-medium text-sm sm:text-base"
       >
         {cta?.text || 'Order Now'}
       </button>

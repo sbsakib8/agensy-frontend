@@ -2,10 +2,10 @@ import CustomersPage from '@/components/home/HomeCustomer/CustomerPage'
 
 export const metadata = {
   title: "Our Clients & Success Stories",
-  description: "Discover how BD Stack Solutions has helped businesses transform digitally. Read success stories and testimonials from our satisfied clients worldwide.",
+  description: "Discover how SoftStack Agency has helped businesses transform digitally. Read success stories and testimonials from our satisfied clients worldwide.",
   openGraph: {
-    title: "Our Clients & Success Stories | BD Stack Solutions",
-    description: "Discover how BD Stack Solutions has helped businesses transform digitally."
+    title: "Our Clients & Success Stories | SoftStack Agency",
+    description: "Discover how SoftStack Agency has helped businesses transform digitally."
   }
 };
 

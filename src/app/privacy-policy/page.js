@@ -2,10 +2,10 @@ import PrivacyPolicy from '@/components/home/HomePolicies/PrivacyPolicy'
 
 export const metadata = {
   title: "Privacy Policy",
-  description: "Read BD Stack Solutions privacy policy. Learn how we collect, use, and protect your personal information and data.",
+  description: "Read SoftStack Agency privacy policy. Learn how we collect, use, and protect your personal information and data.",
   openGraph: {
-    title: "Privacy Policy | BD Stack Solutions",
-    description: "Read BD Stack Solutions privacy policy. Learn how we collect, use, and protect your personal information and data."
+    title: "Privacy Policy | SoftStack Agency",
+    description: "Read SoftStack Agency privacy policy. Learn how we collect, use, and protect your personal information and data."
   }
 };
 

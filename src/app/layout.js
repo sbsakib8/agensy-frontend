@@ -14,15 +14,15 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: {
-    default: "BD Stack Solutions | Leading Software Development & AI Solutions",
-    template: "%s | BD Stack Solutions"
+    default: "SoftStack Agency | Leading Software Development & AI Solutions",
+    template: "%s | SoftStack Agency"
   },
-  description: "BD Stack Solutions provides cutting-edge software development, AI agents, mobile apps, web development, and e-commerce solutions. Transform your business with our expert team.",
-  keywords: ["software development", "AI solutions", "web development", "mobile apps", "e-commerce", "AI agents", "digital transformation", "BD Stack Solutions"],
-  authors: [{ name: "BD Stack Solutions" }],
-  creator: "BD Stack Solutions",
-  publisher: "BD Stack Solutions",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://bdstacksolutions.com'),
+  description: "SoftStack Agency provides cutting-edge software development, AI agents, mobile apps, web development, and e-commerce solutions. Transform your business with our expert team.",
+  keywords: ["software development", "AI solutions", "web development", "mobile apps", "e-commerce", "AI agents", "digital transformation", "SoftStack Agency"],
+  authors: [{ name: "SoftStack Agency" }],
+  creator: "SoftStack Agency",
+  publisher: "SoftStack Agency",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://softstackagency.com'),
   alternates: {
     canonical: '/'
   },
@@ -40,10 +40,10 @@ export const metadata = {
   },
   manifest: '/site.webmanifest',
   openGraph: {
-    title: "BD Stack Solutions | Leading Software Development & AI Solutions",
-    description: "Transform your business with cutting-edge software development, AI agents, and digital solutions from BD Stack Solutions.",
+    title: "SoftStack Agency | Leading Software Development & AI Solutions",
+    description: "Transform your business with cutting-edge software development, AI agents, and digital solutions from SoftStack Agency.",
     url: '/',
-    siteName: 'BD Stack Solutions',
+    siteName: 'SoftStack Agency',
     locale: 'en_US',
     type: 'website',
     images: [
@@ -51,13 +51,13 @@ export const metadata = {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'BD Stack Solutions'
+        alt: 'SoftStack Agency'
       }
     ]
   },
   twitter: {
     card: 'summary_large_image',
-    title: "BD Stack Solutions | Leading Software Development & AI Solutions",
+    title: "SoftStack Agency | Leading Software Development & AI Solutions",
     description: "Transform your business with cutting-edge software development, AI agents, and digital solutions.",
     images: ['/og-image.jpg']
   },
@@ -88,7 +88,7 @@ export const metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'BD Stack Solutions'
+    title: 'SoftStack Agency'
   }
 };
 

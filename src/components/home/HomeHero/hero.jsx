@@ -51,15 +51,15 @@ export default function HeroSection() {
       </div>
 
       {/* ================= CONTENT ================= */}
-      <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 items-center gap-14 px-6 py-40 pb-40 md:grid-cols-2">
+      <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 sm:gap-12 md:gap-14 px-4 sm:px-6 md:px-8 py-24 sm:py-32 md:py-40 pb-28 sm:pb-32 md:pb-40 md:grid-cols-2">
         {/* LEFT SIDE */}
         <div>
-          <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-500/10 px-4 py-1 text-sm text-blue-400">
+          <span className="mb-3 sm:mb-4 inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 sm:px-4 sm:py-1.5 text-xs sm:text-sm text-blue-400">
             <Sparkles size={16} />
-            {loading ? "BD-Stack Solutions Agency" : bannerData?.badge || "BD-Stack Solutions Agency"}
+            {loading ? "SoftStack Agency" : bannerData?.badge || "SoftStack Agency"}
           </span>
 
-          <h1 className="mt-4 text-4xl font-bold leading-tight md:text-5xl lg:text-6xl">
+          <h1 className="mt-3 sm:mt-4 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
             {loading ? (
               <>
                 Build{" "}
@@ -83,16 +83,16 @@ export default function HeroSection() {
             )}
           </h1>
 
-          <p className="mt-6 max-w-xl text-base text-gray-400 md:text-lg">
+          <p className="mt-4 sm:mt-5 md:mt-6 max-w-xl text-sm sm:text-base md:text-lg text-gray-400">
             {loading
               ? "We design and develop high-performance websites and web applications using modern technologies like React, Next.js and Tailwind CSS."
               : bannerData?.description ||
                 "We design and develop high-performance websites and web applications using modern technologies like React, Next.js and Tailwind CSS."}
           </p>
 
-          <div className="mt-10 flex flex-wrap items-center gap-4">
-            <Link href="/pricing">
-              <button className="group inline-flex items-center gap-2 rounded-full bg-linear-to-r from-blue-500 to-cyan-400 px-8 py-4 text-sm font-semibold text-black transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]">
+          <div className="mt-6 sm:mt-8 md:mt-10 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
+            <Link href="/pricing" className="w-full sm:w-auto">
+              <button className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 rounded-full bg-linear-to-r from-blue-500 to-cyan-400 px-6 sm:px-7 md:px-8 py-3 sm:py-3.5 md:py-4 text-sm sm:text-base font-semibold text-black transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]">
                 {loading 
                   ? "Get Started" 
                   : bannerData?.ctaButtons?.[0]?.text || "Get Started"}
@@ -103,8 +103,8 @@ export default function HeroSection() {
               </button>
             </Link>
 
-            <Link href="/product">
-              <button className="rounded-full border border-white/10 px-8 py-4 text-sm text-gray-300 transition-all hover:border-blue-400/40 hover:text-white">
+            <Link href="/product" className="w-full sm:w-auto">
+              <button className="w-full sm:w-auto rounded-full border border-white/10 px-6 sm:px-7 md:px-8 py-3 sm:py-3.5 md:py-4 text-sm sm:text-base text-gray-300 transition-all hover:border-blue-400/40 hover:text-white">
                 {loading 
                   ? "View Our Work" 
                   : bannerData?.ctaButtons?.[1]?.text || "View Our Work"}
@@ -114,7 +114,7 @@ export default function HeroSection() {
         </div>
 
       {/* ===== RIGHT SIDE : FLOATING IMAGE BENTO GRID ===== */}
-<div className="relative mt-6 md:mt-12 translate-y-4 grid grid-cols-3 grid-rows-3 gap-4 h-88 md:h-104">
+<div className="relative mt-6 md:mt-12 translate-y-4 grid grid-cols-3 grid-rows-3 gap-2 sm:gap-3 md:gap-4 h-72 sm:h-80 md:h-88 lg:h-104">
 
   {/* background glow */}
   <motion.div

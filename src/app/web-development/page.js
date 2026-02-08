@@ -2,9 +2,9 @@ import WebPage from '@/components/Services/webDev/WebPage'
 
 export const metadata = {
   title: "Web Development Services",
-  description: "Professional web development services using cutting-edge technologies. Custom websites, web applications, and e-commerce solutions built by BD Stack Solutions expert developers.",
+  description: "Professional web development services using cutting-edge technologies. Custom websites, web applications, and e-commerce solutions built by SoftStack Agency expert developers.",
   openGraph: {
-    title: "Web Development Services | BD Stack Solutions",
+    title: "Web Development Services | SoftStack Agency",
     description: "Professional web development services using cutting-edge technologies."
   }
 };

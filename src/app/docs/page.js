@@ -2,10 +2,10 @@ import DocumentationPage from '@/components/home/HomeDocs/DocumentationPage'
 
 export const metadata = {
   title: "Documentation",
-  description: "Comprehensive documentation and guides for BD Stack Solutions products and services. Learn how to integrate and use our solutions effectively.",
+  description: "Comprehensive documentation and guides for SoftStack Agency products and services. Learn how to integrate and use our solutions effectively.",
   openGraph: {
-    title: "Documentation | BD Stack Solutions",
-    description: "Comprehensive documentation and guides for BD Stack Solutions products and services."
+    title: "Documentation | SoftStack Agency",
+    description: "Comprehensive documentation and guides for SoftStack Agency products and services."
   }
 };
 

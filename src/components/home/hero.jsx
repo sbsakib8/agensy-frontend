@@ -56,7 +56,7 @@ export default function HeroSection() {
         <div>
           <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-500/10 px-4 py-1 text-sm text-blue-400">
             <Sparkles size={16} />
-            {loading ? "BD-Stack Solutions Agency" : bannerData?.badge || "BD-Stack Solutions Agency"}
+            {loading ? "SoftStack Agency" : bannerData?.badge || "SoftStack Agency"}
           </span>
 
           <h1 className="mt-4 text-4xl font-bold leading-tight md:text-5xl lg:text-6xl">

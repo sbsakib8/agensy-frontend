@@ -137,7 +137,7 @@ export default function CookiePolicy() {
             If you have any questions about our Cookie Policy, please contact us:
           </p>
           <div className="space-y-2 text-gray-300">
-            <p>Email: privacy@bdstack.com</p>
+            <p>Email: privacy@softstackagency.com</p>
             <p>Address: Dhaka, Bangladesh</p>
           </div>
         </div>

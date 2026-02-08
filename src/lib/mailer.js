@@ -18,7 +18,7 @@ export const sendVerificationEmail = async (to, subject, htmlContent) => {
   try {
     const mailOptions = {
       from: {
-        name: 'BD Stack Solutions',
+        name: 'SoftStack Agency',
         address: process.env.SMTP_USER,
       },
       to: to,

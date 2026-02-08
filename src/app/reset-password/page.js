@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 
 export const metadata = {
   title: "Reset Password",
-  description: "Reset your BD Stack Solutions account password securely.",
+  description: "Reset your SoftStack Agency account password securely.",
   robots: {
     index: false,
     follow: false
