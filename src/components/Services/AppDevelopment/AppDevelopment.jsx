@@ -160,7 +160,7 @@ const AppDevelopment = () => {
   ];
 
   return (
-    <section className="relative overflow-hidden py-24 px-4 sm:px-6 lg:px-8 bg-linear-to-b from-slate-950 via-slate-900 to-slate-950">
+    <section className="relative overflow-hidden py-16 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-linear-to-b from-slate-950 via-slate-900 to-slate-950">
       {/* Background Animations */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Gradient Orbs */}
@@ -188,20 +188,20 @@ const AppDevelopment = () => {
 
       <div className="relative max-w-7xl mx-auto route-container z-10">
         {/* SECTION 1: HERO (mb-32) */}
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-12 mb-32">
-          <div className="flex-1 space-y-8 text-left scroll-anim order-2 lg:order-1">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-8 sm:gap-10 md:gap-12 mb-20 sm:mb-24 md:mb-32">
+          <div className="flex-1 space-y-6 sm:space-y-8 text-left scroll-anim order-2 lg:order-1">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
               Cross-Platform App <br />
               <span className="bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                 Development. Fast, Fluid, & Future-Ready.
               </span>
             </h1>
-            <p className="text-gray-300/90 text-lg max-w-2xl">
+            <p className="text-gray-300/90 text-base sm:text-lg leading-relaxed max-w-2xl">
               We build native-quality mobile apps using{" "}
               <span className="text-cyan-400 font-semibold">Flutter</span> and{" "}
               <span className="text-blue-400 font-semibold">React Native</span>.
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pt-3 sm:pt-4">
               {features.map((item, idx) => (
                 <div key={idx} className="flex items-center space-x-3 text-gray-200/90">
                   <CheckCircle2 className="w-5 h-5 text-cyan-500 shrink-0" />
@@ -213,18 +213,18 @@ const AppDevelopment = () => {
 
           <div className="flex-1 w-full flex justify-center items-center order-1 lg:order-2 scroll-anim relative">
             <div className="absolute -inset-6 bg-cyan-500/10 blur-3xl rounded-full opacity-60 animate-appGlowPulse" />
-            <div className="relative w-full max-w-75 sm:max-w-100 lg:max-w-125">
+            <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
               <Lottie animationData={mobileAppShowcase} loop={true} className="w-full h-auto" />
             </div>
           </div>
         </div>
 
         {/* SECTION 2: SERVICES GRID (mb-32) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-32">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 md:gap-8 mb-20 sm:mb-24 md:mb-32">
           {services.map((service, index) => (
             <div
               key={index}
-              className="p-8 rounded-3xl bg-slate-900/45 border border-slate-700/60 backdrop-blur-md shadow-lg transform hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300 ease-out group"
+              className="p-6 sm:p-7 md:p-8 rounded-3xl bg-slate-900/45 border border-slate-700/60 backdrop-blur-md shadow-lg transform hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300 ease-out group"
             >
               <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-6 bg-slate-800/70 group-hover:bg-cyan-500/20 text-white text-2xl transition-colors duration-300">
                 {service.icon}
@@ -239,21 +239,21 @@ const AppDevelopment = () => {
 
         {/* SECTION 3: CAPABILITIES (Header + Grid + Button) (mb-32) */}
         <div className="mb-32">
-          <div className="text-center mb-16 scroll-anim">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <div className="text-center mb-12 sm:mb-14 md:mb-16 scroll-anim">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 sm:mb-4">
               Integrated Mobile Capabilities
             </h2>
-            <p className="text-gray-200/75 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
+            <p className="text-gray-200/75 max-w-2xl mx-auto text-sm sm:text-base md:text-lg leading-relaxed px-4">
               We integrate essential, high-performance features into every app to ensure
               reliability, top-tier security, and seamless user engagement.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 md:gap-8 mb-8 sm:mb-10 md:mb-12">
             {capabilities.map((cap, index) => (
               <div
                 key={index}
-                className="p-8 rounded-3xl bg-slate-900/45 border border-slate-700/50 backdrop-blur-md shadow-md transition-colors duration-500 scroll-anim group hover:border-cyan-500/30 hover:bg-slate-900/55"
+                className="p-6 sm:p-7 md:p-8 rounded-3xl bg-slate-900/45 border border-slate-700/50 backdrop-blur-md shadow-md transition-colors duration-500 scroll-anim group hover:border-cyan-500/30 hover:bg-slate-900/55"
               >
                 <div
                   className={`mb-6 w-14 h-14 rounded-full flex items-center justify-center border border-slate-700/50 transition-all duration-500 ${cap.bgColor} ${cap.borderColor} text-white text-2xl group-hover:bg-cyan-500/20 group-hover:border-cyan-400`}
@@ -280,9 +280,9 @@ const AppDevelopment = () => {
         </div>
 
         {/* SECTION 4: PARTNER CALLOUT (mb-32) */}
-        <div className="p-8 md:p-16 rounded-[2.5rem] bg-slate-900/45 border border-slate-800/70 backdrop-blur-md flex flex-col md:flex-row items-center justify-between gap-12 mb-32 scroll-anim shadow-lg hover:border-cyan-500/25 transition-colors">
+        <div className="p-6 sm:p-8 md:p-12 lg:p-16 rounded-[2.5rem] bg-slate-900/45 border border-slate-800/70 backdrop-blur-md flex flex-col md:flex-row items-center justify-between gap-8 sm:gap-10 md:gap-12 mb-20 sm:mb-24 md:mb-32 scroll-anim shadow-lg hover:border-cyan-500/25 transition-colors">
           <div className="max-w-xl text-left">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 leading-snug">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 sm:mb-5 md:mb-6 leading-snug">
               Partner for Flawless Delivery
             </h2>
             <p className="text-gray-200/80 text-base md:text-lg leading-relaxed">
@@ -292,7 +292,7 @@ const AppDevelopment = () => {
           </div>
 
           <Link href="/contact">
-            <button className="group inline-flex items-center gap-2 px-8 py-4 rounded-full bg-linear-to-r from-blue-500 to-cyan-400 text-black font-bold transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.45)] whitespace-nowrap">
+            <button className="group inline-flex items-center gap-2 px-6 sm:px-7 md:px-8 py-3 sm:py-3.5 md:py-4 text-sm sm:text-base rounded-full bg-linear-to-r from-blue-500 to-cyan-400 text-black font-bold transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.45)] whitespace-nowrap">
               Schedule a Consultation{" "}
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
@@ -301,17 +301,17 @@ const AppDevelopment = () => {
 
         {/* SECTION 5: PILLARS */}
         <div className="scroll-anim">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+          <div className="text-center mb-12 sm:mb-14 md:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white tracking-tight">
               The Core Pillars of Our Delivery
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 md:gap-8">
             {pillars.map((pillar, index) => (
               <div
                 key={index}
-                className="p-8 rounded-3xl bg-slate-900/35 border border-slate-800/60 text-left space-y-5 scroll-anim transition-all duration-500 ease-out transform hover:-translate-y-1 hover:bg-slate-900/50 hover:border-cyan-500/40 group"
+                className="p-6 sm:p-7 md:p-8 rounded-3xl bg-slate-900/35 border border-slate-800/60 text-left space-y-4 sm:space-y-5 scroll-anim transition-all duration-500 ease-out transform hover:-translate-y-1 hover:bg-slate-900/50 hover:border-cyan-500/40 group"
               >
                 <div className="flex items-center space-x-4">
                   <div className="p-3 bg-slate-800/60 rounded-2xl transition-colors duration-500 group-hover:bg-cyan-500/20">

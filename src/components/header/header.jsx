@@ -68,7 +68,7 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <div className="shrink-0 group cursor-pointer">
+          <Link href="/" className="shrink-0 group cursor-pointer">
             <div className="flex items-center space-x-3">
               <div className="relative">
                 <div className="absolute inset-0 bg-linear-to-r from-cyan-500 to-blue-500 rounded-lg blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
@@ -98,16 +98,14 @@ const Header = () => {
                   </svg>
                 </div>
               </div>
-              <div>
-                <Link href={"/"} className="text-2xl font-bold">
-                  <span className="text-white">BD Stack </span>
-                  <span className="bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-                    -Solutions
-                  </span>
-                </Link>
+              <div className="text-2xl font-bold">
+                <span className="text-white">SoftStack </span>
+                <span className="bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                  Agency
+                </span>
               </div>
             </div>
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-1">

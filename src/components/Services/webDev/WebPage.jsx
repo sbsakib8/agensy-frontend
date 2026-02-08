@@ -165,13 +165,13 @@ export default function WebPage() {
       </div>
 
       {/* ================= HERO ================= */}
-      <section className="relative max-w-7xl mx-auto px-6 py-32 grid md:grid-cols-2 gap-14 items-center z-10">
+      <section className="relative max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-20 sm:py-24 md:py-32 grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-12 md:gap-14 items-center z-10">
         <motion.div
           variants={fadeSlideUp}
           initial="hidden"
           animate="visible"
         >
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-4 sm:mb-5 md:mb-6">
             Build{" "}
             <span className="bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               Fast & Scalable
@@ -181,18 +181,18 @@ export default function WebPage() {
             Designed for <span className="text-cyan-400">Growth</span>
           </h1>
 
-          <p className="text-lg text-gray-300 max-w-xl mb-10">
+          <p className="text-base sm:text-lg text-gray-300 max-w-xl mb-6 sm:mb-8 md:mb-10">
             We craft modern, secure, and high-performance web
             applications engineered to help your business scale
             confidently.
           </p>
 
-          <div className="flex gap-4 flex-wrap">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 flex-wrap">
             <Link href="/pricing">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 rounded-xl bg-linear-to-r from-blue-500 to-cyan-400 text-black font-semibold shadow-lg hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]"
+                className="w-full sm:w-auto px-6 sm:px-7 md:px-8 py-3 sm:py-3.5 md:py-4 text-sm sm:text-base rounded-xl bg-linear-to-r from-blue-500 to-cyan-400 text-black font-semibold shadow-lg hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]"
               >
                 Get Started
               </motion.button>
@@ -221,20 +221,20 @@ export default function WebPage() {
               autoplay
               loop
               src={animationData}
-              style={{ maxWidth: 600, width: "100%" }}
+              style={{ maxWidth: 500, width: "100%" }}
             />
           )}
         </motion.div>
       </section>
 
       {/* ================= SERVICES ================= */}
-      <section className="max-w-7xl mx-auto px-6 py-28">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-20 sm:py-24 md:py-28">
         <motion.div
           variants={container}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid md:grid-cols-3 gap-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 md:gap-8"
         >
           {services.map((s, i) => (
             <motion.div
@@ -258,13 +258,13 @@ export default function WebPage() {
       </section>
 
       {/* ================= FEATURES ================= */}
-      <section className="bg-[#020617]/60 py-28">
-        <div className="max-w-7xl mx-auto px-6">
+      <section className="bg-[#020617]/60 py-20 sm:py-24 md:py-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-16">
             Capabilities & Features
           </h2>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             {features.map((f, i) => (
               <motion.div
                 key={i}
@@ -272,7 +272,7 @@ export default function WebPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
                 whileHover={{ scale: 1.02 }}
-                className="p-6 rounded-2xl bg-slate-900/40 border border-slate-800 hover:bg-slate-900/60"
+                className="p-5 sm:p-6 rounded-2xl bg-slate-900/40 border border-slate-800 hover:bg-slate-900/60"
               >
                 <f.icon className="text-blue-400 text-2xl mb-4" />
                 <h4 className="text-white font-semibold mb-2">

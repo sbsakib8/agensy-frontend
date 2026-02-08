@@ -322,7 +322,7 @@ function ServiceModal({ service, isOpen, onClose }) {
           </div>
 
           {/* Pricing & Timeline */}
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 md:gap-8">
             <div className="p-6 rounded-2xl bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/20">
               <p className="text-sm text-cyan-300 mb-2 font-semibold">Pricing</p>
               <p className="text-2xl font-bold text-white">{service.details.pricing}</p>
@@ -501,10 +501,10 @@ export default function NeonAgencyLanding() {
       </div>
 
       {/* ================= Content ================= */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 py-14 md:py-24 space-y-20 md:space-y-28">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-12 sm:py-16 md:py-20 lg:py-24 space-y-16 sm:space-y-20 md:space-y-24 lg:space-y-28">
         {/* HERO / BANNER (improved) */}
         {/* HERO / BANNER (NEW) */}
-        <section className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center pt-18 md:pt-16 lg:pt-0">
+        <section className="grid lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-14 items-center pt-12 sm:pt-14 md:pt-16 lg:pt-0">
           {/* Left */}
           <div className="lg:col-span-6 space-y-7 reveal">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-semibold text-slate-300">
@@ -512,19 +512,19 @@ export default function NeonAgencyLanding() {
               Premium agency • Clean UI • High conversion
             </div>
 
-            <h1 className="text-4xl md:text-6xl font-semibold tracking-tight leading-[1.05]">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05]">
               We Build Websites <br />
               <span className="bg-linear-to-r from-cyan-200 via-slate-100 to-blue-300 bg-clip-text text-transparent">
                 That Look Expensive
               </span>
             </h1>
 
-            <p className="text-slate-300/90 text-base md:text-lg leading-relaxed max-w-xl">
+            <p className="text-slate-300/90 text-sm sm:text-base md:text-lg leading-relaxed max-w-xl">
               Design-first development for brands that want premium visuals, fast performance, and
               more leads—without messy code.
             </p>
 
-            <div className="flex flex-wrap items-center gap-3 pt-1">
+            <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 pt-1">
               <Link href="/blog" className="btn-shine group inline-flex items-center gap-2 rounded-xl px-7 py-4 bg-linear-to-r from-blue-500 to-cyan-400 text-black transition-all font-semibold shadow-lg hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]">
                 Get a Free Quote
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
@@ -582,7 +582,7 @@ export default function NeonAgencyLanding() {
             desc="High-end digital solutions crafted with precision and deep technical expertise."
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
             {services.map((s, i) => {
               const Icon = s.icon;
               return (
@@ -627,7 +627,7 @@ export default function NeonAgencyLanding() {
               <p className="text-slate-300">Loading projects...</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
               {recentProjects.length > 0 ? (
                 recentProjects.map((project, i) => (
                   <GlowCard key={project.id || i} className="reveal">
@@ -711,11 +711,11 @@ export default function NeonAgencyLanding() {
         <section className="space-y-10 md:space-y-12">
           <SectionHeader 
             label="About Us" 
-            title="Why Choose BD Stack Solutions" 
+            title="Why Choose SoftStack Agency" 
             desc="Leading the way in innovative digital solutions with expertise and dedication." 
           />
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             {/* Company Stats */}
             <GlowCard className="reveal">
               <div className="p-8 space-y-6">
@@ -826,11 +826,11 @@ export default function NeonAgencyLanding() {
               {/* Technologies & Expertise */}
               <div>
                 <h3 className="text-lg font-semibold text-white mb-6 text-center">Technologies We Master</h3>
-                <div className="flex flex-wrap justify-center gap-3">
+                <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
                   {['Next.js', 'React', 'Node.js', 'MongoDB', 'TypeScript', 'Tailwind CSS', 'Figma', 'AWS', 'Docker', 'Firebase', 'PostgreSQL', 'GraphQL'].map((tech, idx) => (
                     <span
                       key={idx}
-                      className="px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 text-sm text-slate-300 font-medium hover:border-cyan-400/40 transition-colors"
+                      className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 text-xs sm:text-sm text-slate-300 font-medium hover:border-cyan-400/40 transition-colors"
                     >
                       {tech}
                     </span>

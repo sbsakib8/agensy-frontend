@@ -290,9 +290,9 @@ export default function SignUpPage() {
               </div>
               <div>
                 <Link href="/" className="text-md font-bold">
-                  <span className="text-white">BD Stack </span>
+                  <span className="text-white">SoftStack </span>
                   <span className="bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-                    -Solutions
+                    Agency
                   </span>
                 </Link>
               </div>

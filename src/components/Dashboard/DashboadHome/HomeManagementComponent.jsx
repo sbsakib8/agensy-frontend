@@ -718,7 +718,7 @@ function BannerSection({ cardStyle }) {
                 value={formData.badge}
                 onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
                 className="w-full px-4 py-2 bg-[#05060a] border border-blue-500/30 rounded-lg focus:outline-none focus:border-blue-500"
-                placeholder="BD-Stack Solutions"
+                placeholder="SoftStack Agency"
               />
             </div>
 

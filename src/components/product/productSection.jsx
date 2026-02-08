@@ -154,7 +154,7 @@ const ProductsSection = () => {
   }, [productsData]);
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 py-20 px-4 relative overflow-hidden">
+    <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 relative overflow-hidden">
       {/* Animated Background Grid */}
       <div className="absolute inset-0 opacity-20">
         <div
@@ -196,16 +196,16 @@ const ProductsSection = () => {
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
         <div
-          className={`text-center mb-20 transition-all duration-1000 transform ${
+          className={`text-center mb-12 sm:mb-16 md:mb-20 transition-all duration-1000 transform ${
             isVisible ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"
           }`}
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/30 rounded-full mb-6">
-            <Sparkles className="w-4 h-4 text-purple-400" />
-            <span className="text-purple-300 text-sm font-medium">Premium Solutions</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-purple-500/10 border border-purple-500/30 rounded-full mb-4 sm:mb-6">
+            <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-purple-400" />
+            <span className="text-purple-300 text-xs sm:text-sm font-medium">Premium Solutions</span>
           </div>
 
-          <h1 className="text-6xl md:text-7xl font-bold text-white mb-6 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 tracking-tight px-4">
             Our
             <span className="bg-linear-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
               {" "}
@@ -213,7 +213,7 @@ const ProductsSection = () => {
             </span>
           </h1>
 
-          <p className="text-slate-400 text-xl max-w-2xl mx-auto leading-relaxed">
+          <p className="text-slate-400 text-base sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed px-4">
             Transforming ideas into powerful AI solutions
           </p>
 
@@ -235,7 +235,7 @@ const ProductsSection = () => {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 xl:gap-12">
           {products.map((product, index) => {
             const isHovered = hoveredProduct === product.id;
 
@@ -277,7 +277,7 @@ const ProductsSection = () => {
                     )}
 
                     {/* Image */}
-                    <div className="relative h-64 overflow-hidden">
+                    <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
                       <div
                         className="absolute inset-0 opacity-40 mix-blend-multiply transition-opacity duration-500 z-10"
                         style={{
@@ -297,11 +297,11 @@ const ProductsSection = () => {
                       />
 
                       {/* Tags (highlights) */}
-                      <div className="absolute top-4 left-4 flex flex-wrap gap-2 z-20">
+                      <div className="absolute top-2 sm:top-4 left-2 sm:left-4 flex flex-wrap gap-1 sm:gap-2 z-20">
                         {product.tags.map((tag, idx) => (
                           <span
                             key={idx}
-                            className={`px-3 py-1 bg-slate-900/80 backdrop-blur-sm border border-slate-700 rounded-full text-xs text-slate-300 transition-all duration-300 ${
+                            className={`px-2 py-0.5 sm:px-3 sm:py-1 bg-slate-900/80 backdrop-blur-sm border border-slate-700 rounded-full text-[10px] sm:text-xs text-slate-300 transition-all duration-300 ${
                               isHovered ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
                             }`}
                             style={{ transitionDelay: `${idx * 100}ms` }}
@@ -334,9 +334,9 @@ const ProductsSection = () => {
                     </div>
 
                     {/* Content */}
-                    <div className="p-8">
+                    <div className="p-4 sm:p-6 md:p-8">
                       <h2
-                        className={`text-3xl font-bold text-white mb-2 transition-all duration-300 ${
+                        className={`text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 transition-all duration-300 ${
                           isHovered
                             ? "bg-linear-to-br from-purple-400 to-pink-400 bg-clip-text text-transparent"
                             : ""
@@ -350,7 +350,7 @@ const ProductsSection = () => {
                       <p className="text-slate-300 leading-relaxed mb-6">{product.description}</p>
 
                       {/* Stats */}
-                      <div className="grid grid-cols-2 gap-4 mb-6">
+                      <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
                         {[
                           { icon: TrendingUp, label: "Built for Growth", value: "Scalable" },
                           { icon: Award, label: "Production Ready", value: "Quality" },
@@ -359,7 +359,7 @@ const ProductsSection = () => {
                           return (
                             <div
                               key={idx}
-                              className={`bg-slate-900/50 rounded-xl p-4 border border-slate-700/50 transition-all duration-500 ${
+                              className={`bg-slate-900/50 rounded-xl p-3 sm:p-4 border border-slate-700/50 transition-all duration-500 ${
                                 isHovered ? "border-purple-500/50 translate-x-1" : ""
                               }`}
                               style={{ transitionDelay: `${idx * 100}ms` }}
@@ -476,13 +476,13 @@ const ProductsSection = () => {
 
         {/* Bottom CTA */}
         <div
-          className={`text-center mt-20 transition-all duration-1000 delay-500 transform ${
+          className={`text-center mt-12 sm:mt-16 md:mt-20 transition-all duration-1000 delay-500 transform ${
             isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
           }`}
         >
-          <p className="text-slate-400 mb-6 text-lg">Ready to transform your business?</p>
+          <p className="text-slate-400 mb-4 sm:mb-6 text-base sm:text-lg px-4">Ready to transform your business?</p>
           <Link href="/pricing">
-            <button className="group relative px-10 py-5 bg-linear-to-r from-blue-500 to-cyan-400 rounded-full text-black font-bold text-lg shadow-2xl hover:shadow-[0_0_40px_rgba(59,130,246,0.45)] transition-all duration-500 hover:scale-110 overflow-hidden">
+            <button className="group relative px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 bg-linear-to-r from-blue-500 to-cyan-400 rounded-full text-black font-bold text-sm sm:text-base md:text-lg shadow-2xl hover:shadow-[0_0_40px_rgba(59,130,246,0.45)] transition-all duration-500 hover:scale-110 overflow-hidden">
               <span className="relative z-10 flex items-center gap-2">
                 Get Started Now
                 <Zap className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
