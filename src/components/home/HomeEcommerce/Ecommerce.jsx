@@ -21,9 +21,9 @@ const Ecommerce = () => {
   }, []);
 
   const products = [
-    { id: 1, name: "Premium Laptop", price: "$1299", category: "Electronics", span: "md:col-span-2 md:row-span-2", img: "https://i.ibb.co/Ng8VFx40/view-3d-laptop-device-with-screen-keyboard.jpg" },
-    { id: 2, name: "Wireless Headphones", price: "$199", category: "Audio", span: "col-span-1", img: "https://i.ibb.co/0pfDcrst/headphones-displayed-against-dark-background.jpg" },
-    { id: 3, name: "Smart Watch", price: "$299", category: "Wearable", span: "col-span-1", img: "https://i.ibb.co/HT2PLtV9/rendering-smart-home-device.jpg" },
+    { id: 1, name: "Premium Laptop", price: "$1299", category: "Electronics", span: "md:col-span-2 md:row-span-2", img: "/view-3d-laptop-device-with-screen-keyboard (1).jpg" },
+    { id: 2, name: "Wireless Headphones", price: "$199", category: "Audio", span: "col-span-1", img: "/headphones-displayed-against-dark-background (1).jpg" },
+    { id: 3, name: "Smart Watch", price: "$299", category: "Wearable", span: "col-span-1", img: "/rendering-smart-home-device (1).jpg" },
   ];
 
   const features = [
