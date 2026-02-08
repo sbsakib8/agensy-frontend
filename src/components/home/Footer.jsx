@@ -10,7 +10,7 @@ export default function Footer() {
 
         {/* Logo & Brand */}
         <div className="flex flex-col gap-4 items-center md:items-start">
-          <div className="flex items-center gap-3 group cursor-pointer">
+          <Link href="/" className="flex items-center gap-3 group cursor-pointer">
             <div className="relative">
               <div className="absolute inset-0 bg-linear-to-r from-cyan-500 to-blue-500 rounded-lg blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
               <div className="relative bg-linear-to-br from-cyan-400 to-blue-600 p-2 rounded-lg transform group-hover:scale-110 transition-transform duration-300">
@@ -22,11 +22,11 @@ export default function Footer() {
               </div>
             </div>
 
-            <Link href={'/'} className="text-2xl font-bold flex items-center gap-1">
+            <div className="text-2xl font-bold flex items-center gap-1">
               <span className="text-white">BD Stack</span>
               <span className="bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">-Solutions</span>
-            </Link>
-          </div>
+            </div>
+          </Link>
 
           <p className="text-sm leading-relaxed text-gray-400 max-w-xs">
             BD Stack Solutions delivers cutting-edge technology solutions and innovative products for businesses worldwide.

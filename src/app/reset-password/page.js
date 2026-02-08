@@ -1,6 +1,15 @@
 import { Suspense } from 'react';
 // import ResetPasswordPage from '@/components/auth/ResetPassword';
 
+export const metadata = {
+  title: "Reset Password",
+  description: "Reset your BD Stack Solutions account password securely.",
+  robots: {
+    index: false,
+    follow: false
+  }
+};
+
 function ResetPasswordLoading() {
   return (
     <div className="min-h-screen bg-slate-900 flex items-center justify-center">
