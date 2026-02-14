@@ -137,7 +137,7 @@ const Header = () => {
                   onMouseEnter={() => handleDropdownEnter("services")}
                   onMouseLeave={handleDropdownLeave}
                 >
-                  <div className="bg-slate-800/95 backdrop-blur-xl rounded-xl shadow-2xl border border-slate-700/50 overflow-hidden animate-fade-in">
+                  <div className="bg-slate-800/95 backdrop-blur-xl rounded-xl shadow-2xl border border-slate-700/50 overflow-hidden">
                     <div className="p-2">
                       {services.map((service, index) => (
                         <a
@@ -212,7 +212,7 @@ const Header = () => {
                   onMouseEnter={() => handleDropdownEnter("about")}
                   onMouseLeave={handleDropdownLeave}
                 >
-                  <div className="bg-slate-800/95 backdrop-blur-xl rounded-xl shadow-2xl border border-slate-700/50 overflow-hidden animate-fade-in">
+                  <div className="bg-slate-800/95 backdrop-blur-xl rounded-xl shadow-2xl border border-slate-700/50 overflow-hidden">
                     <div className="p-2">
                       {aboutUsItems.map((item, index) => (
                         <a
@@ -240,7 +240,15 @@ const Header = () => {
           <div className="flex gap-5">
             {/* Auth Links */}
             <div className="hidden lg:flex items-center space-x-3">
-              {user ? (
+              {loading ? (
+                // Skeleton loading state
+                <div className="flex items-center space-x-3">
+                  {/* Avatar skeleton */}
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-gray-700/50 to-gray-600/50" />
+                  {/* Sign out button skeleton */}
+                  <div className="w-24 h-10 rounded-full bg-gradient-to-r from-gray-700/50 to-gray-600/50" />
+                </div>
+              ) : user ? (
                 <div className="flex items-center space-x-3">
                   {/* Profile Dropdown */}
                   <div
@@ -248,7 +256,7 @@ const Header = () => {
                     onMouseEnter={() => handleDropdownEnter("profile")}
                     onMouseLeave={handleDropdownLeave}
                   >
-                    <button className="w-10 h-10 rounded-full bg-linear-to-r from-blue-500 to-cyan-400 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform duration-200">
+                    <button className="w-10 h-10 rounded-full bg-linear-to-r from-blue-500 to-cyan-400 flex items-center justify-center cursor-pointer">
                       {user.image || user.picture ? (
                         <Image
                           src={user.image || user.picture}
@@ -269,7 +277,7 @@ const Header = () => {
                         onMouseEnter={() => handleDropdownEnter("profile")}
                         onMouseLeave={handleDropdownLeave}
                       >
-                        <div className="bg-slate-800/95 backdrop-blur-xl rounded-xl shadow-2xl border border-slate-700/50 overflow-hidden animate-fade-in">
+                        <div className="bg-slate-800/95 backdrop-blur-xl rounded-xl shadow-2xl border border-slate-700/50 overflow-hidden">
                           {/* User Info Header */}
                           <div className="px-4 py-3 border-b border-slate-700/50">
                             <div className="font-medium text-white">
@@ -378,19 +386,19 @@ const Header = () => {
                   </button>
                 </div>
               ) : (
-                !loading && (
+                <>
                   <Link
                     href="/signup"
                     className="px-4 py-2 bg-linear-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 text-cyan-400 hover:text-white hover:border-cyan-400 rounded-full transition-all duration-300 font-medium"
                   >
                     Sign Up
                   </Link>
-                )
+                </>
               )}
             </div>
 
             {/* CTA Button */}
-            {!user && !loading && (
+            {!loading && !user && (
               <div className="hidden lg:block">
                 <Link href="/contact">
                   <button className="relative px-6 py-2.5 rounded-full font-semibold text-white overflow-hidden group">
@@ -507,7 +515,19 @@ const Header = () => {
 
             {/* Auth Links */}
             <div className="border-t border-slate-700 pt-4 mt-4">
-              {user ? (
+              {loading ? (
+                // Skeleton loading state for mobile
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-3 px-4 py-3 bg-slate-800/50 rounded-lg">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-gray-700/50 to-gray-600/50" />
+                    <div className="flex-1 space-y-2">
+                      <div className="h-4 w-24 bg-gray-700/50 rounded" />
+                      <div className="h-3 w-32 bg-gray-700/50 rounded" />
+                    </div>
+                  </div>
+                  <div className="w-full h-11 rounded-lg bg-gradient-to-r from-gray-700/50 to-gray-600/50" />
+                </div>
+              ) : user ? (
                 <div className="space-y-3">
                   <div className="flex items-center space-x-3 px-4 py-3 bg-slate-800/50 rounded-lg">
                     <div className="w-10 h-10 rounded-full bg-linear-to-r from-cyan-500 to-blue-500 flex items-center justify-center">
@@ -539,28 +559,26 @@ const Header = () => {
                   </button>
                 </div>
               ) : (
-                !loading && (
-                  <>
-                    <Link
-                      href="/signin"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="block px-4 py-3 text-gray-300 hover:text-cyan-400 hover:bg-slate-800 rounded-lg transition-all duration-300 font-medium"
-                    >
-                      Sign In
-                    </Link>
-                    <Link
-                      href="/signup"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="block px-4 py-3 text-cyan-400 hover:text-white hover:bg-slate-800 rounded-lg transition-all duration-300 font-medium"
-                    >
-                      Sign Up
-                    </Link>
-                  </>
-                )
+                <>
+                  <Link
+                    href="/signin"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="block px-4 py-3 text-gray-300 hover:text-cyan-400 hover:bg-slate-800 rounded-lg transition-all duration-300 font-medium"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/signup"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="block px-4 py-3 text-cyan-400 hover:text-white hover:bg-slate-800 rounded-lg transition-all duration-300 font-medium"
+                  >
+                    Sign Up
+                  </Link>
+                </>
               )}
             </div>
 
-            {!user && !loading && (
+            {!loading && !user && (
               <Link href="/contact" className="w-full">
                 <button className="w-full mt-4 px-6 py-3 cursor-pointer rounded-full bg-linear-to-r from-blue-500 to-cyan-400 text-black font-semibold hover:shadow-[0_0_40px_rgba(59,130,246,0.45)] transition-all duration-300">
                   Schedule a call
