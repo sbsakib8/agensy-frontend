@@ -112,15 +112,6 @@ export const metadata = {
     yandex: 'your-yandex-verification-code',
     bing: 'your-bing-verification-code'
   },
-  themeColor: [
-    { media: '(prefers-color-scheme: dark)', color: '#050914' },
-    { media: '(prefers-color-scheme: light)', color: '#22D3EE' }
-  ],
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5
-  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
@@ -132,6 +123,16 @@ export const metadata = {
     'msapplication-TileColor': '#22D3EE',
     'application-name': 'SoftStack Agency'
   }
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#050914' },
+    { media: '(prefers-color-scheme: light)', color: '#22D3EE' }
+  ]
 };
 
 export default function RootLayout({ children }) {

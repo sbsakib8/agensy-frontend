@@ -1,5 +1,3 @@
-"use client";
-
 import TrackOrderComponent from "@/components/order/TrackOrderComponent";
 
 export const metadata = {
