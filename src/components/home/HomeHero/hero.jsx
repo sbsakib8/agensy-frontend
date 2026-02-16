@@ -9,19 +9,23 @@ import { bannerApi } from "@/lib/api";
 
 export default function HeroSection() {
   const [bannerData, setBannerData] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchBanner = async () => {
       try {
         const response = await bannerApi.getAllBanners();
         if (response.data && response.data.length > 0) {
-          setBannerData(response.data[0]);
-        } else {
+          const banner = response.data[0];
+          // Fix image URLs if they have .com at the end
+          if (banner.images) {
+            banner.images = banner.images.map(img => ({
+              ...img,
+              imageUrl: img.imageUrl?.replace('i.ibb.co.com', 'i.ibb.co') || img.imageUrl
+            }));
+          }
+          setBannerData(banner);
         }
       } catch (err) {
-      } finally {
-        setLoading(false);
       }
     };
     fetchBanner();
@@ -54,86 +58,54 @@ export default function HeroSection() {
       <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 sm:gap-12 md:gap-14 px-4 sm:px-6 md:px-8 py-24 sm:py-32 md:py-40 pb-28 sm:pb-32 md:pb-40 md:grid-cols-2">
         {/* LEFT SIDE */}
         <div>
-          {loading ? (
-            // Skeleton for badge
-            <div className="mb-3 sm:mb-4 inline-flex h-8 w-48 rounded-full bg-gradient-to-r from-blue-500/10 to-cyan-500/10 animate-pulse" />
-          ) : (
-            <span className="mb-3 sm:mb-4 inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 sm:px-4 sm:py-1.5 text-xs sm:text-sm text-blue-400">
-              <Sparkles size={16} />
-              SoftStack Agency
-            </span>
-          )}
+          <span className="mb-3 sm:mb-4 inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-blue-400/20 bg-blue-500/10 px-3 py-1 sm:px-4 sm:py-1.5 text-xs sm:text-sm text-blue-400">
+            <Sparkles size={16} />
+            SoftStack Agency
+          </span>
 
-          {loading ? (
-            // Skeleton for title
-            <div className="mt-3 sm:mt-4 space-y-3 sm:space-y-4">
-              <div className="h-10 sm:h-12 md:h-14 lg:h-16 w-full bg-gradient-to-r from-gray-700/50 to-gray-600/50 rounded-lg animate-pulse" />
-              <div className="h-10 sm:h-12 md:h-14 lg:h-16 w-4/5 bg-gradient-to-r from-gray-700/50 to-gray-600/50 rounded-lg animate-pulse" />
-            </div>
-          ) : (
-            <h1 className="mt-3 sm:mt-4 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-              {bannerData?.title ? (
-                <>
-                  {bannerData.title.text}{" "}
-                  {bannerData.title.highlight && (
-                    <span className="bg-linear-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                      {bannerData.title.highlight}
-                    </span>
-                  )}
-                </>
-              ) : (
-                <>
-                  Build{" "}
-                  <span className="bg-linear-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                    Modern
-                  </span>{" "}
-                  &<br />
-                  Scalable Web Experiences
-                </>
-              )}
-            </h1>
-          )}
-
-          {loading ? (
-            // Skeleton for description
-            <div className="mt-4 sm:mt-5 md:mt-6 space-y-2 max-w-xl">
-              <div className="h-4 sm:h-5 w-full bg-gray-700/50 rounded animate-pulse" />
-              <div className="h-4 sm:h-5 w-11/12 bg-gray-700/50 rounded animate-pulse" />
-              <div className="h-4 sm:h-5 w-4/5 bg-gray-700/50 rounded animate-pulse" />
-            </div>
-          ) : (
-            <p className="mt-4 sm:mt-5 md:mt-6 max-w-xl text-sm sm:text-base md:text-lg text-gray-400">
-              {bannerData?.description ||
-                "We design and develop high-performance websites and web applications using modern technologies like React, Next.js and Tailwind CSS."}
-            </p>
-          )}
-
-          <div className="mt-6 sm:mt-8 md:mt-10 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
-            {loading ? (
-              // Skeleton for buttons
+          <h1 className="mt-3 sm:mt-4 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+            {bannerData?.title ? (
               <>
-                <div className="w-full sm:w-48 h-12 sm:h-14 rounded-full bg-gradient-to-r from-blue-500/30 to-cyan-400/30 animate-pulse" />
-                <div className="w-full sm:w-48 h-12 sm:h-14 rounded-full bg-gray-700/30 animate-pulse" />
+                {bannerData.title.text}{" "}
+                {bannerData.title.highlight && (
+                  <span className="bg-linear-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                    {bannerData.title.highlight}
+                  </span>
+                )}
               </>
             ) : (
               <>
-                <Link href="/pricing" className="w-full sm:w-auto">
-                  <button className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 rounded-full bg-linear-to-r from-blue-500 to-cyan-400 px-6 sm:px-7 md:px-8 py-3 sm:py-3.5 md:py-4 text-sm sm:text-base font-semibold text-black transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]">
-                    {bannerData?.ctaButtons?.[0]?.text || "Get Started"}
-                    <ArrowRight
-                      size={18}
-                      className="transition-transform group-hover:translate-x-1"
-                    />
-                  </button>
-                </Link>
-
-                <Link href="/product" className="w-full sm:w-auto">
-                  <button className="w-full sm:w-auto rounded-full border border-white/10 px-6 sm:px-7 md:px-8 py-3 sm:py-3.5 md:py-4 text-sm sm:text-base text-gray-300 transition-all hover:border-blue-400/40 hover:text-white">
-                    {bannerData?.ctaButtons?.[1]?.text || "View Our Work"}
-                  </button>
-                </Link>
+                Build{" "}
+                <span className="bg-linear-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                  Modern
+                </span>{" "}
+                &<br />
+                Scalable Web Experiences
               </>
             )}
+          </h1>
+
+          <p className="mt-4 sm:mt-5 md:mt-6 max-w-xl text-sm sm:text-base md:text-lg text-gray-400">
+            {bannerData?.description ||
+              "We design and develop high-performance websites and web applications using modern technologies like React, Next.js and Tailwind CSS."}
+          </p>
+
+          <div className="mt-6 sm:mt-8 md:mt-10 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
+            <Link href="/pricing" className="w-full sm:w-auto">
+              <button className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 rounded-full bg-linear-to-r from-blue-500 to-cyan-400 px-6 sm:px-7 md:px-8 py-3 sm:py-3.5 md:py-4 text-sm sm:text-base font-semibold text-black transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.45)]">
+                {bannerData?.ctaButtons?.[0]?.text || "Get Started"}
+                <ArrowRight
+                  size={18}
+                  className="transition-transform group-hover:translate-x-1"
+                />
+              </button>
+            </Link>
+
+            <Link href="/product" className="w-full sm:w-auto">
+              <button className="w-full sm:w-auto rounded-full border border-white/10 px-6 sm:px-7 md:px-8 py-3 sm:py-3.5 md:py-4 text-sm sm:text-base text-gray-300 transition-all hover:border-blue-400/40 hover:text-white">
+                {bannerData?.ctaButtons?.[1]?.text || "View Our Work"}
+              </button>
+            </Link>
           </div>
         </div>
 
@@ -160,19 +132,15 @@ export default function HeroSection() {
     border border-white/10
   "
 >
-  {loading ? (
-    <div className="w-full h-full bg-gradient-to-br from-gray-700/40 to-gray-600/40 animate-pulse" />
-  ) : (
-    (bannerData?.images?.[0]?.imageUrl && bannerData.images[0].imageUrl.trim() !== "") && (
-      <Image
-        src={bannerData.images[0].imageUrl}
-        alt={bannerData.images[0].title || "UI UX"}
-        fill
-        className="object-cover"
-        sizes="(max-width: 768px) 100vw, 50vw"
-        priority
-      />
-    )
+  {(bannerData?.images?.[0]?.imageUrl && bannerData.images[0].imageUrl.trim() !== "") && (
+    <Image
+      src={bannerData.images[0].imageUrl}
+      alt={bannerData.images[0].title || "UI UX"}
+      fill
+      className="object-cover"
+      sizes="(max-width: 768px) 100vw, 50vw"
+      priority
+    />
   )}
 </motion.div>
 
@@ -183,18 +151,14 @@ export default function HeroSection() {
   whileHover={{ y: -6 }}
   className="relative rounded-xl overflow-hidden border border-white/10"
 >
-  {loading ? (
-    <div className="w-full h-full bg-gradient-to-br from-gray-700/40 to-gray-600/40 animate-pulse" />
-  ) : (
-    (bannerData?.images?.[1]?.imageUrl && bannerData.images[1].imageUrl.trim() !== "") && (
-      <Image
-        src={bannerData.images[1].imageUrl}
-        alt={bannerData.images[1].title || "Visual"}
-        fill
-        className="object-cover"
-        sizes="(max-width: 768px) 100vw, 33vw"
-      />
-    )
+  {(bannerData?.images?.[1]?.imageUrl && bannerData.images[1].imageUrl.trim() !== "") && (
+    <Image
+      src={bannerData.images[1].imageUrl}
+      alt={bannerData.images[1].title || "Visual"}
+      fill
+      className="object-cover"
+      sizes="(max-width: 768px) 100vw, 33vw"
+    />
   )}
 </motion.div>
 
@@ -205,18 +169,14 @@ export default function HeroSection() {
   whileHover={{ y: -6 }}
   className="relative rounded-xl overflow-hidden border border-white/10"
 >
-  {loading ? (
-    <div className="w-full h-full bg-gradient-to-br from-gray-700/40 to-gray-600/40 animate-pulse" />
-  ) : (
-    (bannerData?.images?.[2]?.imageUrl && bannerData.images[2].imageUrl.trim() !== "") && (
-      <Image
-        src={bannerData.images[2].imageUrl}
-        alt={bannerData.images[2].title || "WordPress"}
-        fill
-        className="object-cover"
-        sizes="(max-width: 768px) 100vw, 33vw"
-      />
-    )
+  {(bannerData?.images?.[2]?.imageUrl && bannerData.images[2].imageUrl.trim() !== "") && (
+    <Image
+      src={bannerData.images[2].imageUrl}
+      alt={bannerData.images[2].title || "WordPress"}
+      fill
+      className="object-cover"
+      sizes="(max-width: 768px) 100vw, 33vw"
+    />
   )}
 </motion.div>
 
@@ -227,18 +187,14 @@ export default function HeroSection() {
   whileHover={{ y: -6 }}
   className="relative rounded-xl overflow-hidden border border-white/10"
 >
-  {loading ? (
-    <div className="w-full h-full bg-gradient-to-br from-gray-700/40 to-gray-600/40 animate-pulse" />
-  ) : (
-    (bannerData?.images?.[3]?.imageUrl && bannerData.images[3].imageUrl.trim() !== "") && (
-      <Image
-        src={bannerData.images[3].imageUrl}
-        alt={bannerData.images[3].title || "App"}
-        fill
-        className="object-cover"
-        sizes="(max-width: 768px) 100vw, 33vw"
-      />
-    )
+  {(bannerData?.images?.[3]?.imageUrl && bannerData.images[3].imageUrl.trim() !== "") && (
+    <Image
+      src={bannerData.images[3].imageUrl}
+      alt={bannerData.images[3].title || "App"}
+      fill
+      className="object-cover"
+      sizes="(max-width: 768px) 100vw, 33vw"
+    />
   )}
 </motion.div>
 
@@ -254,18 +210,14 @@ export default function HeroSection() {
     border border-white/10
   "
 >
-  {loading ? (
-    <div className="w-full h-full bg-gradient-to-br from-gray-700/40 to-gray-600/40 animate-pulse" />
-  ) : (
-    (bannerData?.images?.[4]?.imageUrl && bannerData.images[4].imageUrl.trim() !== "") && (
-      <Image
-        src={bannerData.images[4].imageUrl}
-        alt={bannerData.images[4].title || "E-commerce"}
-        fill
-        className="object-cover"
-        sizes="(max-width: 768px) 100vw, 50vw"
-      />
-    )
+  {(bannerData?.images?.[4]?.imageUrl && bannerData.images[4].imageUrl.trim() !== "") && (
+    <Image
+      src={bannerData.images[4].imageUrl}
+      alt={bannerData.images[4].title || "E-commerce"}
+      fill
+      className="object-cover"
+      sizes="(max-width: 768px) 100vw, 50vw"
+    />
   )}
 </motion.div>
 

@@ -58,8 +58,8 @@ export default function ContactPage() {
     {
       icon: Mail,
       title: "Email Us",
-      value: "hello@agensy.com",
-      link: "mailto:hello@agensy.com",
+      value: "sbsakibsarkar8@gmail.com",
+      link: "sbsakibsarkar8@gmail.com",
       color: "from-blue-500 to-cyan-400"
     },
     {
