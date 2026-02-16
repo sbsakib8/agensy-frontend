@@ -10,7 +10,6 @@ const FALLBACK_AVATAR = "https://i.pravatar.cc/150";
 export default function Testimonial() {
   const [data, setData] = useState([])
   const [active, setActive] = useState(0)
-  const [loading, setLoading] = useState(true)
 
   const total = data.length
 
@@ -42,21 +41,11 @@ export default function Testimonial() {
           )
         }
       } catch (err) {
-      } finally {
-        setLoading(false)
       }
     })()
   }, [])
 
   /* ---------------- SAFETY ---------------- */
-  if (loading) {
-    return (
-      <section className="py-28 bg-slate-950 text-white text-center">
-        Loading testimonials...
-      </section>
-    )
-  }
-
   if (!total) {
     return null // nothing to show if API returns empty
   }

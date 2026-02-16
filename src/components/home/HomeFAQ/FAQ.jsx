@@ -7,7 +7,6 @@ import { faqApi } from "@/lib/api";
 
 const FAQ = () => {
   const [faqs, setFaqs] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(null);
 
   useEffect(() => {
@@ -16,8 +15,6 @@ const FAQ = () => {
         const response = await faqApi.getAllFAQs();
         setFaqs(response.data || []);
       } catch (err) {
-      } finally {
-        setLoading(false);
       }
     };
     fetchFAQs();
