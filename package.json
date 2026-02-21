@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "check": "node scripts/env-check.js",
+    "postinstall": "node scripts/postinstall.js",
+    "generate-jwt-secret": "node scripts/generate-jwt-secret.js"
   },
   "dependencies": {
     "@lottiefiles/react-lottie-player": "^3.6.0",

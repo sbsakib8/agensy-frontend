@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Agensy Frontend
 
-## Getting Started
+A modern Next.js application for agency management with authentication, dashboard, and service management features.
 
-First, run the development server:
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js 18.x or higher
+- npm or yarn
+- Firebase account (for authentication)
+- SMTP email account (Gmail recommended)
+- Cloudinary account (for image uploads)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd agensy-frontend
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Then edit `.env` and fill in all required values. See [SETUP.md](./SETUP.md) for detailed instructions.
+
+4. **Verify configuration**
+   ```bash
+   npm run check
+   ```
+   
+   This will validate all environment variables and test connections.
+
+5. **Start development server**
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## 📖 Documentation
+
+- **[SETUP.md](./SETUP.md)** - Comprehensive setup guide with detailed instructions for all environment variables
+- **[.env.example](./.env.example)** - Template file showing all required environment variables
+
+## 🔧 Available Scripts
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev      # Start development server
+npm run build    # Build for production
+npm run start    # Start production server
+npm run lint     # Run ESLint
+npm run check    # Validate environment configuration
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🔐 Environment Variables
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+This project requires the following environment variables:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Firebase Configuration** - For authentication
+- **JWT Secret** - For token signing
+- **SMTP Configuration** - For sending emails
+- **Cloudinary** - For image uploads
+- **Backend API URL** - API endpoint
 
-## Learn More
+**Optional:**
+- **MongoDB** - Only if using local database features
 
-To learn more about Next.js, take a look at the following resources:
+Run `npm run check` to validate your configuration.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🐛 Troubleshooting
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Verify all environment variables are set: `npm run check`
+2. Check Firebase configuration
+3. Ensure JWT_SECRET is at least 32 characters
+4. Verify backend API is accessible
+3. Ensure JWT_SECRET is at least 32 characters
+### Common Issues
 
-## Deploy on Vercel
+- **Module not found**: Delete `node_modules` and run `npm install`
+- **Email sending failed**: Verify SMTP credentials (use App Password for Gmail)
+- **Authentication errors**: Check Firebase configuration and JWT_SECRET
+- **Database connection failed**: Check MongoDB connection string and IP whitelist
+- **Email sending failed**: Verify SMTP credentials (use App Password for Gmail)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+See [SETUP.md](./SETUP.md) for detailed troubleshooting.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📦 Tech Stack
+
+- **Framework**: Next.js 16
+- **UI**: React 19, TailwindCSS 4
+- **Authentication**: Firebase Auth, JWT
+- **Database**: MongoDB with Mongoose
+- **Email**: Nodemailer
+- **File Upload**: Cloudinary
+- **Animations**: Framer Motion, Lottie
+
+## 🤝 Contributing
+
+1. Clone the repository
+2. Follow setup instructions in [SETUP.md](./SETUP.md)
+3. Create a feature branch
+4. Make your changes
+5. Run `npm run check` to verify configuration
+6. Submit a pull request
+
+## 📄 License
+
+This project is private and proprietary.
+
+---
+
+**Need Help?** Check the [SETUP.md](./SETUP.md) file or run `npm run check` to diagnose issues.
+
