@@ -20,6 +20,7 @@ import {
 import { updateUserProfile } from '../../controllers/userController'
 import { useCustomAuth } from '../../hooks/useCustomAuth'
 import { uploadImageToImgBB } from '../../lib/imgbb-upload'
+import { userApi } from '../../lib/api'
 
 export default function Profile() {
   const { user: authUser, loading: authLoading } = useCustomAuth();
@@ -31,10 +32,42 @@ export default function Profile() {
   const [uploadingImage, setUploadingImage] = useState(false)
   const [previewImage, setPreviewImage] = useState(null)
   const fileInputRef = useRef(null)
+  const [allUsers, setAllUsers] = useState([])
+
+  // Fetch all users data
+  useEffect(() => {
+    const fetchAllUsers = async () => {
+      try {
+        const users = await userApi.getAllUsers();
+        setAllUsers(users);
+        console.log('=== All Users Data ===');
+        console.log('Total Users:', users.length);
+        console.log('All Users:', users);
+        console.log('=====================');
+      } catch (error) {
+        console.error('Error fetching all users:', error);
+      }
+    };
+
+    if (authUser) {
+      fetchAllUsers();
+    }
+  }, [authUser]);
 
   // Use authUser directly from useCustomAuth - no need to fetch again!
   useEffect(() => {
     if (authUser) {
+      console.log('=== Profile User Data ===');
+      console.log('Full User Object:', authUser);
+      console.log('User Role:', authUser.role);
+      console.log('User Email:', authUser.email);
+      console.log('User UID:', authUser.uid);
+      console.log('User Name:', authUser.name || authUser.displayName);
+      console.log('User Photo:', authUser.photoURL || authUser.image);
+      console.log('User Status:', authUser.status);
+      console.log('Created At:', authUser.createdAt);
+      console.log('========================');
+      
       setEditForm(authUser);
       setPreviewImage(authUser.photoURL || null);
     }

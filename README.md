@@ -6,26 +6,42 @@ A modern Next.js application for agency management with authentication, dashboar
 
 ### Prerequisites
 
-- Node.js 18.x or higher
-- npm or yarn
+- **Node.js 18.17.0 or higher** (Recommended: v25.2.1) ⚠️ **REQUIRED**
+- npm 9.0.0 or higher
 - Firebase account (for authentication)
 - SMTP email account (Gmail recommended)
 - Cloudinary account (for image uploads)
 
+> **⚠️ Important:** This project will automatically check your Node.js version before installation. If your version is too old, you'll see a warning message.
+
 ### Installation
 
-1. **Clone the repository**
+1. **Check Node.js version**
+   ```bash
+   node --version
+   # Should be >= v18.17.0
+   ```
+   
+   If your version is too old, update Node.js:
+   ```bash
+   # Using NVM (Recommended)
+   nvm install 25.2.1
+   nvm use 25.2.1
+   ```
+
+2. **Clone the repository**
    ```bash
    git clone <repository-url>
    cd agensy-frontend
    ```
 
-2. **Install dependencies**
+3. **Install dependencies**
    ```bash
    npm install
+   # The version checker will run automatically
    ```
 
-3. **Configure environment variables**
+4. **Configure environment variables**
    ```bash
    cp .env.example .env
    ```
