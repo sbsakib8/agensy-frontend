@@ -2,11 +2,20 @@
   "name": "agensy-frontend",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=18.17.0",
+    "npm": ">=9.0.0"
+  },
   "scripts": {
+    "preinstall": "node scripts/check-node-version.js",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "check": "node scripts/env-check.js",
+    "check-node": "node scripts/check-node-version.js",
+    "postinstall": "node scripts/postinstall.js",
+    "generate-jwt-secret": "node scripts/generate-jwt-secret.js"
   },
   "dependencies": {
     "@lottiefiles/react-lottie-player": "^3.6.0",

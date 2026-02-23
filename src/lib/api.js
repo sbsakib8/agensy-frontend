@@ -117,11 +117,23 @@ export const userApi = {
   getAllUsers: async () => {
     const response = await api.get('users');
     
+    console.log('=== getAllUsers API Response ===');
+    console.log('Full Response:', response);
+    console.log('Response Data:', response.data);
+    
     // Handle different response structures
     const usersData = response.data.data || response.data.users || response.data;
     const usersArray = Array.isArray(usersData) ? usersData : [];
     
-    return usersArray.map(normalizeUser);
+    console.log('Extracted Users Data:', usersData);
+    console.log('Users Array:', usersArray);
+    console.log('Number of Users:', usersArray.length);
+    
+    const normalizedUsers = usersArray.map(normalizeUser);
+    console.log('Normalized Users:', normalizedUsers);
+    console.log('================================');
+    
+    return normalizedUsers;
   },
 
   // Get all users with status
