@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Plus, X, Upload, Loader2 } from "lucide-react";
 import { uploadImageToImgBB } from "@/lib/imgbb-upload";
+import api from "@/lib/api";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api'}/projects`;
 
@@ -47,21 +48,21 @@ export default function DemoProjectComponent() {
       const response = await fetch(`${API_BASE_URL}`, {
         credentials: 'include',
       });
-      
+
       if (!response.ok) {
         throw new Error('Failed to fetch categories');
       }
-      
+
       const result = await response.json();
-      
+
       if (result.success && result.data && Array.isArray(result.data.categories)) {
         setCategories(result.data.categories);
-        
+
         // Set first category as default if no category is selected
         if (!selectedCategoryId && result.data.categories.length > 0) {
           setSelectedCategoryId(result.data.categories[0].id);
         }
-        
+
         // Load projects for the selected category from the fetched data
         const currentCategory = result.data.categories.find(cat => cat.id === selectedCategoryId);
         if (currentCategory && Array.isArray(currentCategory.projects)) {
@@ -76,18 +77,18 @@ export default function DemoProjectComponent() {
   const fetchProjects = async () => {
     try {
       setLoading(true);
-      
+
       // Fetch all categories with projects
       const response = await fetch(`${API_BASE_URL}`, {
         credentials: 'include',
       });
-      
+
       if (!response.ok) {
         throw new Error('Failed to fetch projects');
       }
-      
+
       const result = await response.json();
-      
+
       if (result.success && result.data && Array.isArray(result.data.categories)) {
         // Find the selected category and get its projects
         const currentCategory = result.data.categories.find(cat => cat.id === selectedCategoryId);
@@ -118,7 +119,7 @@ export default function DemoProjectComponent() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       // Convert tags array to filtered array
       const tagsArray = formData.tags
@@ -132,41 +133,36 @@ export default function DemoProjectComponent() {
 
       if (isEditing) {
         // Update existing project
-        const response = await fetch(`${API_BASE_URL}/categories/${selectedCategoryId}/projects/${editId}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify(submitData),
-        });
-        
-        if (!response.ok) throw new Error('Failed to update project');
-        const result = await response.json();
+        const { data } = await api.put(
+          `/projects/${editId}/categories/${selectedCategoryId}`,
+          submitData,
+        );
+
+
+        if (!data.success) throw new Error('Failed to update project');
+
         await fetchProjects();
         setSuccessMessage("Project updated successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
         setIsEditing(false);
         setEditId(null);
       } else {
+        console.log({selectedCategoryId})
         // Create new project
-        const response = await fetch(`${API_BASE_URL}/categories/${selectedCategoryId}/projects`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify(submitData),
-        });
-        
-        if (!response.ok) throw new Error('Failed to create project');
-        const result = await response.json();
+        const {data} = await api.post(`/projects/categories/${selectedCategoryId}`, submitData);
+
+        if (!data.success) throw new Error('Failed to create project');
+
         await fetchProjects();
         setSuccessMessage("Project added successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
       }
 
-      setFormData({ 
-        title: "", 
-        description: "", 
-        tags: [""], 
-        thumbnail: "", 
+      setFormData({
+        title: "",
+        description: "",
+        tags: [""],
+        thumbnail: "",
         previewUrl: "",
         isFeatured: false,
         order: 0
@@ -195,13 +191,10 @@ export default function DemoProjectComponent() {
     setDeleteModal({ show: false, projectName: "", projectId: "" });
 
     try {
-      const response = await fetch(`${API_BASE_URL}/categories/${selectedCategoryId}/projects/${projectId}`, {
-        method: 'DELETE',
-        credentials: 'include',
-      });
-      
-      if (!response.ok) throw new Error('Failed to delete project');
-      const result = await response.json();
+      const {data} = await api.delete(`/projects/${projectId}/categories/${selectedCategoryId}`);
+
+      if (!data.success) throw new Error('Failed to delete project');
+
       await fetchProjects();
       setSuccessMessage("Project deleted successfully!");
       setTimeout(() => setSuccessMessage(""), 3000);
@@ -220,11 +213,11 @@ export default function DemoProjectComponent() {
   };
 
   const handleCancel = () => {
-    setFormData({ 
-      title: "", 
-      description: "", 
-      tags: [""], 
-      thumbnail: "", 
+    setFormData({
+      title: "",
+      description: "",
+      tags: [""],
+      thumbnail: "",
       previewUrl: "",
       isFeatured: false,
       order: 0
@@ -290,7 +283,7 @@ export default function DemoProjectComponent() {
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold text-white mb-6">Demo Projects</h1>
+      <h1 className="text-3xl font-bold text-white mb-6 text-center">Demo Projects</h1>
 
       {/* Success Modal */}
       {successMessage && (
@@ -359,12 +352,13 @@ export default function DemoProjectComponent() {
       ) : (
         <>
           {/* Add/Edit Project Form */}
-          <div className="bg-gradient-to-br from-blue-900/20 to-purple-900/20 backdrop-blur-sm border border-blue-500/20 rounded-xl p-6 mb-6">
+          <div className="bg-linear-to-br from-blue-900/20 to-purple-900/20 backdrop-blur-sm border border-blue-500/20 rounded-xl p-6 mb-6 max-w-4xl mx-auto">
             <h2 className="text-xl font-semibold text-white mb-4">
               {isEditing ? "Edit Project" : "Add New Project"}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Category Selector */}
+              {/* Category Selector and Project Title */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-gray-300 mb-2">Category *</label>
                 {categories.length === 0 ? (
@@ -385,9 +379,8 @@ export default function DemoProjectComponent() {
                     ))}
                   </select>
                 )}
-              </div>
+                  </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-gray-300 mb-2">Project Title *</label>
                   <input
@@ -400,16 +393,18 @@ export default function DemoProjectComponent() {
                     placeholder="Enter project title"
                   />
                 </div>
+              </div>
+
                 <div>
                   <label className="block text-gray-300 mb-2">Thumbnail</label>
-                  
+
                   {/* Image Preview */}
                   {formData.thumbnail && (
                     <div className="mb-3 relative w-full h-48 rounded-lg overflow-hidden border-2 border-blue-500/30">
-                      <Image 
-                        src={formData.thumbnail} 
-                        alt="Thumbnail preview" 
-                        fill 
+                      <Image
+                        src={formData.thumbnail}
+                        alt="Thumbnail preview"
+                        fill
                         className="object-cover"
                       />
                     </div>
@@ -429,8 +424,8 @@ export default function DemoProjectComponent() {
                   <div className="flex gap-2">
                     <label className="flex-1 cursor-pointer">
                       <div className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg border-2 border-dashed transition-colors ${
-                        imageUploading 
-                          ? 'border-blue-500/50 bg-blue-500/10 cursor-not-allowed' 
+                        imageUploading
+                          ? 'border-blue-500/50 bg-blue-500/10 cursor-not-allowed'
                           : 'border-blue-500/30 bg-blue-500/5 hover:bg-blue-500/10 hover:border-blue-500/50'
                       }`}>
                         {imageUploading ? (
@@ -456,8 +451,7 @@ export default function DemoProjectComponent() {
                   </div>
                   <p className="text-xs text-gray-500 mt-1">Upload image or paste URL (Max 5MB)</p>
                 </div>
-              </div>
-              
+
               <div>
                 <label className="block text-gray-300 mb-2">Description *</label>
                 <textarea
@@ -577,8 +571,8 @@ export default function DemoProjectComponent() {
                     </div>
                   )}
                   {project.thumbnail && (
-                    <img 
-                      src={project.thumbnail} 
+                    <img
+                      src={project.thumbnail}
                       alt={project.title}
                       className="w-full h-40 object-cover rounded-lg mb-3"
                     />
@@ -587,11 +581,11 @@ export default function DemoProjectComponent() {
                     {project.title}
                   </h3>
                   <p className="text-gray-400 mb-3 text-sm line-clamp-3">{project.description}</p>
-                  
+
                   {project.tags && project.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2 mb-3">
                       {project.tags.map((tag, index) => (
-                        <span 
+                        <span
                           key={index}
                           className="px-2 py-1 bg-blue-500/20 text-blue-300 text-xs rounded"
                         >

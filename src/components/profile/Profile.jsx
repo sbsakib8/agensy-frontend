@@ -34,16 +34,13 @@ export default function Profile() {
   const fileInputRef = useRef(null)
   const [allUsers, setAllUsers] = useState([])
 
+
   // Fetch all users data
   useEffect(() => {
     const fetchAllUsers = async () => {
       try {
         const users = await userApi.getAllUsers();
         setAllUsers(users);
-        console.log('=== All Users Data ===');
-        console.log('Total Users:', users.length);
-        console.log('All Users:', users);
-        console.log('=====================');
       } catch (error) {
         console.error('Error fetching all users:', error);
       }
@@ -57,17 +54,7 @@ export default function Profile() {
   // Use authUser directly from useCustomAuth - no need to fetch again!
   useEffect(() => {
     if (authUser) {
-      console.log('=== Profile User Data ===');
-      console.log('Full User Object:', authUser);
-      console.log('User Role:', authUser.role);
-      console.log('User Email:', authUser.email);
-      console.log('User UID:', authUser.uid);
-      console.log('User Name:', authUser.name || authUser.displayName);
-      console.log('User Photo:', authUser.photoURL || authUser.image);
-      console.log('User Status:', authUser.status);
-      console.log('Created At:', authUser.createdAt);
-      console.log('========================');
-      
+
       setEditForm(authUser);
       setPreviewImage(authUser.photoURL || null);
     }
@@ -121,15 +108,15 @@ export default function Profile() {
     e.preventDefault()
     try {
       setUpdating(true)
-      
-      
+
+
       const result = await updateUserProfile(authUser, editForm)
-      
+
       if (result.success) {
         // Show success modal
         setShowSuccessModal(true)
         setIsEditing(false)
-        
+
         // Hide modal after 1 second
         setTimeout(() => {
           setShowSuccessModal(false)
@@ -239,7 +226,7 @@ export default function Profile() {
     <div className="relative min-h-screen p-6 overflow-auto text-slate-200">
       {/* Animated Background - Similar to OverviewComponent */}
       <div className="fixed inset-0 bg-gradient-to-br from-slate-900 via-slate-900 to-blue-950 -z-10" />
-      
+
       <div className="max-w-6xl mx-auto mt-20">
         {/* Header Section */}
         <div className="mb-8">
@@ -252,11 +239,11 @@ export default function Profile() {
           <div className="bg-[#0a0f23]/60 backdrop-blur-xl border border-blue-500/30 rounded-2xl overflow-hidden shadow-[0_0_20px_rgba(59,130,246,0.1)] hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] transition-all duration-500">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/5" />
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/5" />
-            
+
             {/* Content */}
             <div className="relative p-8">
               <div className="flex flex-col lg:flex-row items-center gap-8">
-                
+
                 {/* Profile Image */}
                 <div className="relative flex items-center gap-4">
                   <div className="relative">
@@ -313,7 +300,7 @@ export default function Profile() {
                       </>
                     )}
                   </div>
-                  
+
                   {/* Role Badge - Positioned to the right of image */}
                   <div className="flex items-center">
                     <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-white text-sm font-semibold shadow-lg ${
@@ -333,7 +320,7 @@ export default function Profile() {
                     {authUser.displayName || 'User'}
                   </h1>
                   <p className="text-lg text-blue-300 mb-6">{authUser.email}</p>
-                  
+
                   {/* Quick Stats */}
                   <div className="flex flex-wrap justify-center lg:justify-start gap-6">
                     <div className="text-center">
@@ -384,11 +371,11 @@ export default function Profile() {
 
         {/* ================= PROFILE DETAILS ================= */}
         <div className="grid lg:grid-cols-1 gap-6">
-          
+
           {/* Profile Information Card */}
           <div className="bg-[#0a0f23]/60 backdrop-blur-xl border border-blue-500/30 rounded-2xl overflow-hidden shadow-[0_0_20px_rgba(59,130,246,0.1)] hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] transition-all duration-500">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5" />
-            
+
             <div className="relative p-8">
               {!isEditing ? (
                 <>
@@ -402,7 +389,7 @@ export default function Profile() {
                       <span className="text-sm font-semibold">Profile Complete</span>
                     </div>
                   </div>
-                  
+
                   <div className="grid md:grid-cols-2 gap-6">
                     <InfoCard icon={Mail} label="Email Address" value={authUser.email} />
                     <InfoCard icon={Phone} label="Phone Number" value={authUser.phoneNumber || 'Not provided'} />
@@ -418,7 +405,7 @@ export default function Profile() {
                     <h2 className="text-2xl font-bold text-white mb-1">Edit Profile</h2>
                     <p className="text-sm text-gray-400">Update your personal information</p>
                   </div>
-                  
+
                   <form onSubmit={handleUpdateProfile} className="space-y-6">
                     {/* Image Upload Info */}
                     {uploadingImage && (

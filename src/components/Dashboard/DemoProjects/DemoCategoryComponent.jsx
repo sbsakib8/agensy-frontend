@@ -1,5 +1,6 @@
 "use client";
 
+import api from "@/lib/api";
 import React, { useState, useEffect } from "react";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api';
@@ -59,24 +60,16 @@ export default function DemoCategoryComponent() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       if (isEditing) {
         // Update existing category
-        const response = await fetch(`${API_BASE_URL}/projects/categories/${editId}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include', // Include cookies for authentication
-          body: JSON.stringify(formData),
-        });
+        const {data} = await api.put(`/projects/categories/${editId}`, formData);
 
-        if (!response.ok) {
+        if (!data.success) {
           throw new Error('Failed to update demo category');
         }
 
-        const result = await response.json();
         await fetchDemoCategories();
         setSuccessMessage("Category updated successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -84,20 +77,12 @@ export default function DemoCategoryComponent() {
         setEditId(null);
       } else {
         // Create new category
-        const response = await fetch(`${API_BASE_URL}/projects/categories`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include', // Include cookies for authentication
-          body: JSON.stringify(formData),
-        });
+        const {data} = await api.post(`/projects/categories`, formData);
 
-        if (!response.ok) {
+        if (!data.success) {
           throw new Error('Failed to create demo category');
         }
 
-        const result = await response.json();
         await fetchDemoCategories();
         setSuccessMessage("Category added successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -123,16 +108,12 @@ export default function DemoCategoryComponent() {
     setDeleteModal({ show: false, categoryName: "", categoryId: "" });
 
     try {
-      const response = await fetch(`${API_BASE_URL}/projects/categories/${categoryId}`, {
-        method: 'DELETE',
-        credentials: 'include', // Include cookies for authentication
-      });
+      const {data} = await api.delete(`/projects/categories/${categoryId}`);
 
-      if (!response.ok) {
+      if (!data.success) {
         throw new Error('Failed to delete demo category');
       }
 
-      const result = await response.json();
       await fetchDemoCategories();
       setSuccessMessage("Category deleted successfully!");
       setTimeout(() => setSuccessMessage(""), 3000);
@@ -158,7 +139,7 @@ export default function DemoCategoryComponent() {
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold text-white mb-6">Demo Categories</h1>
+      <h1 className="text-3xl font-bold text-white mb-6 text-center">Demo Categories</h1>
 
       {/* Success Modal */}
       {successMessage && (
@@ -227,7 +208,7 @@ export default function DemoCategoryComponent() {
       ) : (
         <>
           {/* Add/Edit Category Form */}
-          <div className="bg-gradient-to-br from-blue-900/20 to-purple-900/20 backdrop-blur-sm border border-blue-500/20 rounded-xl p-6 mb-6">
+          <div className="bg-gradient-to-br from-blue-900/20 to-purple-900/20 backdrop-blur-sm border border-blue-500/20 rounded-xl p-6 mb-6 max-w-xl mx-auto">
             <h2 className="text-xl font-semibold text-white mb-4">
               {isEditing ? "Edit Category" : "Add New Category"}
             </h2>
