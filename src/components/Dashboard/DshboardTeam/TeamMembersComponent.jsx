@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Plus, X, Upload, Loader2 } from "lucide-react";
 import { uploadImageToImgBB } from "@/lib/imgbb-upload";
+import api from "@/lib/api";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api';
 
@@ -50,6 +51,7 @@ export default function TeamMembersComponent() {
       const response = await fetch(`${API_BASE_URL}/team`, {
         credentials: 'include',
       });
+
       if (!response.ok) {
         throw new Error('Failed to fetch team members');
       }
@@ -123,20 +125,12 @@ export default function TeamMembersComponent() {
 
       if (isEditing) {
         // Update existing member
-        const response = await fetch(`${API_BASE_URL}/team/${editId}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include',
-          body: JSON.stringify(payload),
-        });
+        const {data} = await api.put(`/team/${editId}`, payload);
 
-        if (!response.ok) {
-          throw new Error('Failed to update team member');
+        if(!data.success) {
+          throw new Error(data.message || 'Failed to update team member');
         }
 
-        const result = await response.json();
         await fetchMembers();
         setSuccessMessage("Team member updated successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -144,20 +138,12 @@ export default function TeamMembersComponent() {
         setEditId(null);
       } else {
         // Create new member
-        const response = await fetch(`${API_BASE_URL}/team`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include',
-          body: JSON.stringify(payload),
-        });
+        const {data} = await api.post(`/team`, payload);
 
-        if (!response.ok) {
-          throw new Error('Failed to create team member');
-        }
+        if(!data.success) {
+           throw new Error(data.message || 'Failed to create team member');
+          }
 
-        const result = await response.json();
         await fetchMembers();
         setSuccessMessage("Team member added successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -220,16 +206,12 @@ export default function TeamMembersComponent() {
     setDeleteModal({ show: false, memberId: "", memberName: "" });
 
     try {
-      const response = await fetch(`${API_BASE_URL}/team/${memberId}`, {
-        method: 'DELETE',
-        credentials: 'include',
-      });
+      const {data} = await api.delete(`/team/${memberId}`);
 
-      if (!response.ok) {
-        throw new Error('Failed to delete team member');
+      if (!data.success) {
+        throw new Error( data.message || 'Failed to delete team member');
       }
 
-      const result = await response.json();
       await fetchMembers();
       setSuccessMessage("Team member deleted successfully!");
       setTimeout(() => setSuccessMessage(""), 3000);
@@ -332,18 +314,7 @@ export default function TeamMembersComponent() {
   return (
     <div className="p-6">
       {/* Header with Add Button */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-white">Team Members</h1>
-        <button
-          onClick={openAddModal}
-          className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center gap-2"
-        >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
-          Add Member
-        </button>
-      </div>
+        <h1 className="text-3xl font-bold text-white mb-6 text-center">Team Members</h1>
 
       {/* Success Modal */}
       {successMessage && (
@@ -413,7 +384,7 @@ export default function TeamMembersComponent() {
         <>
 
           {/* Add/Edit Member Form */}
-          <div className="bg-gradient-to-br from-blue-900/20 to-purple-900/20 backdrop-blur-sm border border-blue-500/20 rounded-xl p-6 mb-6">
+          <div className="bg-linear-to-br from-blue-900/20 to-purple-900/20 backdrop-blur-sm border border-blue-500/20 rounded-xl p-6 mb-6 max-w-4xl mx-auto">
             <h2 className="text-xl font-semibold text-white mb-4">
               {isEditing ? "Edit Member" : "Add New Member"}
             </h2>
@@ -479,14 +450,14 @@ export default function TeamMembersComponent() {
               </div>
               <div>
                 <label className="block text-gray-300 mb-2">Profile Image</label>
-                
+
                 {/* Image Preview */}
                 {formData.profileImage && (
                   <div className="mb-3 relative w-32 h-32 rounded-lg overflow-hidden border-2 border-blue-500/30">
-                    <Image 
-                      src={formData.profileImage} 
-                      alt="Profile preview" 
-                      fill 
+                    <Image
+                      src={formData.profileImage}
+                      alt="Profile preview"
+                      fill
                       className="object-cover"
                     />
                   </div>
@@ -506,8 +477,8 @@ export default function TeamMembersComponent() {
                 <div className="flex gap-2">
                   <label className="flex-1 cursor-pointer">
                     <div className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg border-2 border-dashed transition-colors ${
-                      imageUploading 
-                        ? 'border-blue-500/50 bg-blue-500/10 cursor-not-allowed' 
+                      imageUploading
+                        ? 'border-blue-500/50 bg-blue-500/10 cursor-not-allowed'
                         : 'border-blue-500/30 bg-blue-500/5 hover:bg-blue-500/10 hover:border-blue-500/50'
                     }`}>
                       {imageUploading ? (
@@ -704,8 +675,8 @@ export default function TeamMembersComponent() {
                   <div className="flex items-start gap-4 mb-4">
                     {member.profileImage ? (
                       <div className="w-16 h-16 rounded-full overflow-hidden relative">
-                        <Image 
-                          src={member.profileImage} 
+                        <Image
+                          src={member.profileImage}
                           alt={member.name}
                           width={64}
                           height={64}
