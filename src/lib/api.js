@@ -10,6 +10,17 @@ const api = axios.create({
   },
 });
 
+api.interceptors.request.use((config) => {
+  // Add authorization header to request if user is logged in
+  const token = localStorage.getItem('__ssa_access_token');
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+})
+
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -116,23 +127,23 @@ export const userApi = {
   // Get all users
   getAllUsers: async () => {
     const response = await api.get('users');
-    
+
     console.log('=== getAllUsers API Response ===');
     console.log('Full Response:', response);
     console.log('Response Data:', response.data);
-    
+
     // Handle different response structures
     const usersData = response.data.data || response.data.users || response.data;
     const usersArray = Array.isArray(usersData) ? usersData : [];
-    
+
     console.log('Extracted Users Data:', usersData);
     console.log('Users Array:', usersArray);
     console.log('Number of Users:', usersArray.length);
-    
+
     const normalizedUsers = usersArray.map(normalizeUser);
     console.log('Normalized Users:', normalizedUsers);
     console.log('================================');
-    
+
     return normalizedUsers;
   },
 
@@ -151,10 +162,10 @@ export const userApi = {
   // Get single user by ID
   getUser: async (uid) => {
     const response = await api.get(`users/${uid}`);
-    
+
     // Extract the actual user data from { success: true, data: {...} }
     const userData = response.data.data || response.data;
-    
+
     return normalizeUser(userData);
   },
 
@@ -166,17 +177,23 @@ export const userApi = {
 
   // Get user role
   getUserRole: async (uid) => {
-    const response = await api.get(`users/${uid}/role`);
+    const response = await api.get(`users/${uid}/role`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        }
+      }
+    );
     return response.data;
   },
 
   // Update user
   updateUser: async (uid, data) => {
     const response = await api.put(`users/${uid}`, data);
-    
+
     // Extract the actual user data from { success: true, data: {...} }
     const userData = response.data.data || response.data;
-    
+
     return normalizeUser(userData);
   },
 
