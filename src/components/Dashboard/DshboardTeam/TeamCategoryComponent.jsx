@@ -1,5 +1,6 @@
 "use client";
 
+import api from "@/lib/api";
 import React, { useState, useEffect } from "react";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000/api';
@@ -59,43 +60,29 @@ export default function TeamCategoryComponent() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       if (isEditing) {
         // Update existing department
-        const response = await fetch(`${API_BASE_URL}/team/departments/${editId}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include', // Include cookies for authentication
-          body: JSON.stringify(formData),
-        });
+        const {data} = await api.put(`/team/departments/${editId}`, formData);
 
-        if (!response.ok) {
-          throw new Error('Failed to update department');
+        if (!data.success) {
+          throw new Error( data.message || 'Failed to update department');
         }
 
-        const result = await response.json();
         await fetchDepartments();
         setIsEditing(false);
         setEditId(null);
+        setSuccessMessage("Category updated successfully!");
+        setTimeout(() => setSuccessMessage(""), 3000);
       } else {
         // Create new department
-        const response = await fetch(`${API_BASE_URL}/team/departments`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include', // Include cookies for authentication
-          body: JSON.stringify(formData),
-        });
+        const {data} = await api.post(`/team/departments`, formData);
 
-        if (!response.ok) {
+        if (!data.success) {
           throw new Error('Failed to create department');
         }
 
-        const result = await response.json();
         await fetchDepartments();
         setSuccessMessage("Category added successfully!");
         setTimeout(() => setSuccessMessage(""), 3000);
@@ -114,23 +101,19 @@ export default function TeamCategoryComponent() {
       description: category.description,
     });
     setIsEditing(true);
-    setEditId(category.name); // Using name as ID based on the delete endpoint pattern
+    setEditId(category._id);
   };
 
-  const handleDelete = async (categoryName) => {
+  const handleDelete = async (id) => {
     setDeleteModal({ show: false, categoryName: "" });
 
     try {
-      const response = await fetch(`${API_BASE_URL}/team/departments/${categoryName}`, {
-        method: 'DELETE',
-        credentials: 'include', // Include cookies for authentication
-      });
+      const {data} = await api.delete(`/team/departments/${id}`);
 
-      if (!response.ok) {
-        throw new Error('Failed to delete department');
+      if (!data.success) {
+        throw new Error(data.message || 'Failed to delete department');
       }
 
-      const result = await response.json();
       await fetchDepartments();
       setSuccessMessage("Category deleted successfully!");
       setTimeout(() => setSuccessMessage(""), 3000);
@@ -156,7 +139,7 @@ export default function TeamCategoryComponent() {
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold text-white mb-6">Team Categories</h1>
+      <h1 className="text-3xl font-bold text-white mb-6 text-center">Team Categories</h1>
 
       {/* Success Modal */}
       {successMessage && (
@@ -225,7 +208,7 @@ export default function TeamCategoryComponent() {
       ) : (
         <>
           {/* Add/Edit Category Form */}
-          <div className="bg-gradient-to-br from-blue-900/20 to-purple-900/20 backdrop-blur-sm border border-blue-500/20 rounded-xl p-6 mb-6">
+          <div className="bg-linear-to-br from-blue-900/20 to-purple-900/20 backdrop-blur-sm border border-blue-500/20 rounded-xl p-6 mb-6 max-w-xl mx-auto">
         <h2 className="text-xl font-semibold text-white mb-4">
           {isEditing ? "Edit Category" : "Add New Category"}
         </h2>
@@ -284,7 +267,7 @@ export default function TeamCategoryComponent() {
           categories.map((category) => (
             <div
               key={category._id || category.name}
-              className="bg-gradient-to-br from-blue-900/20 to-purple-900/20 backdrop-blur-sm border border-blue-500/20 rounded-xl p-5 hover:border-blue-500/40 transition-all"
+              className="bg-linear-to-br from-blue-900/20 to-purple-900/20 backdrop-blur-sm border border-blue-500/20 rounded-xl p-5 hover:border-blue-500/40 transition-all"
             >
               <h3 className="text-xl font-semibold text-white mb-2">
                 {category.name}

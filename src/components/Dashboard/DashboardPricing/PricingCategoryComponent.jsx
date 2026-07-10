@@ -151,7 +151,7 @@ export default function PricingCategoryComponent() {
   const handleDelete = async (id) => {
     setLoading(true);
     setDeleteModal({ show: false, categoryId: null, categoryName: "" });
-    
+
     try {
       const user = auth.currentUser;
       if (!user) {
@@ -234,7 +234,7 @@ export default function PricingCategoryComponent() {
 
         {/* Add/Edit Form */}
         {(isAdding || editingId) && (
-          <div className={`${cardStyle} mb-6`}>
+          <div className={`${cardStyle} mb-6 max-w-md mx-auto`}>
             <h3 className="text-xl font-semibold mb-4">
               {editingId ? "Edit Category" : "Add New Category"}
             </h3>
@@ -250,7 +250,7 @@ export default function PricingCategoryComponent() {
                   disabled={loading}
                 />
               </div>
-              
+
               <div>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -327,7 +327,7 @@ export default function PricingCategoryComponent() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center gap-2 text-xs text-gray-500">
                     <span>ID: {category._id}</span>
@@ -399,7 +399,7 @@ export default function PricingCategoryComponent() {
               </div>
               <h3 className="text-2xl font-bold text-white">Delete Category</h3>
             </div>
-            
+
             <p className="text-gray-300 mb-6">
               Are you sure you want to delete the category{" "}
               <span className="font-semibold text-white">{deleteModal.categoryName}</span>?

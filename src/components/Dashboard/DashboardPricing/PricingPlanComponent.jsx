@@ -222,7 +222,7 @@ export default function PricingPlanComponent() {
   const handleDelete = async (categoryId, planId) => {
     setLoading(true);
     setDeleteModal({ show: false, planId: null, planName: "" });
-    
+
     try {
       const idToken = await getAuthToken();
       if (!idToken) return;
@@ -324,7 +324,7 @@ export default function PricingPlanComponent() {
 
         {/* Add/Edit Form */}
         {(isAdding || editingId) && (
-          <div className={`${cardStyle} mb-6`}>
+          <div className={`${cardStyle} mb-6 max-w-4xl mx-auto`}>
             <h3 className="text-xl font-semibold mb-4">
               {editingId ? "Edit Pricing Plan" : "Add New Pricing Plan"}
             </h3>
@@ -612,7 +612,7 @@ export default function PricingPlanComponent() {
               </div>
               <h3 className="text-2xl font-bold text-white">Delete Plan</h3>
             </div>
-            
+
             <p className="text-gray-300 mb-6">
               Are you sure you want to delete the plan{" "}
               <span className="font-semibold text-white">&quot;{deleteModal.planName}&quot;</span>?

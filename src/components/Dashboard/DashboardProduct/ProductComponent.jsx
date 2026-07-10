@@ -65,12 +65,12 @@ export default function ProductComponent() {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      
+
       const data = await productApi.getAllProducts();
-      
+
       if (data.success) {
         const productsArray = Array.isArray(data.data) ? data.data : [];
-        
+
         // Log each product's ID for debugging
         productsArray.forEach((product, index) => {
           console.log(`Product ${index}:`, {
@@ -81,7 +81,7 @@ export default function ProductComponent() {
             slug: product.slug
           });
         });
-        
+
         setProducts(productsArray);
       } else {
         setError(data.message || 'Failed to fetch products');
@@ -119,8 +119,8 @@ export default function ProductComponent() {
       const result = await uploadImageToImgBB(file);
 
       if (result.success) {
-        setEditForm({ 
-          ...editForm, 
+        setEditForm({
+          ...editForm,
           coverImage: { ...editForm.coverImage, url: result.imageUrl }
         });
         setSuccessMessage('Image uploaded successfully!');
@@ -140,16 +140,16 @@ export default function ProductComponent() {
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    
+
     if (!user || !user.uid) {
       setError('User not authenticated');
       return;
     }
-    
+
     try {
-      
+
       const data = await productApi.createProduct(user.uid, editForm);
-      
+
       if (data.success) {
         setProducts([...products, data.data]);
         setShowCreateModal(false);
@@ -171,9 +171,9 @@ export default function ProductComponent() {
         idLength: selectedProduct._id?.length || 'N/A',
         title: selectedProduct.title
       });
-      
+
       const data = await productApi.updateProduct(selectedProduct._id, editForm);
-      
+
       if (data.success) {
         setProducts(products.map(p => p._id === selectedProduct._id ? { ...p, ...editForm } : p));
         setShowEditModal(false);
@@ -188,9 +188,9 @@ export default function ProductComponent() {
 
   const handleDelete = async () => {
     try {
-      
+
       await productApi.deleteProduct(selectedProduct._id);
-      
+
       setProducts(products.filter(p => p._id !== selectedProduct._id));
       setShowDeleteModal(false);
       setSelectedProduct(null);
@@ -274,7 +274,7 @@ export default function ProductComponent() {
       )}
 
       <div className="bg-slate-800/50 backdrop-blur-xl rounded-xl p-6">
-        <div className="flex gap-4 mb-6">
+        <div className="flex gap-4 mb-6 max-w-sm mx-auto">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
             <input
@@ -557,8 +557,8 @@ export default function ProductComponent() {
                       <div className="flex-1">
                         <p className="text-gray-400 text-xs mb-2">Gradient From</p>
                         <div className="flex items-center gap-2">
-                          <div 
-                            className="w-8 h-8 rounded border border-slate-600" 
+                          <div
+                            className="w-8 h-8 rounded border border-slate-600"
                             style={{ backgroundColor: selectedProduct.theme.gradientFrom }}
                           ></div>
                           <span className="text-white text-sm font-mono">{selectedProduct.theme.gradientFrom}</span>
@@ -569,8 +569,8 @@ export default function ProductComponent() {
                       <div className="flex-1">
                         <p className="text-gray-400 text-xs mb-2">Gradient To</p>
                         <div className="flex items-center gap-2">
-                          <div 
-                            className="w-8 h-8 rounded border border-slate-600" 
+                          <div
+                            className="w-8 h-8 rounded border border-slate-600"
                             style={{ backgroundColor: selectedProduct.theme.gradientTo }}
                           ></div>
                           <span className="text-white text-sm font-mono">{selectedProduct.theme.gradientTo}</span>
@@ -646,14 +646,14 @@ export default function ProductComponent() {
               {/* Cover Image */}
               <div className="border-t border-slate-600 pt-4">
                 <h3 className="text-white font-medium mb-2">Cover Image</h3>
-                
+
                 {/* Image Preview */}
                 {editForm.coverImage.url && (
                   <div className="mb-3 relative w-full h-48 rounded-lg overflow-hidden border-2 border-blue-500/30">
-                    <Image 
-                      src={editForm.coverImage.url} 
-                      alt={editForm.coverImage.alt || "Cover image preview"} 
-                      fill 
+                    <Image
+                      src={editForm.coverImage.url}
+                      alt={editForm.coverImage.alt || "Cover image preview"}
+                      fill
                       className="object-cover"
                     />
                   </div>
@@ -692,8 +692,8 @@ export default function ProductComponent() {
                 <div className="flex gap-2">
                   <label className="flex-1 cursor-pointer">
                     <div className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg border-2 border-dashed transition-colors ${
-                      imageUploading 
-                        ? 'border-blue-500/50 bg-blue-500/10 cursor-not-allowed' 
+                      imageUploading
+                        ? 'border-blue-500/50 bg-blue-500/10 cursor-not-allowed'
                         : 'border-slate-600 bg-slate-700 hover:bg-slate-600 hover:border-blue-500/50'
                     }`}>
                       {imageUploading ? (
